@@ -1,25 +1,19 @@
-export function Card({
-  className,
-  title,
-  children,
-  href,
-}: {
-  className?: string;
-  title: string;
-  children: React.ReactNode;
-  href: string;
-}): JSX.Element {
-  return (
-    <a
-      className={className}
-      href={`${href}?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <h2>
-        {title} <span>-&gt;</span>
-      </h2>
-      <p>{children}</p>
-    </a>
-  );
+import React, { ReactNode } from 'react'
+interface cardprops{
+width?:number;
+height?:number;
+br?:number;
+elevation?:number;
+text?:string;
+children?:React.ReactNode;
 }
+const Card = ({width,height,br,text,children}:cardprops) => {
+    
+  return (
+    <div className='dark:bg-black-700 dark:border-[0.1px] border-l-slate-300 dark:text-white w-full h-full rounded-lg  dark:shadow-none shadow-md  shadow-gray-500 '>
+         {children}
+    </div>
+  )
+}
+
+export default Card;
