@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @layer components {
+  .btn-primary {
+    @apply text-green-500 p-2;
+  }
+} */
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;

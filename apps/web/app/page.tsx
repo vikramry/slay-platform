@@ -157,10 +157,10 @@ export default function Page(): JSX.Element {
           </div>
         </div>
       </div>
-
+      <Card />
       <div className={styles.grid}>
         {LINKS.map(({ title, href, description }) => (
-          <Card className={styles.card} href={href} key={title} title={title}>
+          <Card href={href} key={title} title={title}>
             {description}
           </Card>
         ))}
