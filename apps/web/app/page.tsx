@@ -3,9 +3,9 @@ import Image from "next/image";
 import { Card } from "@repo/ui/card";
 import { Code } from "@repo/ui/code";
 import styles from "./page.module.css";
-import { Button } from "@repo/ui/button";
 import Client, { useFetchUserData, useLazyFetchUserData } from "@repo/client";
 import { useEffect } from "react";
+import Button from "@repo/ui/button";
 
 function Gradient({
   conic,
@@ -96,7 +96,7 @@ export default function Page(): JSX.Element {
         </div>
       </div>
 
-      <Button appName="web" className={styles.button}>
+      <Button buttonText="Click Me!" size="md" variant="primary">
         Click me!
       </Button>
       <button
