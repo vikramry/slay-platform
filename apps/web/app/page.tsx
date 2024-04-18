@@ -1,9 +1,11 @@
+"use client";
 import Image from "next/image";
 import { Card } from "@repo/ui/card";
 import { Code } from "@repo/ui/code";
 import styles from "./page.module.css";
 import { Button } from "@repo/ui/button";
-import Client from "@repo/client";
+import Client, { useFetchUserData, useLazyFetchUserData } from "@repo/client";
+import { useEffect } from "react";
 
 function Gradient({
   conic,
@@ -52,15 +54,28 @@ const LINKS = [
   },
 ];
 
+type Store = {
+  count: number;
+  inc: () => void;
+  late: () => Promise<Boolean>;
+};
+
 export default function Page(): JSX.Element {
-  const client = new Client("Mecury");
-  console.log(client.name);
+  const client = new Client();
+  // const { count, inc } = useCounter();
+  const { count, inc, late } = client
+    .Model<"Product", Store>("Product")
+    .Product();
+  const [data, loading, error, getLazy] = useLazyFetchUserData(late);
+  useEffect(() => {
+    console.log(data, loading, error);
+  }, [data, loading, error]);
   return (
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
           examples/basic&nbsp;
-          <Code className={styles.code}>web</Code>
+          <Code className={styles.code}>{count}</Code>
         </p>
         <div>
           <a
@@ -84,7 +99,15 @@ export default function Page(): JSX.Element {
       <Button appName="web" className={styles.button}>
         Click me!
       </Button>
-
+      <button
+        onClick={async () => {
+          console.log("Clicked");
+          await getLazy();
+          inc();
+        }}
+      >
+        Add
+      </button>
       <div className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.logos}>
@@ -134,10 +157,10 @@ export default function Page(): JSX.Element {
           </div>
         </div>
       </div>
-
+      <Card />
       <div className={styles.grid}>
         {LINKS.map(({ title, href, description }) => (
-          <Card className={styles.card} href={href} key={title} title={title}>
+          <Card href={href} key={title} title={title}>
             {description}
           </Card>
         ))}
