@@ -4,8 +4,7 @@ import DynamicLayout from "../../dynamicLayout";
 const page = () => {
   return (
     <div >
-      hello
-      {/* <DynamicLayout /> */}
+      <DynamicLayout />
     </div>
   );
 };
