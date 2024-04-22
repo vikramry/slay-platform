@@ -7,9 +7,11 @@ interface InputFieldProps {
   error?: boolean | undefined | string | any;
   disabled?: boolean;
   required?:boolean;
+  classNames?: string;
+  [key: string]: any;
 }
 
-function InputField({ type = "text", size = "sm", placeholder,label,errorMessage,error,...rest }: InputFieldProps) {
+function InputField({ type = "text", size = "sm", placeholder,label,errorMessage,error, classNames, ...rest }: InputFieldProps) {
   const sizeStyles = {
     sm: "p-[5px]",
     md: "p-[10px]",
@@ -18,14 +20,14 @@ function InputField({ type = "text", size = "sm", placeholder,label,errorMessage
   };
 
   return (
-    <div >
+    <div className="w-full">
         {label &&
         <label className='dark:text-white'>{label}  {rest.required && (
             <span >
               <strong className='text-[red]'>*</strong>
             </span>
           )}</label>}
-      <input type={type} placeholder={placeholder} className={`${sizeStyles[size]} bg-transparent rounded-md border-2 border-black w-[100%]  ${error&& "border-[red]"} dark:border-white dark:text-white`}/>
+      <input type={type} placeholder={placeholder} className={`${sizeStyles[size]} bg-transparent rounded-md border-2 border-black w-[100%]  ${error&& "border-[red]"} dark:border-white dark:text-white ${classNames}`}/>
     </div>
   );
 }

@@ -24,6 +24,8 @@ const LayoutCardTemplate = [
   },
 ];
 
+// to make tailwind classes work dynamically
+"col-span-1 col-span-2 col-span-3 row-span-1 row-span-2 row-span-3"
 const DynamicLayout = () => {
   return (
     <div className="h-auto w-[100vw - 100px] grid grid-cols-3 gap-2 bg-black p-2">

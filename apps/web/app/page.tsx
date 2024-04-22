@@ -7,6 +7,7 @@ import Client, { useFetchUserData, useLazyFetchUserData } from "@repo/client";
 import { useEffect } from "react";
 import Button from "@repo/ui/button";
 import DynamicLayout from "./dynamicLayout";
+import Login from "./login";
 
 function Gradient({
   conic,
@@ -72,7 +73,10 @@ export default function Page(): JSX.Element {
     console.log(data, loading, error);
   }, [data, loading, error]);
   return (
-    <DynamicLayout />
+    <div>
+      <Login />
+    </div>
+    // <DynamicLayout />
     // <main className={styles.main}>
     //   <div className={styles.description}>
     //     <p>

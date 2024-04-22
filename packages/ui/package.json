@@ -9,7 +9,8 @@
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
-    "./styles": "./src/style.css"
+    "./styles": "./src/style.css",
+    "./input": "./src/inputField.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
