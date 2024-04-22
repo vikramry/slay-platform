@@ -73,7 +73,7 @@ export default function Page(): JSX.Element {
   }, [data, loading, error]);
   return (
     <div>
-      <Login />
+      <DynamicLayout />
     </div>
     // <DynamicLayout />
     // <main className={styles.main}>
