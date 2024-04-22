@@ -1,4 +1,5 @@
 "use client"
+import { useState } from 'react';
 interface DialogBoxProps{
     state:boolean;
     setState: (state: boolean) => void;
@@ -6,7 +7,7 @@ interface DialogBoxProps{
     children: React.ReactNode;
     title?:string
 }
-function DialogBox({state,setState,onClick,children,...rest}:DialogBoxProps) {
+export function DialogBox({state,setState,onClick,children,...rest}:DialogBoxProps) {
 
     const toggleModal = () => {
         setState(!state);
@@ -57,4 +58,3 @@ function DialogBox({state,setState,onClick,children,...rest}:DialogBoxProps) {
     </>
         )
 }
-export default DialogBox

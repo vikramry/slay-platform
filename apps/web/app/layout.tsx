@@ -1,9 +1,11 @@
+import { SideBar } from "@repo/ui/sideBar";
 import "./globals.css";
 import "@repo/ui/styles";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-// import ModeToggleButton from "@/components/ModeToggleButton";
+import { Inter } from "next/font/google";
+import { Header } from "@repo/ui/header";
+import { NavBar } from "@repo/ui/navBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,13 +21,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <script src="https://cdn.tailwindcss.com"></script>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" enableSystem>
-          {/* <ModeToggleButton /> */}
-          {children}
+  <script src="https://cdn.tailwindcss.com"></script>
+<body className={inter.className}>
+        <ThemeProvider attribute="class">
+        <div className="flex flex-col gap-5">
+      <Header />
+      <NavBar/>
+      <div className="border-[1px] ml-[20px] mr-[20px] mb-[20px] rounded-lg h-[calc(100vh-200px)] dark:border-gray-500">
+      <div className="flex flex-row gap-3 p-[10px]">
+        <SideBar />
+        {children}
+      </div>
+      </div>
+    </div>
+          
         </ThemeProvider>
-      </body>
-    </html>
+      </body>    </html>
   );
 }

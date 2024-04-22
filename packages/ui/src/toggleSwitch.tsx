@@ -1,8 +1,8 @@
 "use client"
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useTheme } from "next-themes";
 
-const ModeToggleButton = () => {
+export const ModeToggleButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
 
@@ -12,7 +12,7 @@ const ModeToggleButton = () => {
 
   return (
     <div
-      className={` w-[60px] rounded-[100px] shadow-gray-500 shadow-md ${
+      className={` w-[60px] rounded-[100px] shadow-gray-300 shadow-md ${
         theme == "dark" ? "bg-[black]" : "bg-[white]"
       }`}
     >
@@ -64,4 +64,3 @@ const ModeToggleButton = () => {
   );
 };
 
-export default ModeToggleButton;
