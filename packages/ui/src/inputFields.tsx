@@ -1,5 +1,5 @@
 interface InputFieldProps {
-  type?: "text" | "password" | "number" | "radio" | "checkbox"; 
+  type?: "text" | "password" | "number" | "radio" | "checkbox" |"email"; 
   size?: "sm" | "md" | "lg" |"default";
   placeholder?: string;
   label?: string;
@@ -7,6 +7,7 @@ interface InputFieldProps {
   error?: boolean | undefined | string | any;
   disabled?: boolean;
   required?:boolean;
+  classNames?:string;
 }
 
 export function InputField({ type = "text", size = "sm", placeholder,label,errorMessage,error,...rest }: InputFieldProps) {
@@ -25,7 +26,7 @@ export function InputField({ type = "text", size = "sm", placeholder,label,error
               <strong className='text-[red]'>*</strong>
             </span>
           )}</label>}
-      <input type={type} placeholder={placeholder} className={`${sizeStyles[size]} bg-transparent rounded-md border-2 border-black w-[100%]  ${error&& "border-[red]"} dark:border-white dark:text-white`}/>
+      <input type={type} placeholder={placeholder} className={`${sizeStyles[size]} bg-transparent rounded-md border-2  border-gray-300  w-[100%]  ${error&& "border-[red]"} dark:border-white dark:text-white ${rest?.classNames}`}/>
     </div>
   );
 }
