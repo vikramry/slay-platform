@@ -1,6 +1,6 @@
 import React from "react";
-import InputField from "../inputFields";
-import Button from "../button";
+import { InputField } from "@repo/ui/inputField";
+import { Button } from "@repo/ui/button";
 import Link from "next/link";
 const LoginForm = () => {
   return (
@@ -35,7 +35,7 @@ const LoginForm = () => {
           buttonText="GitHub"
           variant="secondary"
           size="lg"
-          classNames="font-bold mt-3"
+          classnames="font-bold mt-3"
         />
 
         <div className="text-xs flex justify-center flex-col items-center gap-1 text-gray-500 dark:text-gray-300">
