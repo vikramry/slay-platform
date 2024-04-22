@@ -1,28 +1,41 @@
-"use client"
+"use client";
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export const ModeToggleButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
-
+  console.log(currentTheme, "theme1`");
+  
+  
   useEffect(() => {
-    setTheme("system");
+    const previousUserPreference = localStorage.getItem("theme");
+    if (previousUserPreference) {
+      setTheme(previousUserPreference);
+    } else setTheme("system");
   }, []);
 
   return (
     <div
       className={` w-[60px] rounded-[100px] shadow-gray-300 shadow-md ${
-        theme == "dark" ? "bg-[black]" : "bg-[white]"
+        theme == "dark" || currentTheme ==  "dark" ? "bg-[black]" : "bg-[white]"
       }`}
     >
       <button
-        className={`w-8 h-8 rounded-full  ${theme == "dark"?"bg-black":"bg-black"} flex items-center transition duration-300 focus:outline-none shadow  ${
-          theme == "dark"
+        className={`w-8 h-8 rounded-full  ${theme == "dark" ? "bg-black" : "bg-black"} flex items-center transition duration-300 focus:outline-none shadow  ${
+          theme == "dark" || currentTheme ==  "dark"
             ? "bg-gray-700 translate-x-full"
             : "bg-yellow-500 -translate-x-2"
         }`}
-        onClick={() => (theme == "dark" ? setTheme("light") : setTheme("dark"))}
+        onClick={() => {
+          if (theme == "dark" || currentTheme ==  "dark") {
+            setTheme("light");
+            localStorage.setItem("theme", "light");
+          } else {
+            setTheme("dark");
+            localStorage.setItem("theme", "dark");
+          }
+        }}
       >
         <div
           id="switch-toggle"
@@ -40,7 +53,7 @@ export const ModeToggleButton = () => {
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                // style={{ stroke: 'black' }} 
+                // style={{ stroke: 'black' }}
               />
             </svg>
           ) : (
@@ -63,4 +76,3 @@ export const ModeToggleButton = () => {
     </div>
   );
 };
-

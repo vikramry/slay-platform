@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import { Header } from "@repo/ui/header";
-import { NavBar } from "@repo/ui/navBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,21 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-  <script src="https://cdn.tailwindcss.com"></script>
-<body className={inter.className}>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <body className={inter.className}>
         <ThemeProvider attribute="class">
-        <div className="flex flex-col gap-5">
-      <Header />
-      <NavBar/>
-      <div className="border-[1px] ml-[20px] mr-[20px] mb-[20px] rounded-lg h-[calc(100vh-200px)] dark:border-gray-500">
-      <div className="flex flex-row gap-3 p-[10px]">
-        <SideBar />
-        {children}
-      </div>
-      </div>
-    </div>
-          
+          <div className="flex flex-col w-full">
+            <Header />
+            {children}
+          </div>
         </ThemeProvider>
-      </body>    </html>
+      </body>{" "}
+    </html>
   );
 }
