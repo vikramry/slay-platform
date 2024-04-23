@@ -1,5 +1,4 @@
 import { SideBar } from "@repo/ui/sideBar";
-import "@repo/ui/styles";
 import { NavBar } from "@repo/ui/navBar";
 
 export default function RootLayout({

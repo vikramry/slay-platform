@@ -72,8 +72,8 @@ export default function Page(): JSX.Element {
     console.log(data, loading, error);
   }, [data, loading, error]);
   return (
-    <div>
-      <DynamicLayout />
+    <div className="h-screen w-screen bg-red-800 dark:bg-green-300">
+      {/* <DynamicLayout /> */}
     </div>
     // <DynamicLayout />
     // <main className={styles.main}>

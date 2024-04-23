@@ -1,6 +1,6 @@
 import { SideBar } from "@repo/ui/sideBar";
 import "./globals.css";
-import "@repo/ui/styles";
+import "@repo/ui/styles.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <script src="https://cdn.tailwindcss.com"></script>
+      {/* <script src="https://cdn.tailwindcss.com"></script> */}
       <body className={inter.className}>
         <ThemeProvider attribute="class">
           <div className="flex flex-col w-full">

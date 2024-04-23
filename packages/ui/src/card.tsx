@@ -6,7 +6,7 @@ interface cardprops {
 const Card = ({ children, classNames }: cardprops) => {
   return (
     <div
-      className={`${classNames} dark:bg-black-700 dark:border-[0.1px] border-l-slate-300 dark:text-white w-full h-full rounded-lg  dark:shadow-none shadow-md  shadow-gray-500`}
+      className={`${classNames} dark:bg-gray-700 dark:border-[0.1px] border-l-slate-300 dark:text-white w-full h-full rounded-lg  dark:shadow-none shadow-md  shadow-gray-500 dark:shadow-gray-200`}
     >
       {children}
     </div>
