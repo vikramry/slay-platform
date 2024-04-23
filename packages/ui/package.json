@@ -23,7 +23,7 @@
 
   },
   "scripts": {
-    "build": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build": "tailwindcss -i ./src/style.css -o ./dist/index.css",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component"
   },
