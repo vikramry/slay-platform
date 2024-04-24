@@ -29,7 +29,7 @@ const LayoutCardTemplate = [
 
 const DynamicLayout = () => {
   return (
-    <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 bg-black p-2">
+    <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-[#121212] bg-gray-100 p-2">
       {LayoutCardTemplate.map((item: any) => (
         <Card
           classNames={`col-span-${item.cols} row-span-${item.rows} bg-white min-h-96`}

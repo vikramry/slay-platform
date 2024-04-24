@@ -28,8 +28,8 @@ export function NavBar() {
           <div className="flex flex-row justify-center gap-8 ">
             {data?.map((item) => {
               return (
-                <Link href={"#"}>
-                  <h4 className="text-gray-500 text-[14px] hover:text-black dark:hover:text-white hover:font-semibold ease-in-out duration-300">
+                <Link href={"#"} key={item.title}>
+                  <h4 className="text-gray-500 text-[14px] hover:text-black dark:hover:text-white font-semibold ease-in-out duration-300">
                     {item?.title}
                   </h4>
                 </Link>

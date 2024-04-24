@@ -46,7 +46,7 @@ export function Header() {
         <ModeToggleButton />
       </div>
       <div className='rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray md:block hidden'></div>
-      <div className='dark:text-white md:hidden block'>
+      <div className='dark:text-white text-black md:hidden block'>
         <RxHamburgerMenu size={30} onClick={toggleMenu} />
       </div>
     </div>
