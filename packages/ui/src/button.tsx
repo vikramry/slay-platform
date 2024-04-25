@@ -12,25 +12,24 @@ interface ButtonPropType {
   [key: string]: any;
 }
 
-const variantStyles = {
-  primary:
-    "bg-[#18181b] text-white dark:text-[#18181b] dark:bg-[#FAFAFA] hover:bg-[#18181b]/80 dark:hover:text-white",
-  secondary:
-    "bg-transparent border-[1px] text-[#18181b] dark:text-[#FAFAFA] dark:bg-transparent",
-  textButton:
-    "bg-transparent text-[#18181b] dark:text-[#FAFAFA] dark:bg-transparent",
-};
-
 const sizeStyles = {
   sm: "px-2.5 py-0.5 text-xs rounded-sm",
   md: "px-4 py-1.5 text-sm rounded-md",
   lg: "px-6 py-3 text-base rounded-lg",
 };
 export const Button = (props: ButtonPropType) => {
+  const variantStyles = {
+    primary:
+      `text-white dark:text-[#18181b] bg-[#18181b] dark:bg-[#FAFAFA] ${!props.disabled && " hover:bg-[#18181b]/80 dark:hover:text-white"}`,
+    secondary:
+      "bg-transparent border-[1px] text-[#18181b] dark:text-[#FAFAFA] dark:bg-transparent",
+    textButton:
+      "bg-transparent text-[#18181b] dark:text-[#FAFAFA] dark:bg-transparent",
+  };
   return (
     <button
       className={`${variantStyles[props.variant]} ${sizeStyles[props.size]
-        } cursor-pointer flex justify-center gap-2 items-center w-full ${props.classnames}`}
+        } ${props.disabled ? " cursor-crosshair bg-opacity-80" : " cursor-pointer"} flex justify-center gap-2 items-center w-full ${props.classnames}`}
       {...props}
     >
       {props.iconPosition === "left" && props.icon}
