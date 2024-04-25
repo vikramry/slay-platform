@@ -1,5 +1,6 @@
 import React from "react";
 import LoginForm from "./LoginForm";
+import image from "../../public/assets/loginSideImage.png";
 
 const Login = () => {
   return (
@@ -9,10 +10,10 @@ const Login = () => {
       </div>
 
       <div
-        className="w-full h-full bg-cover lg:block hidden relative col-span-4 bg-[url('/assets/loginSideImage.png')]"
-        // style={{
-        //   backgroundImage: "url('/assets/loginSideImage.png')",
-        // }}
+        className="w-full h-full bg-cover relative col-span-4 lg:visible invisible"
+        style={{
+          backgroundImage: `url(${image.src})`,
+        }}
       >
         <p className="absolute text-black text-2xl font-[600] bottom-24 px-16 font- text-center leading-10">
           “Unlock the power of simplicity with Mercury Where websites come to
