@@ -15,7 +15,8 @@
     "./inputField":"./src/inputFields.tsx",
     "./dialogBox":"./src/dialogBox.tsx",
     "./toggleSwitch":"./src/toggleSwitch.tsx",
-    "./sideBar":"./src/sideBar.tsx"
+    "./sideBar":"./src/sideBar.tsx",
+    "./deletePopupComp":"./src/deletePopupComp.tsx"
 
 
 
@@ -24,6 +25,7 @@
   },
   "scripts": {
     "build": "tailwindcss -i ./src/style.css -o ./dist/index.css",
+    "dev": "tailwindcss -i ./src/style.css -o ./dist/index.css --watch",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component"
   },

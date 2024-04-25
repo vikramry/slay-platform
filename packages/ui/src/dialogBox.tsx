@@ -23,10 +23,10 @@ export function DialogBox({state,setState,onClick,children,...rest}:DialogBoxPro
         } overflow-x-hidden overflow-y-auto fixed h-modal md:h-full top-4 left-0 right-0 md:inset-0 z-50 flex flex-row justify-center items-center  dark:bg-transparent `}
       >
         <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-          <div className="bg-white rounded-lg shadow relative dark:bg-gray-700">
-            <div className="flex items-start justify-between p-2 rounded-t dark:border-gray-600">
+          <div className="bg-white rounded-lg shadow relative dark:bg-black">
+            <div className="flex items-start justify-between  rounded-t dark:border-gray-600  pt-5 pl-6 pr-6">
                 {rest.title && 
-              <h3 className="text-gray-900 text-xl lg:text-2xl font-semibold dark:text-[#817994]">
+              <h3 className="text-gray-900 text-xl lg:text-2xl font-semibold dark:text-white">
                 {rest?.title}
               </h3>
                 }
@@ -49,7 +49,7 @@ export function DialogBox({state,setState,onClick,children,...rest}:DialogBoxPro
                 </svg>
               </button>
             </div>
-            <div className="p-2 space-y-6">
+            <div className=" space-y-6 pt-5 pl-6 pr-6 pb-5">
               {children}
             </div>
           </div>

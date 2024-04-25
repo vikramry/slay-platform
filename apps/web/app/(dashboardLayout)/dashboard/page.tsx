@@ -11,8 +11,8 @@ const page = () => {
       hello
       {/* <DynamicLayout /> */}
       <Button size="sm" variant="primary"  buttonText="click" onClick={()=>setState(true)}/>
-      <DialogBox setState={setState} state={state} title="Confirm Delete">
-        <DeletePopupComp InputText="delete"/>
+      <DialogBox setState={setState} state={state} title="Confirm Delete?">
+        <DeletePopupComp InputText="delete" setState={setState}/>
         </DialogBox>
     </div>
   );
