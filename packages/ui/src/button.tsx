@@ -24,13 +24,12 @@ const sizeStyles = {
 };
 export const Button = (props: ButtonPropType) => {
   return (
-    <div
-      className={`${variantStyles[props.variant]} ${
-        sizeStyles[props.size]
-      } cursor-pointer flex justify-center items-center w-full ${props.classnames}`}
+    <button
+      className={`${variantStyles[props.variant]} ${sizeStyles[props.size]
+        } cursor-pointer flex justify-center items-center w-full ${props.classnames}`}
       {...props}
     >
       {props.buttonText}
-    </div>
+    </button>
   );
 };
