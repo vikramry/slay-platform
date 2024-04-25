@@ -26,8 +26,8 @@ export function DialogBox({state,setState,onClick,children,...rest}:DialogBoxPro
           <div className="bg-white rounded-lg shadow relative dark:bg-gray-700">
             <div className="flex items-start justify-between p-2 rounded-t dark:border-gray-600">
                 {rest.title && 
-              <h3 className="text-gray-900 text-xl lg:text-2xl font-semibold dark:text-white">
-                Title
+              <h3 className="text-gray-900 text-xl lg:text-2xl font-semibold dark:text-[#817994]">
+                {rest?.title}
               </h3>
                 }
               <button

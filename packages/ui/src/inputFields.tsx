@@ -8,7 +8,7 @@ interface InputFieldProps {
   disabled?: boolean;
   classNames?: string;
   required?: boolean;
-}
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;}
 
 export function InputField({
   type = "text",
@@ -42,7 +42,9 @@ export function InputField({
       <input
         type={type}
         placeholder={placeholder}
+        onChange={rest?.onChange}
         className={`${sizeStyles[size]} bg-transparent rounded-md border-2 border-black w-[100%]  ${error && "border-[red]"} dark:border-white dark:text-white ${classNames}`}
+        {...rest}
       />
     </div>
   );
