@@ -9,6 +9,7 @@ interface ButtonPropType {
   classnames?: string;
   icon?: ReactNode;
   iconPosition?: "left" | "right";
+  disabled?: boolean;
   [key: string]: any;
 }
 
@@ -17,7 +18,7 @@ const sizeStyles = {
   md: "px-4 py-1.5 text-sm rounded-md",
   lg: "px-6 py-3 text-base rounded-lg",
 };
-export const Button = (props: ButtonPropType) => {
+export const Button = ({ disabled = false, ...props }: ButtonPropType) => {
   const variantStyles = {
     primary:
       `text-white dark:text-[#18181b] bg-[#18181b] dark:bg-[#FAFAFA] ${!props.disabled && " hover:bg-[#18181b]/80 dark:hover:text-white"}`,
@@ -29,7 +30,7 @@ export const Button = (props: ButtonPropType) => {
   return (
     <button
       className={`${variantStyles[props.variant]} ${sizeStyles[props.size]
-        } ${props.disabled ? " cursor-crosshair bg-opacity-80" : " cursor-pointer"} flex justify-center gap-2 items-center w-full ${props.classnames}`}
+        } ${disabled ? " cursor-not-allowed bg-opacity-80" : " cursor-pointer bg-opacity-100"} flex justify-center gap-2 items-center w-full ${props.classnames}`}
       {...props}
     >
       {props.iconPosition === "left" && props.icon}
