@@ -2,6 +2,7 @@ import React from "react";
 import { InputField } from "@repo/ui/inputField";
 import { Button } from "@repo/ui/button";
 import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
 const LoginForm = () => {
   return (
     <div className="flex justify-center flex-col items-center w-full p-5 h-full">
@@ -34,6 +35,8 @@ const LoginForm = () => {
         <Button
           buttonText="GitHub"
           variant="secondary"
+          iconPosition="left"
+          icon={<FaGithub size={22}/>}
           size="lg"
           classnames="font-bold mt-3"
         />
