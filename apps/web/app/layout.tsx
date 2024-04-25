@@ -22,12 +22,7 @@ export default function RootLayout({
     <html lang="en">
       {/* <script src="https://cdn.tailwindcss.com"></script> */}
       <body className={inter.className}>
-        <ThemeProvider attribute="class">
-          <div className="flex flex-col w-full">
-            <Header />
-            {children}
-          </div>
-        </ThemeProvider>
+        <ThemeProvider attribute="class">{children}</ThemeProvider>
       </body>{" "}
     </html>
   );

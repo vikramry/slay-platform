@@ -1,10 +1,14 @@
 "use client";
 
+import { ReactNode } from "react";
+
 interface ButtonPropType {
   variant: "primary" | "secondary" | "textButton";
   size: "sm" | "md" | "lg";
   buttonText: string;
   classnames?: string;
+  icon?: ReactNode;
+  iconPosition?: "left" | "right";
   [key: string]: any;
 }
 
@@ -26,10 +30,12 @@ export const Button = (props: ButtonPropType) => {
   return (
     <button
       className={`${variantStyles[props.variant]} ${sizeStyles[props.size]
-        } cursor-pointer flex justify-center items-center w-full ${props.classnames}`}
+        } cursor-pointer flex justify-center gap-2 items-center w-full ${props.classnames}`}
       {...props}
     >
+      {props.iconPosition === "left" && props.icon}
       {props.buttonText}
+      {props.iconPosition === "right" && props.icon}
     </button>
   );
 };
