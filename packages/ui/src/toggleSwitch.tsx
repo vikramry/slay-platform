@@ -17,7 +17,7 @@ export const ModeToggleButton = () => {
 
   return (
     <div
-      className={` w-[60px] rounded-[100px] shadow-gray-300 shadow-md ${
+      className={` w-[60px] rounded-[100px]  ${
         theme == "dark" || currentTheme ==  "dark" ? "bg-[black]" : "bg-[white]"
       }`}
     >

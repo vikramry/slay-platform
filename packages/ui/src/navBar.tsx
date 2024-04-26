@@ -29,7 +29,7 @@ export function NavBar() {
             {data?.map((item) => {
               return (
                 <Link href={"#"} key={item.title}>
-                  <h4 className="text-gray-500 text-[14px] hover:text-black dark:hover:text-white hover:font-semibold ease-in-out duration-300">
+                  <h4 className="text-gray-500 text-[14px] hover:text-black dark:hover:text-white font-semibold ease-in-out duration-300">
                     {item?.title}
                   </h4>
                 </Link>
