@@ -10,24 +10,29 @@
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
     "./styles.css": "./dist/index.css",
-    "./header":"./src/header.tsx",
-    "./navBar":"./src/navBar.tsx",
-    "./inputField":"./src/inputFields.tsx",
-    "./dialogBox":"./src/dialogBox.tsx",
-    "./toggleSwitch":"./src/toggleSwitch.tsx",
-    "./sideBar":"./src/sideBar.tsx",
-    "./deletePopupComp":"./src/deletePopupComp.tsx"
-
-
-
-
-
+    "./header": "./src/header.tsx",
+    "./navBar": "./src/navBar.tsx",
+    "./inputField": "./src/inputFields.tsx",
+    "./dialogBox": "./src/dialogBox.tsx",
+    "./toggleSwitch": "./src/toggleSwitch.tsx",
+    "./sideBar": "./src/sideBar.tsx",
+    "./deletePopupComp": "./src/deletePopupComp.tsx"
   },
   "scripts": {
     "build": "tailwindcss -i ./src/style.css -o ./dist/index.css",
     "dev": "tailwindcss -i ./src/style.css -o ./dist/index.css --watch",
     "lint": "eslint . --max-warnings 0",
-    "generate:component": "turbo gen react-component"
+    "generate:component": "turbo gen react-component",
+    "ui:add": "npx shadcn-ui@latest add"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "framer-motion": "^10.16.4",
+    "lucide-react": "^0.292.0",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@repo/tailwind-config": "*",
