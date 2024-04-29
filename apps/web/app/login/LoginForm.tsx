@@ -1,6 +1,6 @@
 import React from "react";
 import { InputField } from "@repo/ui/inputField";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 const LoginForm = () => {

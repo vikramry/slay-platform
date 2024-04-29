@@ -5,8 +5,9 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./button": "./src/button.tsx",
+    ".": "./dist/index.mjs",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
     "./styles.css": "./dist/index.css",
@@ -19,11 +20,11 @@
     "./deletePopupComp": "./src/deletePopupComp.tsx"
   },
   "scripts": {
-    "build": "tailwindcss -i ./src/style.css -o ./dist/index.css",
-    "dev": "tailwindcss -i ./src/style.css -o ./dist/index.css --watch",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
-    "ui:add": "npx shadcn-ui@latest add"
+    "ui:add": "npx shadcn-ui@latest add",
+    "dev": "tsup --watch",
+    "build": "tsup"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
@@ -32,7 +33,8 @@
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.292.0",
     "tailwind-merge": "^2.0.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tsup": "^6.2.0"
   },
   "devDependencies": {
     "@repo/tailwind-config": "*",
