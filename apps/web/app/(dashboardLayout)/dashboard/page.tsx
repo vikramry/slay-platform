@@ -40,6 +40,102 @@ const page = () => {
       status: "failed",
       email: "carmella@hotmail.com",
     },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
   ]
 
 
