@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/ui": "*",
+    "lucide-react": "^0.376.0",
     "next": "^14.1.1",
     "next-themes": "^0.3.0",
     "react": "^18.2.0",

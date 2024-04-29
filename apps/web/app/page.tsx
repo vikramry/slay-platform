@@ -4,7 +4,7 @@ import { Code } from "@repo/ui/code";
 import styles from "./page.module.css";
 import Client, { useFetchUserData, useLazyFetchUserData } from "@repo/client";
 import { useEffect } from "react";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui";
 import DynamicLayout from "./dynamicLayout";
 import Login from "./login";
 
@@ -74,6 +74,7 @@ export default function Page(): JSX.Element {
   return (
     <div className="h-screen w-screen bg-red-800 dark:bg-green-300">
       {/* <DynamicLayout /> */}
+      {/* <Button>As it was</Button> */}
     </div>
     // <DynamicLayout />
     // <main className={styles.main}>
