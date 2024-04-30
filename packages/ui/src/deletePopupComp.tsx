@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { InputField } from "./inputFields";
 
-export function DeletePopupComp({InputText,setState,...rest}:{InputText:string,state?:boolean,setState: (state: boolean) => void;
+export function DeletePopupComp({InputText,setState,onclick,...rest}:{InputText:string,state?:boolean,setState: (state: boolean) => void,onclick?:()=>void
 }) {
     const[confirmDeleteText,setConfirmDeleteText]=useState("")
     const [confirmDelete,setConfirmDelete]=useState(true)
@@ -24,7 +24,7 @@ export function DeletePopupComp({InputText,setState,...rest}:{InputText:string,s
             <div className="w-[150px] flex flex-row gap-2 justify-end">
 
             <Button buttonText="Cancel" variant="secondary" size="md" classnames=" font-medium text-black dark:hover:bg-[#18181b]/80 dark:hover:opacity-800 " onClick={()=>setState(false)}/>
-            <Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={()=>console.log("enter")}/>
+            <Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick}/>
                 </div>
 
         </div>
