@@ -18,7 +18,7 @@ export const ModeToggleButton = () => {
   return (
     <div
       className={` w-[60px] rounded-[100px]  ${
-        theme == "dark" || currentTheme ==  "dark" ? "bg-[black]" : "bg-[white]"
+        theme == "dark" || currentTheme ==  "dark" ? "bg-[black]" : "bg-[white] shadow-md "
       }`}
     >
       <button
@@ -39,7 +39,7 @@ export const ModeToggleButton = () => {
       >
         <div
           id="switch-toggle"
-          className="w-8 h-8 relative rounded-full transition duration-500 transform p-1 text-white"
+          className={`w-8 h-8 relative rounded-full transition duration-500 transform p-1 text-white `}
         >
           {theme == "dark" ? (
             <svg
