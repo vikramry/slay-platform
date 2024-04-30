@@ -1,4 +1,4 @@
-import { Model } from "./types";
+import { CreatingModelType, Model } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -62,4 +62,82 @@ export const Modeldata: Model[] = [
       name: "avi"
     },
   }
+]
+
+export const  ModelFieldTypes:CreatingModelType[]= [
+    {
+        model:{
+            id: "1",
+            name: "test1",
+            label: "Test1",
+            managed: false,
+            createdBy: {
+              id: 1,
+              name: "avi"
+            },
+            updatedBy: {
+              id: 1,
+              name: "avi"
+            },
+          },
+        modelName:"Users",
+        createdBy:{
+            id:1,
+            name:"avi"
+        },
+        updatedBy:{
+            id:1,
+            name:"avi"
+        },
+        fieldName:"email",
+        label:"Email",
+        type:"email",
+        required:true,
+        default:"",
+        rounds:0,
+        unique:true,
+        ref:"",
+        localField:"",
+        foreignField:"",
+        enumType:"",
+        enumValues:[""],
+        managed:true
+    },{
+        model:{
+            id: "4",
+            name: "test4",
+            label: "Test4",
+            managed: true,
+            createdBy: {
+              id: 2,
+              name: "avi"
+            },
+            updatedBy: {
+              id: 2,
+              name: "avi"
+            },
+          },
+        modelName:"Users",
+        createdBy:{
+            id:1,
+            name:"Thrinetra"
+        },
+        updatedBy:{
+            id:1,
+            name:"Thrinetra"
+        },
+        fieldName:"password",
+        label:"Password",
+        type:"password",
+        required:true,
+        default:"",
+        rounds:0,
+        unique:true,
+        ref:"",
+        localField:"",
+        foreignField:"",
+        enumType:"",
+        enumValues:[""],
+        managed:true
+    }
 ]
