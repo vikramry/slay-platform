@@ -1,4 +1,4 @@
-import { CreatingModelType, Model } from "./types";
+import { Model, ModelFieldType } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -64,7 +64,7 @@ export const Modeldata: Model[] = [
   }
 ]
 
-export const  ModelFieldTypes:CreatingModelType[]= [
+export const  ModelFieldData:ModelFieldType[]= [
     {
         model:{
             id: "1",
@@ -132,12 +132,12 @@ export const  ModelFieldTypes:CreatingModelType[]= [
         required:true,
         default:"",
         rounds:0,
-        unique:true,
+        unique:false,
         ref:"",
         localField:"",
         foreignField:"",
         enumType:"",
         enumValues:[""],
-        managed:true
+        managed:false
     }
 ]

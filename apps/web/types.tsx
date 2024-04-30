@@ -13,7 +13,7 @@ export interface User{
   }
 
 
-export interface CreatingModelType {
+export interface ModelFieldType {
     model:Model,
     modelName:string,
     createdBy:User,

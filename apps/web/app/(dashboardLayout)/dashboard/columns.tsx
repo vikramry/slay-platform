@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox, Button, DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, AlertDialog, AlertDialogTrigger, DeletePopupComp } from "@repo/ui"
 import { ChevronsUpDown, Ellipsis, Trash2 } from 'lucide-react';
-import { Model } from "../../../types";
+import { Model, ModelFieldType } from "../../../types";
 import Link from "next/link";
 import { useState } from "react";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
@@ -170,6 +170,170 @@ export const modelColumns: ColumnDef<Model>[] = [
     </div>,
   },
   {
+    accessorKey: "createdBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created By
+
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+    },
+  },
+  {
+    accessorKey: "updatedBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated By
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+      const handleDelete = () => {
+        //delete functionality here
+      }
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <Ellipsis className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy Model ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>View Model</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <Trash2 size={13} /> Delete Model
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+              </AlertDialog>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+]
+
+export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
+  {
+    accessorKey: "fieldName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Field Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="">{row.getValue("fieldName")}</div>
+    ),
+  },
+  {
+    accessorKey: "label",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Label
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
+  },
+  {
+    accessorKey: "type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Type
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("type") || "-"}</div>,
+  },
+  {
+    accessorKey: "required",
+    header: "Required",
+    cell: ({ row }) => <div className="">
+      <Checkbox
+        checked={
+          row.getValue("required")
+        }
+        readonly
+        aria-label="Select all"
+      />
+    </div>,
+  },
+  {
+    accessorKey: "unique",
+    header: "Unique",
+    cell: ({ row }) => <div className="">
+      <Checkbox
+        checked={
+          row.getValue("unique")
+        }
+        readonly
+        aria-label="Select all"
+      />
+    </div>,
+  },
+  {
+    accessorKey: "managed",
+    header: "Managed",
+    cell: ({ row }) => <div className="">
+      <Checkbox
+        checked={
+          row.getValue("managed")
+        }
+        readonly
+        aria-label="Select all"
+      />
+    </div>,
+  },{
     accessorKey: "createdBy.name",
     header: ({ column }) => {
       return (
