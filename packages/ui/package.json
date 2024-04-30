@@ -16,8 +16,7 @@
     "./inputField": "./src/inputFields.tsx",
     "./dialogBox": "./src/dialogBox.tsx",
     "./toggleSwitch": "./src/toggleSwitch.tsx",
-    "./sideBar": "./src/sideBar.tsx",
-    "./deletePopupComp": "./src/deletePopupComp.tsx"
+    "./sideBar": "./src/sideBar.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -27,6 +26,7 @@
     "build": "tsup"
   },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-select": "^2.0.0",
