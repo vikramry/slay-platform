@@ -226,7 +226,7 @@ export const modelColumns: ColumnDef<Model>[] = [
               Copy Model ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+            <Link href={`/dashboard/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View Model</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
