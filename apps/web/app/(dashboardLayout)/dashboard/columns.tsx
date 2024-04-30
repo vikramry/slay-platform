@@ -1,9 +1,12 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Checkbox, Button, DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from "@repo/ui"
-import { ChevronsUpDown, Ellipsis } from 'lucide-react';
+import { Checkbox, Button, DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, AlertDialog, AlertDialogTrigger, DeletePopupComp } from "@repo/ui"
+import { ChevronsUpDown, Ellipsis, Trash2 } from 'lucide-react';
 import { Model } from "../../../types";
+import Link from "next/link";
+import { useState } from "react";
+// import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -106,28 +109,6 @@ export const columns: ColumnDef<Payment>[] = [
 ]
 
 export const modelColumns: ColumnDef<Model>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value: any) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -142,7 +123,7 @@ export const modelColumns: ColumnDef<Model>[] = [
       )
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("name")}</div>
+      <div className="">{row.getValue("name")}</div>
     ),
   },
   {
@@ -158,7 +139,7 @@ export const modelColumns: ColumnDef<Model>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("label")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
   {
     accessorKey: "prefix",
@@ -226,7 +207,9 @@ export const modelColumns: ColumnDef<Model>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original
-
+      const handleDelete = () => {
+        //delete functionality here
+      }
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -243,8 +226,20 @@ export const modelColumns: ColumnDef<Model>[] = [
               Copy Model ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Model</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>View Model</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <Trash2 size={13} /> Delete Model
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+              </AlertDialog>
+            </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
       )
