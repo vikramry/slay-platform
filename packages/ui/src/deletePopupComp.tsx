@@ -29,7 +29,7 @@ export function DeletePopupComp({ InputText, onclick, ...rest }: {
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={onclick} disabled={confirmDelete}>Delete</AlertDialogAction>
+                <AlertDialogAction className="bg-transparent shadow-none border-none hover:bg-transparent"><Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick}/></AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
         // <div className="flex flex-col gap-6 fixed top-0 left-0 h-screen w-screen">
