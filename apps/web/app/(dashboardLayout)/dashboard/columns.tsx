@@ -154,7 +154,7 @@ export const modelColumns: ColumnDef<Model>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("prefix") || "-"}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("prefix") || "-"}</div>,
   },
   {
     accessorKey: "managed",
@@ -184,7 +184,7 @@ export const modelColumns: ColumnDef<Model>[] = [
       )
     },
     cell: ({ row }) => {
-      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      return <div className=""> {row.original.createdBy?.name || "-"}</div>
     },
   },
   {
@@ -200,7 +200,7 @@ export const modelColumns: ColumnDef<Model>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+    cell: ({ row }) => <div className="">{row.original.updatedBy?.name || "-"}</div>,
   },
   {
     id: "actions",
@@ -233,8 +233,8 @@ export const modelColumns: ColumnDef<Model>[] = [
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
-                    <Trash2 size={13} /> Delete Model
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer">
+                    <Trash2 size={14} /> Delete Model
                   </div>
                 </AlertDialogTrigger>
                 <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
