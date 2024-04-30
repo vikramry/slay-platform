@@ -11,3 +11,24 @@ export interface User{
     createdBy?: User,
     updatedBy?: User,
   }
+
+
+export interface CreatingModelType {
+    model:Model,
+    modelName:string,
+    createdBy:User,
+    updatedBy:User,
+    fieldName:string,
+    label:string,
+    type:string
+    required:boolean
+    default:string
+    rounds:number
+    unique:boolean
+    ref:string
+    localField:string
+    foreignField:string
+    enumType:string
+    enumValues:string[]
+    managed:boolean
+}
