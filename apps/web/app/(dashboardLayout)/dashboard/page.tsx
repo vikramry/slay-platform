@@ -5,7 +5,8 @@ import { DialogBox } from "@repo/ui/dialogBox";
 import { DeletePopupComp } from "@repo/ui/deletePopupComp"
 // import { Button } from "@repo/ui/button";
 import { Button, DataTable } from '@repo/ui';
-import { Payment, columns } from "./columns"
+import { Payment, columns, modelColumns } from "./columns"
+import { Modeldata } from "../../../tempData";
 const page = () => {
   const [state, setState] = useState(false)
 
@@ -147,7 +148,7 @@ const page = () => {
         <DeletePopupComp InputText="delete" setState={setState}/>
         </DialogBox> */}
 
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={modelColumns} data={Modeldata} />
     </div>
   );
 };
