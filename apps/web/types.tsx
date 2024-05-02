@@ -32,3 +32,20 @@ export interface ModelFieldType {
     enumValues:string[]
     managed:boolean
 }
+export interface ComponentsType {
+    name: string
+    label: string
+    description: string
+    code: string
+    modules: string
+    createdBy: User
+    updatedBy: User
+}
+export interface TabType{
+    icon: string
+    model:Model
+    label: String
+    order: number
+    createdBy: User
+    updatedBy: User
+}
