@@ -33,11 +33,21 @@ export interface ModelFieldType {
     managed:boolean
 }
 
-export interface Tab {
-  icon:string,
-  model:Model,
-  label:string,
-  order:number,
-  createdBy:User,
-  updatedBy:User
+
+export interface ComponentsType {
+    name: string
+    label: string
+    description: string
+    code: string
+    modules: string
+    createdBy: User
+    updatedBy: User
+}
+export interface TabType{
+    icon: string
+    model:Model
+    label: string
+    order: number
+    createdBy: User
+    updatedBy: User
 }
