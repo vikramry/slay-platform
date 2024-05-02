@@ -895,7 +895,7 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
                     <Trash2 size={13} /> Delete Component
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="COMPONENT" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -975,7 +975,7 @@ export const userColumns:ColumnDef<User>[]=[
                     <Trash2 size={13} /> Delete User
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="USER"/>
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
