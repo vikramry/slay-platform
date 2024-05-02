@@ -15,6 +15,7 @@ export interface User{
 
 
 export interface ModelFieldType {
+  id: string,
     model:Model,
     modelName:string,
     createdBy:User,
@@ -36,6 +37,7 @@ export interface ModelFieldType {
 
 
 export interface ComponentsType {
+  id: string,
     name: string
     label: string
     description: string
@@ -45,10 +47,40 @@ export interface ComponentsType {
     updatedBy: User
 }
 export interface TabType{
+  id: string,
     icon: string
     model:Model
     label: string
     order: number
     createdBy: User
     updatedBy: User
+}
+export interface enumType{
+  type: string,
+      enum: any[],
+      enumType: string,
+      required: boolean,
+}
+
+export interface ModelOptionType  {
+  id: string
+  model: Model
+  name: string
+  managed: boolean
+  keyName: string
+  value: string
+  type: enumType
+  createdBy: User
+  updatedBy: User
+}
+export interface FieldOptionsType  {
+  model:Model
+  modelName: string
+  modelField: ModelFieldType
+  fieldName: string
+  keyName: string
+  type: enumType
+  value: string
+  managed: boolean
+  prefix: string
 }
