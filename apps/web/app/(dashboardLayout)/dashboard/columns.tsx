@@ -237,7 +237,7 @@ export const modelColumns: ColumnDef<Model>[] = [
                     <Trash2 size={14} /> Delete Model
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="MODEL" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -333,7 +333,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
         aria-label="Select all"
       />
     </div>,
-  },{
+  }, {
     accessorKey: "createdBy.name",
     header: ({ column }) => {
       return (
@@ -404,7 +404,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
                     <Trash2 size={13} /> Delete Model Field
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.fieldName} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.fieldName} onclick={handleDelete} type="MODELFIELD" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -528,7 +528,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
                     <Trash2 size={13} /> Delete Tab
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.label} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.label} onclick={handleDelete} type="TAB" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -665,7 +665,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
                     <Trash2 size={13} /> Delete Model Options
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="MODELOPTION" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -784,6 +784,117 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
                     <Trash2 size={13} /> Delete Field Option
                   </div>
                 </AlertDialogTrigger>
+                <DeletePopupComp inputText={row.original.fieldName} onclick={handleDelete} type="FIELDOPTION" />
+              </AlertDialog>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+]
+
+export const componentsColumns: ColumnDef<ComponentsType>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+           Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="">{row.getValue("name")}</div>
+    ),
+  },
+  {
+    accessorKey: "label",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Label
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
+  },
+{
+    accessorKey: "createdBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created By
+
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+    },
+  },
+  {
+    accessorKey: "updatedBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated By
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+      const handleDelete = () => {
+        //delete functionality here
+      }
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <Ellipsis className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy Component ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>View Component</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <Trash2 size={13} /> Delete Component
+                  </div>
+                </AlertDialogTrigger>
                 <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
               </AlertDialog>
             </DropdownMenuLabel>
@@ -793,3 +904,85 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
     },
   },
 ]
+
+export const userColumns:ColumnDef<User>[]=[
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+           Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="">{row.getValue("name")}</div>
+    ),
+  },
+  {
+    accessorKey: "email",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+           Email
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="">{row.getValue("email")}</div>
+    ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+      const handleDelete = () => {
+        //delete functionality here
+      }
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <Ellipsis className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy User ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>View User</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <Trash2 size={13} /> Delete User
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+              </AlertDialog>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+
+]
+

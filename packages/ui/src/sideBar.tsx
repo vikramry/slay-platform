@@ -14,12 +14,12 @@ const data: Record<string, SideBarProps[]> = {
     },
     {
       title: "Components",
-      link: "components"
+      link: "dashboard/components"
 
     },
     {
       title: "Users",
-      link: "users"
+      link: "dashboard/users"
 
     },
     {

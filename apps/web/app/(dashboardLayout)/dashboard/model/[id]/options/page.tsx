@@ -9,7 +9,7 @@ const page = () => {
       {/* <DynamicLayout /> */}
       {/* <Button size="sm" variant="primary"  buttonText="click" onClick={()=>setState(true)}/>
       <DialogBox setState={setState} state={state} title="Confirm Delete?">
-        <DeletePopupComp InputText="delete" setState={setState}/>
+        <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
 
       <DataTable columns={modelOptionsColumns} data={ModelOptionsData} />
