@@ -3,14 +3,23 @@ import { Button } from "./button";
 import { InputField } from "./inputFields";
 import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./components";
 
-export function DeletePopupComp({ InputText, onclick, ...rest }: {
-    InputText: string, onclick?: () => void
+export function DeletePopupComp({ inputText, type, onclick, ...rest }: {
+    inputText: string, type: "MODEL" | "MODELFIELD" | "FIELDOPTION" | "MODELOPTION" | "COMPONENT" | "TAB" | "USER", onclick?: () => void
 }) {
+    const typeMap: Record<string, string> = {
+        "MODEL": "model",
+        "MODELFIELD": "model field",
+        "FIELDOPTION": "field option",
+        "MODELOPTION": "model option",
+        "COMPONENT": "component",
+        "TAB": "tab",
+        "USER": "user",
+    }
     const [confirmDeleteText, setConfirmDeleteText] = useState("")
     const [confirmDelete, setConfirmDelete] = useState(true)
     console.log(confirmDeleteText, "text")
     useEffect(() => {
-        if (confirmDeleteText === InputText) {
+        if (confirmDeleteText === inputText) {
             setConfirmDelete(false)
         } else {
             setConfirmDelete(true)
@@ -22,14 +31,14 @@ export function DeletePopupComp({ InputText, onclick, ...rest }: {
 
         <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure you want to drop model "{InputText}"?</AlertDialogTitle>
+                <AlertDialogTitle>Are you sure you want to drop {typeMap[type]} "{inputText}"?</AlertDialogTitle>
                 <AlertDialogDescription>
-                    <InputField type="text" label={`Type "${InputText}" to confirm your action`} placeholder="Enter Model Name for delete" onChange={(e) => setConfirmDeleteText(e.target.value)} classNames="border-[1.5px]  dark:border-[#18181b]/80  dark:text-[red]" />
+                    <InputField type="text" label={`Type "${inputText}" to confirm your action`} placeholder={`Enter ${typeMap[type]} name for delete`} onChange={(e) => setConfirmDeleteText(e.target.value)} classNames="border-[1.5px]  dark:border-[#18181b]/80  dark:text-[red]" />
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-transparent shadow-none border-none hover:bg-transparent"><Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick}/></AlertDialogAction>
+                <AlertDialogAction className="bg-transparent shadow-none border-none hover:bg-transparent"><Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick} /></AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
         // <div className="flex flex-col gap-6 fixed top-0 left-0 h-screen w-screen">

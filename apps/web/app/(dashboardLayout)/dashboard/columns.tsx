@@ -237,7 +237,7 @@ export const modelColumns: ColumnDef<Model>[] = [
                     <Trash2 size={14} /> Delete Model
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="MODEL" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -333,7 +333,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
         aria-label="Select all"
       />
     </div>,
-  },{
+  }, {
     accessorKey: "createdBy.name",
     header: ({ column }) => {
       return (
@@ -404,7 +404,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
                     <Trash2 size={13} /> Delete Model Field
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.fieldName} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.fieldName} onclick={handleDelete} type="MODELFIELD" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -528,7 +528,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
                     <Trash2 size={13} /> Delete Tab
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.label} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.label} onclick={handleDelete} type="TAB" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -665,7 +665,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
                     <Trash2 size={13} /> Delete Model Options
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="MODELOPTION" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -784,7 +784,7 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
                     <Trash2 size={13} /> Delete Field Option
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.fieldName} onclick={handleDelete} type="FIELDOPTION" />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
