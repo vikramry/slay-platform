@@ -1,4 +1,4 @@
-import { Model, ModelFieldType, ModelOptionType, TabType } from "./types";
+import { FieldOptionsType, Model, ModelFieldType, ModelOptionType, TabType } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -671,4 +671,143 @@ export const ModelOptionsData:ModelOptionType[]=[
         id: "876543"
     }
   ]
-  
+
+  export const FieldOptions:FieldOptionsType[]=[{
+    "model": {
+      "id": "1",
+      "name": "UserModel",
+      "label": "User",
+      "prefix": "usr",
+      "managed": true,
+      "createdBy": {
+        "id": 1,
+        "name": "Admin"
+      },
+      "updatedBy": {
+        "id": 1,
+        "name": "Admin"
+      }
+    },
+    "modelName": "UserModel",
+    "modelField": {
+      "model": {
+        "id": "1",
+        "name": "UserModel",
+        "label": "User",
+        "prefix": "usr",
+        "managed": true,
+        "createdBy": {
+          "id": 1,
+          "name": "Admin"
+        },
+        "updatedBy": {
+          "id": 1,
+          "name": "Admin"
+        }
+      },
+      "modelName": "UserModel",
+      "createdBy": {
+        "id": 1,
+        "name": "Admin"
+      },
+      "updatedBy": {
+        "id": 1,
+        "name": "Admin"
+      },
+      "fieldName": "email",
+      "label": "Email",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "rounds": 10,
+      "unique": true,
+      "ref": "",
+      "localField": "",
+      "foreignField": "",
+      "enumType": "",
+      "enumValues": [],
+      "managed": true,
+      "id":"123"
+    },
+    "fieldName": "email",
+    "keyName": "user_email",
+    "type": {
+      "type": "string",
+      "enum": [],
+      "enumType": "",
+      "required": true
+    },
+    "value": "user@example.com",
+    "managed": true,
+    "prefix": "usr"
+  },
+  {
+    "model": {
+      "id": "2",
+      "name": "ProductModel",
+      "label": "Product",
+      "prefix": "prd",
+      "managed": true,
+      "createdBy": {
+        "id": 1,
+        "name": "Admin"
+      },
+      "updatedBy": {
+        "id": 1,
+        "name": "Admin"
+      }
+    },
+    "modelName": "ProductModel",
+    "modelField": {
+      "model": {
+        "id": "2",
+        "name": "ProductModel",
+        "label": "Product",
+        "prefix": "prd",
+        "managed": true,
+        "createdBy": {
+          "id": 1,
+          "name": "Admin"
+        },
+        "updatedBy": {
+          "id": 1,
+          "name": "Admin"
+        }
+      },
+      "modelName": "ProductModel",
+      "createdBy": {
+        "id": 1,
+        "name": "Admin"
+      },
+      "updatedBy": {
+        "id": 1,
+        "name": "Admin"
+      },
+      "fieldName": "price",
+      "label": "Price",
+      "type": "number",
+      "required": true,
+      "default": "0",
+      "rounds": 2,
+      "unique": false,
+      "ref": "",
+      "localField": "",
+      "foreignField": "",
+      "enumType": "",
+      "enumValues": [],
+      "managed": true,
+      "id":"123"
+    },
+    "fieldName": "price",
+    "keyName": "product_price",
+    "type": {
+      "type": "number",
+      "enum": [],
+      "enumType": "",
+      "required": true
+    },
+    "value": "100",
+    "managed": true,
+    "prefix": "prd"
+  }
+]

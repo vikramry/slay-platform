@@ -72,3 +72,14 @@ export interface ModelOptionType  {
   createdBy: User
   updatedBy: User
 }
+export interface FieldOptionsType  {
+  model:Model
+  modelName: string
+  modelField: ModelFieldType
+  fieldName: string
+  keyName: string
+  type: enumType
+  value: string
+  managed: boolean
+  prefix: string
+}
