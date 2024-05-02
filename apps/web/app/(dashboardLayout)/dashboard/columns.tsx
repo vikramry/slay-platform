@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox, Button, DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, AlertDialog, AlertDialogTrigger, DeletePopupComp } from "@repo/ui"
 import { ChevronsUpDown, Ellipsis, Trash2 } from 'lucide-react';
-import { FieldOptionsType, Model, ModelFieldType, ModelOptionType, TabType } from "../../../types";
+import { ComponentsType, FieldOptionsType, Model, ModelFieldType, ModelOptionType, TabType, User } from "../../../types";
 import Link from "next/link";
 import { useState } from "react";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
@@ -895,7 +895,7 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
                     <Trash2 size={13} /> Delete Component
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -975,7 +975,7 @@ export const userColumns:ColumnDef<User>[]=[
                     <Trash2 size={13} /> Delete User
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
