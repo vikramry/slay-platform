@@ -672,7 +672,7 @@ export const ModelOptionsData:ModelOptionType[]=[
     }
   ]
 
-  export const FieldOptions:FieldOptionsType[]=[{
+  export const FieldOptionsData:FieldOptionsType[]=[{
     "model": {
       "id": "1",
       "name": "UserModel",
