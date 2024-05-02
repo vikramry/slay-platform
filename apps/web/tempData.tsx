@@ -1,4 +1,4 @@
-import { Model, ModelFieldType } from "./types";
+import { Model, ModelFieldType, Tab } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -141,3 +141,158 @@ export const  ModelFieldData:ModelFieldType[]= [
         managed:false
     }
 ]
+
+
+export const TabSampleData: Tab[] = [
+  {
+    icon: "icon1",
+    model: {
+      id: "model1",
+      name: "Model 1",
+      label: "Model One",
+      prefix: "M1",
+      managed: true,
+      createdBy: { id: 1, name: "John Doe" },
+      updatedBy: { id: 2, name: "Jane Smith" }
+    },
+    label: "Tab 1",
+    order: 1,
+    createdBy: { id: 3, name: "Alice Johnson" },
+    updatedBy: { id: 4, name: "Bob Brown" }
+  },
+  {
+    icon: "icon2",
+    model: {
+      id: "model2",
+      name: "Model 2",
+      label: "Model Two",
+      managed: false,
+      createdBy: { id: 5, name: "Ella Davis" },
+      updatedBy: { id: 6, name: "Mike Wilson" }
+    },
+    label: "Tab 2",
+    order: 2,
+    createdBy: { id: 7, name: "Sophia Martinez" },
+    updatedBy: { id: 8, name: "Liam Taylor" }
+  },
+  {
+    icon: "icon3",
+    model: {
+      id: "model3",
+      name: "Model 3",
+      label: "Model Three",
+      managed: true,
+      createdBy: { id: 9, name: "Olivia Brown" },
+      updatedBy: { id: 10, name: "Noah Garcia" }
+    },
+    label: "Tab 3",
+    order: 3,
+    createdBy: { id: 11, name: "Mia Rodriguez" },
+    updatedBy: { id: 12, name: "William Martinez" }
+  },
+  {
+    icon: "icon4",
+    model: {
+      id: "model4",
+      name: "Model 4",
+      label: "Model Four",
+      managed: false,
+      createdBy: { id: 13, name: "Ava Wilson" },
+      updatedBy: { id: 14, name: "James Jones" }
+    },
+    label: "Tab 4",
+    order: 4,
+    createdBy: { id: 15, name: "Charlotte Anderson" },
+    updatedBy: { id: 16, name: "Daniel Thomas" }
+  },
+  {
+    icon: "icon5",
+    model: {
+      id: "model5",
+      name: "Model 5",
+      label: "Model Five",
+      managed: true,
+      createdBy: { id: 17, name: "Sophia Hernandez" },
+      updatedBy: { id: 18, name: "Benjamin Nelson" }
+    },
+    label: "Tab 5",
+    order: 5,
+    createdBy: { id: 19, name: "Amelia Turner" },
+    updatedBy: { id: 20, name: "Ethan White" }
+  },
+  {
+    icon: "icon6",
+    model: {
+      id: "model6",
+      name: "Model 6",
+      label: "Model Six",
+      managed: false,
+      createdBy: { id: 21, name: "Harper King" },
+      updatedBy: { id: 22, name: "Mason Moore" }
+    },
+    label: "Tab 6",
+    order: 6,
+    createdBy: { id: 23, name: "Evelyn Cooper" },
+    updatedBy: { id: 24, name: "Lucas Lee" }
+  },
+  {
+    icon: "icon7",
+    model: {
+      id: "model7",
+      name: "Model 7",
+      label: "Model Seven",
+      managed: true,
+      createdBy: { id: 25, name: "Abigail Parker" },
+      updatedBy: { id: 26, name: "Elijah Scott" }
+    },
+    label: "Tab 7",
+    order: 7,
+    createdBy: { id: 27, name: "Scarlett Ward" },
+    updatedBy: { id: 28, name: "Alexander Green" }
+  },
+  {
+    icon: "icon8",
+    model: {
+      id: "model8",
+      name: "Model 8",
+      label: "Model Eight",
+      managed: false,
+      createdBy: { id: 29, name: "Grace Adams" },
+      updatedBy: { id: 30, name: "Logan Hill" }
+    },
+    label: "Tab 8",
+    order: 8,
+    createdBy: { id: 31, name: "Zoey Baker" },
+    updatedBy: { id: 32, name: "Jackson Rivera" }
+  },
+  {
+    icon: "icon9",
+    model: {
+      id: "model9",
+      name: "Model 9",
+      label: "Model Nine",
+      managed: true,
+      createdBy: { id: 33, name: "Nora Ward" },
+      updatedBy: { id: 34, name: "Carter Price" }
+    },
+    label: "Tab 9",
+    order: 9,
+    createdBy: { id: 35, name: "Leah Bailey" },
+    updatedBy: { id: 36, name: "Sebastian Cooper" }
+  },
+  {
+    icon: "icon10",
+    model: {
+      id: "model10",
+      name: "Model 10",
+      label: "Model Ten",
+      managed: false,
+      createdBy: { id: 37, name: "Penelope Rivera" },
+      updatedBy: { id: 38, name: "Mateo Hughes" }
+    },
+    label: "Tab 10",
+    order: 10,
+    createdBy: { id: 39, name: "Stella Reed" },
+    updatedBy: { id: 40, name: "Wyatt Long" }
+  }
+];

@@ -32,3 +32,12 @@ export interface ModelFieldType {
     enumValues:string[]
     managed:boolean
 }
+
+export interface Tab {
+  icon:string,
+  model:Model,
+  label:string,
+  order:number,
+  createdBy:User,
+  updatedBy:User
+}

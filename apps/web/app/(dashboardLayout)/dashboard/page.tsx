@@ -1,8 +1,5 @@
 "use client"
 import React, { useState } from "react";
-import DynamicLayout from "../../dynamicLayout";
-import { DialogBox } from "@repo/ui/dialogBox";
-import { DeletePopupComp } from "@repo/ui/deletePopupComp"
 // import { Button } from "@repo/ui/button";
 import { Button, DataTable } from '@repo/ui';
 import { Payment, columns, modelColumns } from "./columns"
