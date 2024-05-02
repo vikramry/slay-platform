@@ -390,8 +390,11 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
               Copy Model ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
-              <DropdownMenuItem>View Model</DropdownMenuItem>
+            <Link href={`${row.original.model.id}/field/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>View Model Field</DropdownMenuItem>
+            </Link>
+            <Link href={`${row.original.model.id}/field/${row.original.id}/options`} className="cursor-pointer">
+              <DropdownMenuItem>Go to Field Options</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
 
@@ -401,7 +404,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
                     <Trash2 size={13} /> Delete Model
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp InputText={row.original.fieldName} onclick={handleDelete} />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
@@ -525,7 +528,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
                     <Trash2 size={13} /> Delete Tab
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+                <DeletePopupComp InputText={row.original.label} onclick={handleDelete} />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
