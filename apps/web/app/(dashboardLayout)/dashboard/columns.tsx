@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox, Button, DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, AlertDialog, AlertDialogTrigger, DeletePopupComp } from "@repo/ui"
 import { ChevronsUpDown, Ellipsis, Trash2 } from 'lucide-react';
-import { ComponentsType, Model, ModelFieldType } from "../../../types";
+import { ComponentsType, Model, ModelFieldType, User } from "../../../types";
 import Link from "next/link";
 import { useState } from "react";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
@@ -498,18 +498,18 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy Model ID
+              Copy Component ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link href={`/model/${row.original.id}`} className="cursor-pointer">
-              <DropdownMenuItem>View Model</DropdownMenuItem>
+              <DropdownMenuItem>View Component</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
-                    <Trash2 size={13} /> Delete Model
+                    <Trash2 size={13} /> Delete Component
                   </div>
                 </AlertDialogTrigger>
                 <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
@@ -521,3 +521,85 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
     },
   },
 ]
+
+export const userColumns:ColumnDef<User>[]=[
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+           Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="">{row.getValue("name")}</div>
+    ),
+  },
+  {
+    accessorKey: "email",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+           Email
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="">{row.getValue("email")}</div>
+    ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+      const handleDelete = () => {
+        //delete functionality here
+      }
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <Ellipsis className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy User ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>View User</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <Trash2 size={13} /> Delete User
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp InputText={row.original.name} onclick={handleDelete} />
+              </AlertDialog>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+
+]
+

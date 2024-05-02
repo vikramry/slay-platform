@@ -1,4 +1,4 @@
-import { ComponentsType, Model, ModelFieldType, TabType } from "./types";
+import { ComponentsType, Model, ModelFieldType, TabType, User } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -345,4 +345,33 @@ export const componentsSampleData:ComponentsType[]=[
   }
 }
   
+]
+
+export const usersSampleData:User[]=[
+  {
+    id:1,
+    name:"orange",
+    email:"orange@email.com"
+  },
+  {
+    id:2,
+    name:"mango",
+    email:"mango@email.com"
+  },
+  {
+    id:3,
+    name:"grapes",
+    email:"grapes@email.com"
+  },
+  {
+    id:4,
+    name:"coconuts",
+    email:"coconuts@email.com"
+  },
+  {
+    id:5,
+    name:"apple",
+    email:"apple@email.com"
+  }
+
 ]

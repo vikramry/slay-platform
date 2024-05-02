@@ -1,6 +1,7 @@
 export interface User{
     id:number,
-    name:string
+    name:string,
+    email?:string,  
   }
   export interface Model {
     id: string,
