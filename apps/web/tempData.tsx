@@ -1,4 +1,4 @@
-import { Model, ModelFieldType, Tab } from "./types";
+import { Model, ModelFieldType, TabType } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -143,7 +143,7 @@ export const  ModelFieldData:ModelFieldType[]= [
 ]
 
 
-export const TabSampleData: Tab[] = [
+export const TabSampleData: TabType[] = [
   {
     icon: "icon1",
     model: {
