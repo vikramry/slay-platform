@@ -1,4 +1,4 @@
-import { Model, ModelFieldType, TabType } from "./types";
+import { ComponentsType, Model, ModelFieldType, TabType } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -296,3 +296,53 @@ export const TabSampleData: TabType[] = [
     updatedBy: { id: 40, name: "Wyatt Long" }
   }
 ];
+
+export const componentsSampleData:ComponentsType[]=[
+{
+  name: "comp1",
+    label: "Comp1",
+    description: "this data is about components.",
+    code: "",
+    modules: "",
+    createdBy: {
+      id:7,
+      name:"3netra"
+      },
+
+    updatedBy:{
+      id:7,
+      name:"vikram"
+    },
+},
+{
+  name:"comp2",
+  label:"Comp2",
+  description:"this data is about comp2",
+  code:"",
+  modules:"",
+  createdBy:{
+    id:8,
+    name:"orange"
+  },
+  updatedBy:{
+    id:8,
+    name:"orange"
+  },
+},
+{
+  name:"comp3",
+  label:"Comp3",
+  description:"this data is about comp3",
+  code:"",
+  modules:"",
+  createdBy:{
+    id:9,
+    name:"mango",
+  },
+  updatedBy:{
+    id:9,
+    name:"coconut"
+  }
+}
+  
+]

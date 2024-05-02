@@ -14,7 +14,7 @@ const data: Record<string, SideBarProps[]> = {
     },
     {
       title: "Components",
-      link: "components"
+      link: "dashboard/components"
 
     },
     {
