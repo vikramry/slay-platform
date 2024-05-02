@@ -1,4 +1,4 @@
-import { FieldOptionsType, Model, ModelFieldType, ModelOptionType, TabType } from "./types";
+import { FieldOptionsType, ComponentsType, Model, ModelFieldType, ModelOptionType, TabType, User } from "./types";
 
 export const Modeldata: Model[] = [
   {
@@ -309,505 +309,81 @@ export const TabSampleData: TabType[] = [
   }
 ];
 
-export const ModelOptionsData:ModelOptionType[]=[
-    {
-        "model": {
-            "id": "1",
-            "name": "UserModel",
-            "label": "User",
-            "prefix": "usr",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "user_status",
-        "managed": true,
-        "keyName": "status",
-        "value": "active",
-        "type": {
-            "type": "string",
-            "enum": ["active", "inactive", "blocked"],
-            "enumType": "userStatus",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "12345"
-    },
-    {
-        "model": {
-            "id": "2",
-            "name": "ProductModel",
-            "label": "Product",
-            "prefix": "prd",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "product_status",
-        "managed": true,
-        "keyName": "status",
-        "value": "available",
-        "type": {
-            "type": "string",
-            "enum": ["available", "out_of_stock", "discontinued"],
-            "enumType": "productStatus",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "8765543"
-    },
-    {
-        "model": {
-            "id": "3",
-            "name": "OrderModel",
-            "label": "Order",
-            "prefix": "ord",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "order_status",
-        "managed": true,
-        "keyName": "status",
-        "value": "pending",
-        "type": {
-            "type": "string",
-            "enum": ["pending", "confirmed", "shipped", "delivered"],
-            "enumType": "orderStatus",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "654321234"
-    },
-    {
-        "model": {
-            "id": "4",
-            "name": "TaskModel",
-            "label": "Task",
-            "prefix": "tsk",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "task_priority",
-        "managed": true,
-        "keyName": "priority",
-        "value": "high",
-        "type": {
-            "type": "string",
-            "enum": ["high", "medium", "low"],
-            "enumType": "taskPriority",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "765432"
-    },
-    {
-        "model": {
-            "id": "5",
-            "name": "CategoryModel",
-            "label": "Category",
-            "prefix": "cat",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "category_status",
-        "managed": true,
-        "keyName": "status",
-        "value": "active",
-        "type": {
-            "type": "string",
-            "enum": ["active", "inactive"],
-            "enumType": "categoryStatus",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "8765432"
-    },
-    {
-        "model": {
-            "id": "6",
-            "name": "PermissionModel",
-            "label": "Permission",
-            "prefix": "prm",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "permission_role",
-        "managed": true,
-        "keyName": "role",
-        "value": "user",
-        "type": {
-            "type": "string",
-            "enum": ["user", "admin", "manager"],
-            "enumType": "permissionRole",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "765432"
-    },
-    {
-        "model": {
-            "id": "7",
-            "name": "PostModel",
-            "label": "Post",
-            "prefix": "pst",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "post_category",
-        "managed": true,
-        "keyName": "category",
-        "value": "general",
-        "type": {
-            "type": "string",
-            "enum": ["general", "announcement", "discussion"],
-            "enumType": "postCategory",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "8765432"
-    },
-    {
-        "model": {
-            "id": "8",
-            "name": "EventModel",
-            "label": "Event",
-            "prefix": "evt",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "event_type",
-        "managed": true,
-        "keyName": "type",
-        "value": "conference",
-        "type": {
-            "type": "string",
-            "enum": ["conference", "webinar", "workshop"],
-            "enumType": "eventType",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "876543"
-    },
-    {
-        "model": {
-            "id": "9",
-            "name": "RoleModel",
-            "label": "Role",
-            "prefix": "rol",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "role_type",
-        "managed": true,
-        "keyName": "type",
-        "value": "user",
-        "type": {
-            "type": "string",
-            "enum": ["user", "admin", "manager"],
-            "enumType": "roleType",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "8765432"
-    },
-    {
-        "model": {
-            "id": "10",
-            "name": "DocumentModel",
-            "label": "Document",
-            "prefix": "doc",
-            "managed": true,
-            "createdBy": {
-                "id": 1,
-                "name": "Admin"
-            },
-            "updatedBy": {
-                "id": 1,
-                "name": "Admin"
-            }
-        },
-        "name": "document_type",
-        "managed": true,
-        "keyName": "type",
-        "value": "pdf",
-        "type": {
-            "type": "string",
-            "enum": ["pdf", "docx", "xlsx"],
-            "enumType": "documentType",
-            "required": true
-        },
-        "createdBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        "updatedBy": {
-            "id": 1,
-            "name": "Admin"
-        },
-        id: "876543"
-    }
-  ]
+export const componentsSampleData:ComponentsType[]=[
+{
+  name: "comp1",
+    label: "Comp1",
+    description: "this data is about components.",
+    code: "",
+    modules: "",
+    createdBy: {
+      id:7,
+      name:"3netra"
+      },
 
-  export const FieldOptions:FieldOptionsType[]=[{
-    "model": {
-      "id": "1",
-      "name": "UserModel",
-      "label": "User",
-      "prefix": "usr",
-      "managed": true,
-      "createdBy": {
-        "id": 1,
-        "name": "Admin"
-      },
-      "updatedBy": {
-        "id": 1,
-        "name": "Admin"
-      }
+    updatedBy:{
+      id:7,
+      name:"vikram"
     },
-    "modelName": "UserModel",
-    "modelField": {
-      "model": {
-        "id": "1",
-        "name": "UserModel",
-        "label": "User",
-        "prefix": "usr",
-        "managed": true,
-        "createdBy": {
-          "id": 1,
-          "name": "Admin"
-        },
-        "updatedBy": {
-          "id": 1,
-          "name": "Admin"
-        }
-      },
-      "modelName": "UserModel",
-      "createdBy": {
-        "id": 1,
-        "name": "Admin"
-      },
-      "updatedBy": {
-        "id": 1,
-        "name": "Admin"
-      },
-      "fieldName": "email",
-      "label": "Email",
-      "type": "string",
-      "required": true,
-      "default": "",
-      "rounds": 10,
-      "unique": true,
-      "ref": "",
-      "localField": "",
-      "foreignField": "",
-      "enumType": "",
-      "enumValues": [],
-      "managed": true,
-      "id":"123"
-    },
-    "fieldName": "email",
-    "keyName": "user_email",
-    "type": {
-      "type": "string",
-      "enum": [],
-      "enumType": "",
-      "required": true
-    },
-    "value": "user@example.com",
-    "managed": true,
-    "prefix": "usr"
+},
+{
+  name:"comp2",
+  label:"Comp2",
+  description:"this data is about comp2",
+  code:"",
+  modules:"",
+  createdBy:{
+    id:8,
+    name:"orange"
+  },
+  updatedBy:{
+    id:8,
+    name:"orange"
+  },
+},
+{
+  name:"comp3",
+  label:"Comp3",
+  description:"this data is about comp3",
+  code:"",
+  modules:"",
+  createdBy:{
+    id:9,
+    name:"mango",
+  },
+  updatedBy:{
+    id:9,
+    name:"coconut"
+  }
+}
+  
+]
+
+export const usersSampleData:User[]=[
+  {
+    id:1,
+    name:"orange",
+    email:"orange@email.com"
   },
   {
-    "model": {
-      "id": "2",
-      "name": "ProductModel",
-      "label": "Product",
-      "prefix": "prd",
-      "managed": true,
-      "createdBy": {
-        "id": 1,
-        "name": "Admin"
-      },
-      "updatedBy": {
-        "id": 1,
-        "name": "Admin"
-      }
-    },
-    "modelName": "ProductModel",
-    "modelField": {
-      "model": {
-        "id": "2",
-        "name": "ProductModel",
-        "label": "Product",
-        "prefix": "prd",
-        "managed": true,
-        "createdBy": {
-          "id": 1,
-          "name": "Admin"
-        },
-        "updatedBy": {
-          "id": 1,
-          "name": "Admin"
-        }
-      },
-      "modelName": "ProductModel",
-      "createdBy": {
-        "id": 1,
-        "name": "Admin"
-      },
-      "updatedBy": {
-        "id": 1,
-        "name": "Admin"
-      },
-      "fieldName": "price",
-      "label": "Price",
-      "type": "number",
-      "required": true,
-      "default": "0",
-      "rounds": 2,
-      "unique": false,
-      "ref": "",
-      "localField": "",
-      "foreignField": "",
-      "enumType": "",
-      "enumValues": [],
-      "managed": true,
-      "id":"123"
-    },
-    "fieldName": "price",
-    "keyName": "product_price",
-    "type": {
-      "type": "number",
-      "enum": [],
-      "enumType": "",
-      "required": true
-    },
-    "value": "100",
-    "managed": true,
-    "prefix": "prd"
+    id:2,
+    name:"mango",
+    email:"mango@email.com"
+  },
+  {
+    id:3,
+    name:"grapes",
+    email:"grapes@email.com"
+  },
+  {
+    id:4,
+    name:"coconuts",
+    email:"coconuts@email.com"
+  },
+  {
+    id:5,
+    name:"apple",
+    email:"apple@email.com"
   }
+
 ]
