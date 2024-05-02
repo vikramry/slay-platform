@@ -24,7 +24,7 @@ const data: Record<string, SideBarProps[]> = {
     },
     {
       title: "Tabs",
-      link: "#"
+      link: "dashboard/tabs"
     },
   ],
   "model": [
@@ -32,6 +32,10 @@ const data: Record<string, SideBarProps[]> = {
       title: "Fields",
       link: "model"
     },
+    {
+        title: "Options",
+        link: "options"
+      },
     {
       title: "Permissions",
       link: "permissions"
