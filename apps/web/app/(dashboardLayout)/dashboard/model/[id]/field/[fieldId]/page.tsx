@@ -1,9 +1,10 @@
 import React from 'react'
+import { DynamicForm } from '../../../../../../dynamicForm'
 
 const page = () => {
   return (
     <div>
-        Here form for field will be coming
+      <DynamicForm />
     </div>
   )
 }
