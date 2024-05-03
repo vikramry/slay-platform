@@ -1,7 +1,7 @@
 import React from "react";
 
 import { InputField } from "@repo/ui/inputField";
-import { Button } from "@repo/ui";
+import { CustomButton } from "@repo/ui";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 const LoginForm = () => {
@@ -24,7 +24,7 @@ const LoginForm = () => {
           size="md"
           classNames="border-gray-300"
         />
-        <Button buttonText="Continue" variant="primary" size="lg" />
+        <CustomButton buttonText="Continue" variant="primary" size="lg" />
 
         <div className="relative w-full mt-6 flex justify-center items-center">
           <div className="absolute h-0.5 w-full bg-gray-100 dark:bg-gray-800"></div>
@@ -33,7 +33,7 @@ const LoginForm = () => {
           </p>
         </div>
 
-        <Button
+        <CustomButton
           buttonText="GitHub"
           variant="secondary"
           iconPosition="left"

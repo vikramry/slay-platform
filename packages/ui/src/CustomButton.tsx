@@ -18,7 +18,7 @@ const sizeStyles = {
   md: "px-4 py-1.5 text-sm rounded-md",
   lg: "px-6 py-3 text-base rounded-lg",
 };
-export const Button = ({ disabled = false, ...props }: ButtonPropType) => {
+export const CustomButton = ({ disabled = false, ...props }: ButtonPropType) => {
   const variantStyles = {
     primary:
       `text-white dark:text-[#18181b] bg-[#18181b] dark:bg-[#FAFAFA] ${!props.disabled && " hover:bg-[#18181b]/80 dark:hover:text-white"}`,

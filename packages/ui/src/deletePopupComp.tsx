@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "./button";
+import { CustomButton } from "./CustomButton";
 import { InputField } from "./inputFields";
 import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./components";
 
@@ -38,7 +38,7 @@ export function DeletePopupComp({ inputText, type, onclick, ...rest }: {
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-transparent shadow-none border-none hover:bg-transparent"><Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick} /></AlertDialogAction>
+                <AlertDialogAction className="bg-transparent shadow-none border-none hover:bg-transparent"><CustomButton buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick} /></AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
         // <div className="flex flex-col gap-6 fixed top-0 left-0 h-screen w-screen">
@@ -47,8 +47,8 @@ export function DeletePopupComp({ inputText, type, onclick, ...rest }: {
         //     <div className=" flex flex-row gap-5 justify-end">
         //         <div className="w-[150px] flex flex-row gap-2 justify-end">
 
-        //         <Button buttonText="Cancel" variant="secondary" size="md" classnames=" font-medium text-black dark:hover:bg-[#18181b]/80 dark:hover:opacity-800 " onClick={()=>setState(false)}/>
-        //         <Button buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick}/>
+        //         <CustomButton buttonText="Cancel" variant="secondary" size="md" classnames=" font-medium text-black dark:hover:bg-[#18181b]/80 dark:hover:opacity-800 " onClick={()=>setState(false)}/>
+        //         <CustomButton buttonText="Delete" variant="primary" size="md" classnames="font-medium" disabled={confirmDelete} onClick={onclick}/>
         //             </div>
 
         //     </div>
