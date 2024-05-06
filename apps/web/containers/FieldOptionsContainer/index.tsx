@@ -54,6 +54,9 @@ const FieldOptionsContainer = () => {
     resolver: zodResolver(fieldOptionSchema),
     defaultValues: {
       prefix: "DOMAIN",
+      modelName: "some-model",
+      model: "34567",
+      fieldName: "some-field"
     },
   });
   const onSubmit = (data: FieldOptionType) => {
@@ -64,107 +67,118 @@ const FieldOptionsContainer = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 w-2/3"
+        className="space-y-8 "
       >
-        <FormField
-          control={form.control}
-          name="modelName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Model Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Model name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
 
-        <FormField
-          control={form.control}
-          name="keyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Key Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Key name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="modelName"
+            render={({ field }) => (
+              <FormItem >
+                <FormLabel>Model Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Model name" disabled={true}  {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <Select>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Types</SelectLabel>
-                      <SelectItem value="string">String</SelectItem>
-                      <SelectItem value="number">Number</SelectItem>
-                      <SelectItem value="boolean">Boolean</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="keyName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Key Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Key name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="value"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Value</FormLabel>
-              <FormControl>
-                <Input placeholder="Value" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Type</FormLabel>
+                <FormControl>
+                  <Select {...field}>
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Types</SelectLabel>
+                        <SelectItem value="string">String</SelectItem>
+                        <SelectItem value="number">Number</SelectItem>
+                        <SelectItem value="boolean">Boolean</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="managed"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Managed</FormLabel>
-              <FormControl>
-                <Checkbox {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="value"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Value</FormLabel>
+                <FormControl>
+                  <Input placeholder="Value" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="prefix"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Prefix</FormLabel>
-              <FormControl>
-                <Input placeholder="Prefix" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="managed"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    Managed
+                  </FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit" variant="default">
-          Update account
-        </Button>
+          <FormField
+            control={form.control}
+            name="prefix"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Prefix</FormLabel>
+                <FormControl>
+                  <Input placeholder="Prefix" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+        </div>
+        <div className="flex justify-center items-center">
+          <Button type="submit" variant="default" className="flex justify-center items-center w-fit">
+            Add Field Option
+          </Button>
+        </div>
       </form>
     </Form>
   );

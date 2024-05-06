@@ -8,25 +8,23 @@ import { z } from "zod"
 
 
 const formSchema = z.object({
-  name: z.string().nonempty(),
-  label:z.string().nonempty(),
-  managed:z.boolean()
+  name: z.string(),
+  label: z.string(),
+  managed: z.boolean()
 
 })
 
-const CreatModel=()=> {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: "",
-            label:"",
-            managed:false
-        },
-      })
-     
-      function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-      }
+const CreatModel = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      managed: false
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+  }
   // ...
 
   return (
@@ -50,7 +48,7 @@ const CreatModel=()=> {
           name="label"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>label</FormLabel>
+              <FormLabel>Label</FormLabel>
               <FormControl>
                 <Input placeholder="Model label" {...field} />
               </FormControl>
@@ -58,7 +56,7 @@ const CreatModel=()=> {
             </FormItem>
           )}
         />
-           <FormField
+        <FormField
           control={form.control}
           name="managed"
           render={({ field }) => (
@@ -71,8 +69,8 @@ const CreatModel=()=> {
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel>
-                Managed      
-                  </FormLabel>
+                  Managed
+                </FormLabel>
               </div>
             </FormItem>
           )}
