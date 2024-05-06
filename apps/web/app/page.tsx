@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Button } from "@repo/ui";
 import DynamicLayout from "./dynamicLayout";
 import Login from "./login";
+import FieldOptionsContainer from "../containers/FieldOptionsContainer";
 
 function Gradient({
   conic,
@@ -72,7 +73,8 @@ export default function Page(): JSX.Element {
     console.log(data, loading, error);
   }, [data, loading, error]);
   return (
-    <div className="h-screen w-screen bg-red-800 dark:bg-green-300">
+    <div className="h-screen w-screen ">
+      <FieldOptionsContainer />
       {/* <DynamicLayout /> */}
       {/* <Button>As it was</Button> */}
     </div>
