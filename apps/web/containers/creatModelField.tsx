@@ -8,11 +8,17 @@ import { z } from "zod"
 
 
 const formSchema = z.object({
-    fieldName: z.string(),
-    label: z.string(),
+    fieldName: z.string({
+        required_error: "Field Name is required",
+      }),
+    label: z.string({
+        required_error: "Label is required",
+      }),
     required: z.boolean(),
     unique: z.boolean(),
-    type: z.string(),
+    type: z.string({
+        required_error: "Type is required",
+      }),
     managed: z.boolean(),
     enumType: z.string().optional(),
     enumValues:z.array(z.string()).optional(),
