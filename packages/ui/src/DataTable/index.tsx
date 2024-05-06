@@ -24,16 +24,20 @@ import {
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, Input, Button, SelectValue, SelectContent, SelectTrigger, SelectItem, Select } from "../components"
 import { ChevronDownIcon, ChevronsLeft, ChevronsRight, ChevronRight, ChevronLeft } from "lucide-react"
 import { useState } from "react"
+import { CustomButton } from "../CustomButton"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  text?:string
+  url?:string
 }
-
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  text,
+  url,
 }: DataTableProps<TData, TValue>) {
   // const table = useReactTable({
   //   data,
@@ -64,6 +68,9 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
     },
+  
+    
+
   })
 
   return (
@@ -77,6 +84,13 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {text && 
+        <div className="pl-[300px]">
+          
+          <a href={url}>
+        <CustomButton buttonText={text} variant="primary" size="lg" />
+          </a>
+        </div>}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
