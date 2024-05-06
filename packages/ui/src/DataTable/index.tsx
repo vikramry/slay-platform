@@ -84,11 +84,13 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <div className="ml-auto flex flex-row gap-5">
+
         {text && 
-        <div className="pl-[300px]">
+        <div >
           
           <a href={url}>
-        <CustomButton buttonText={text} variant="primary" size="lg" />
+        <Button>{text} </Button>
           </a>
         </div>}
         <DropdownMenu>
@@ -117,6 +119,7 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
