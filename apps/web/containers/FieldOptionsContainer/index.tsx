@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -20,6 +20,7 @@ import {
   SelectGroup,
   SelectLabel,
   SelectItem,
+  DateTimePicker,
 } from "@repo/ui";
 import { Input } from "@repo/ui";
 
@@ -40,12 +41,12 @@ const FieldOptionsContainer = () => {
     keyName: z.string({
       required_error: "Key name is required",
     }),
-    type: z.enum(["number", "string", "boolean", "date", "enum"]),
+    type: z.enum(["number", "string", "boolean"]),
     value: z.any({
       required_error: "Value is required",
     }),
     managed: z.boolean(),
-    prefix: z.string().nullable(),
+    prefix: z.string().optional(),
   });
 
   type FieldOptionType = z.infer<typeof fieldOptionSchema>;
@@ -57,7 +58,7 @@ const FieldOptionsContainer = () => {
       modelName: "some-model",
       model: "34567",
       modelField: "some-field",
-      managed: false
+      managed: false,
     },
   });
   const handleSubmit = (data: FieldOptionType) => {
@@ -66,20 +67,16 @@ const FieldOptionsContainer = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-8 "
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 ">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
-
           <FormField
             control={form.control}
             name="modelName"
             render={({ field }) => (
-              <FormItem >
+              <FormItem>
                 <FormLabel>Model Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Model name" disabled={true}  {...field} />
+                  <Input placeholder="Model name" disabled={true} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,7 +87,7 @@ const FieldOptionsContainer = () => {
             control={form.control}
             name="fieldName"
             render={({ field }) => (
-              <FormItem >
+              <FormItem>
                 <FormLabel>Field Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Model name" {...field} />
@@ -120,7 +117,13 @@ const FieldOptionsContainer = () => {
               <FormItem>
                 <FormLabel>Type</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={(e: any) => {
+                      field.onChange(e);
+                      form.setValue("value", "");
+                    }}
+                    defaultValue={field.value}
+                  >
                     <SelectTrigger className="">
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
@@ -130,8 +133,6 @@ const FieldOptionsContainer = () => {
                         <SelectItem value="string">String</SelectItem>
                         <SelectItem value="number">Number</SelectItem>
                         <SelectItem value="boolean">Boolean</SelectItem>
-                        <SelectItem value="enum">Enum</SelectItem>
-                        <SelectItem value="date">Date</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -141,42 +142,47 @@ const FieldOptionsContainer = () => {
             )}
           />
 
-          {
-            form.watch("type", "string") === "boolean" ?
-              <FormField
-                control={form.control}
-                name="value"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        Value
-                      </FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              :
-              
-              <FormField
-                control={form.control}
-                name="value"
-                render={({ field }) => (
-                  <FormItem>
+          {form.watch("type", "string") === "boolean" ? (
+            <FormField
+              control={form.control}
+              name="value"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
                     <FormLabel>Value</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Value" {...field} type={form.watch("type", "string") === "string" ? "text" : "number"} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />}
+                  </div>
+                </FormItem>
+              )}
+            />
+          ) : (
+            <FormField
+              control={form.control}
+              name="value"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Value</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Value"
+                      {...field}
+                      type={
+                        form.watch("type", "string") === "string"
+                          ? "text"
+                          : "number"
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}
@@ -190,9 +196,7 @@ const FieldOptionsContainer = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>
-                    Managed
-                  </FormLabel>
+                  <FormLabel>Managed</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -211,10 +215,13 @@ const FieldOptionsContainer = () => {
               </FormItem>
             )}
           />
-
         </div>
         <div className="flex justify-center items-center">
-          <Button type="submit" variant="default" className="flex justify-center items-center w-fit">
+          <Button
+            type="submit"
+            variant="default"
+            className="flex justify-center items-center w-fit"
+          >
             Add Field Option
           </Button>
         </div>
