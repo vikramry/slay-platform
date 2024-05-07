@@ -40,8 +40,8 @@ const FieldOptionsContainer = () => {
     keyName: z.string({
       required_error: "Key name is required",
     }),
-    type: z.enum(["number", "string", "boolean", "date"]),
-    value: z.string({
+    type: z.enum(["number", "string", "boolean", "date", "enum"]),
+    value: z.any({
       required_error: "Value is required",
     }),
     managed: z.boolean(),
@@ -56,17 +56,18 @@ const FieldOptionsContainer = () => {
       prefix: "DOMAIN",
       modelName: "some-model",
       model: "34567",
-      fieldName: "some-field"
+      modelField: "some-field",
+      managed: false
     },
   });
-  const onSubmit = (data: FieldOptionType) => {
+  const handleSubmit = (data: FieldOptionType) => {
     console.log(data);
   };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-8 "
       >
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
@@ -85,6 +86,19 @@ const FieldOptionsContainer = () => {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="fieldName"
+            render={({ field }) => (
+              <FormItem >
+                <FormLabel>Field Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Model name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="keyName"
@@ -106,7 +120,7 @@ const FieldOptionsContainer = () => {
               <FormItem>
                 <FormLabel>Type</FormLabel>
                 <FormControl>
-                  <Select {...field}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger className="">
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
@@ -116,6 +130,8 @@ const FieldOptionsContainer = () => {
                         <SelectItem value="string">String</SelectItem>
                         <SelectItem value="number">Number</SelectItem>
                         <SelectItem value="boolean">Boolean</SelectItem>
+                        <SelectItem value="enum">Enum</SelectItem>
+                        <SelectItem value="date">Date</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -125,19 +141,42 @@ const FieldOptionsContainer = () => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="value"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Value</FormLabel>
-                <FormControl>
-                  <Input placeholder="Value" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {
+            form.watch("type", "string") === "boolean" ?
+              <FormField
+                control={form.control}
+                name="value"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        Value
+                      </FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              :
+              
+              <FormField
+                control={form.control}
+                name="value"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Value</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Value" {...field} type={form.watch("type", "string") === "string" ? "text" : "number"} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />}
 
           <FormField
             control={form.control}
