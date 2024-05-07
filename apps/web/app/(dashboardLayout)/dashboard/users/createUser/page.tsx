@@ -1,10 +1,10 @@
 import React from 'react'
-import CreatUser from '../../../../../containers/createUser'
+import CreateUser from '../../../../../containers/createUser'
 
 function page() {
   return (
     <div>
-        <CreatUser/>
+        <CreateUser/>
     </div>
   )
 }

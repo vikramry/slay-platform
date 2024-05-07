@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui"
+import { Button, Checkbox, Form, FormControl, FormDescription,DateTimePicker, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -22,7 +22,8 @@ const formSchema = z.object({
     managed: z.boolean(),
     enumType: z.string().optional(),
     enumValues:z.array(z.string()).optional(),
-    default:z.any().optional()
+    default:z.any().optional(),
+    date:z.any().optional()
 
 })
 
@@ -87,8 +88,10 @@ const CreatModelField = () => {
                                 <SelectContent>
                                     <SelectItem value="text">Text</SelectItem>
                                     <SelectItem value="number">Number</SelectItem>
-                                    <SelectItem value="checkBox">Check Box</SelectItem>
+                                    <SelectItem value="checkBox">Boolean</SelectItem>
                                     <SelectItem value="enum">Enum</SelectItem>
+                                    <SelectItem value="date">Date</SelectItem>
+
 
                                 </SelectContent>
                             </Select>
@@ -96,7 +99,7 @@ const CreatModelField = () => {
                         </FormItem>
                     )}
                 />
-                {form.watch("type") !== "enum" && (
+                {(form.watch("type") !== "enum" && form.watch("type") !== "date") && (
                     <FormField
                         control={form.control}
                         name="default"
@@ -105,6 +108,21 @@ const CreatModelField = () => {
                                 <FormLabel>Default Value</FormLabel>
                                 <FormControl>
                                     <Input placeholder="Enter default value" {...field} type={form.watch("type")} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                )}
+                {form.watch("type") === "date" && (
+                    <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Date</FormLabel>
+                                <FormControl>
+                                <DateTimePicker granularity="second" {...field}/>   
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

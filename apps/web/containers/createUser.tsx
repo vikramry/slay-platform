@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
+import { Button, Checkbox, Form, FormControl, FormDescription,DateTimePicker, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -17,7 +17,7 @@ const formSchema = z.object({
 
 })
 
-const CreatUser = () => {
+const CreateUser = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -26,6 +26,9 @@ const CreatUser = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
+    const dateString = values.date ? new Date(values.date).toISOString() : null;
+        const updatedValues = { ...values, date: dateString };
+        console.log(updatedValues);
   }
   // ...
 
@@ -58,10 +61,10 @@ const CreatUser = () => {
             </FormItem>
           )}
         />
-        
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>
   )
 }
-export default CreatUser
+export default CreateUser
