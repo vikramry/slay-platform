@@ -14,7 +14,7 @@ const page = ({params}: {params: {fieldId: string}}) => {
 // console.log(modelId);
     return (
         <div>
-            <DataTable columns={fieldOptionsColumns} data={FieldOptionsData} url="options/add" text="Create field options"/>
+            <DataTable columns={fieldOptionsColumns} data={FieldOptionsData} text={"Create Field Option"} url={"options/add"}  />
 
         </div>
     )
