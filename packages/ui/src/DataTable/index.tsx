@@ -29,8 +29,9 @@ import { CustomButton } from "../CustomButton"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  text?:string
-  url?:string
+  text?: string
+  url?: string
+  filterBy?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -38,6 +39,7 @@ export function DataTable<TData, TValue>({
   data,
   text,
   url,
+  filterBy
 }: DataTableProps<TData, TValue>) {
   // const table = useReactTable({
   //   data,
@@ -68,57 +70,57 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
     },
-  
-    
+
+
 
   })
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+        {filterBy && <Input
+          placeholder={`Filter by ${filterBy}...`}
+          value={(table.getColumn(filterBy)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn(filterBy)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />
+        />}
         <div className="ml-auto flex flex-row gap-5">
 
-        {text && 
-        <div >
-          
-          <a href={url}>
-        <Button>{text} </Button>
-          </a>
-        </div>}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          {text &&
+            <div >
+
+              <a href={url}>
+                <Button>{text} </Button>
+              </a>
+            </div>}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  )
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="rounded-md border">
