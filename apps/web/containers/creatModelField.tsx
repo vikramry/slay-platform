@@ -8,11 +8,17 @@ import { z } from "zod"
 
 
 const formSchema = z.object({
-    fieldName: z.string().nonempty(),
-    label: z.string().nonempty(),
+    fieldName: z.string({
+        required_error: "Field Name is required",
+      }),
+    label: z.string({
+        required_error: "Label is required",
+      }),
     required: z.boolean(),
     unique: z.boolean(),
-    type: z.string().nonempty(),
+    type: z.string({
+        required_error: "Type is required",
+      }),
     managed: z.boolean(),
     enumType: z.string().optional(),
     enumValues:z.array(z.string()).optional(),
@@ -24,12 +30,9 @@ const CreatModelField = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fieldName: "",
-            label: "",
             required: false,
             unique: false,
-            type: "",
-            managed: false,
+             managed: false,
             enumType: "",
             enumValues: []
                 },
