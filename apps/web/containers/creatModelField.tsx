@@ -331,13 +331,27 @@ const CreatModelField = () => {
                     <Input
                       placeholder="Enter enum values separated by comma"
                       {...field}
-                      type={
-                        form.watch("enumType") === "string" ? "text" : "number"
-                      }
+                      type="text"
                       onChange={(event) => {
                         const enumValues = event.target.value
                           .split(",")
-                          .map((value: string) => value.trim());
+                          .map((value: string) => {
+                            if (form.watch("enumType") === "number") {
+                              return isNaN(Number(value.trim()))
+                                ? null
+                                : value.trim();
+                            } else {
+                              return value.trim();
+                            }
+                          })
+                          .filter((value: any) => {
+                            if (form.watch("enumType") === "number") {
+                              return value !== null;
+                            }
+                            return true;
+                          });
+                        console.log(enumValues);
+
                         field.onChange(enumValues);
                       }}
                     />
