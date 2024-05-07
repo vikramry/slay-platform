@@ -26,9 +26,7 @@ const CreateUser = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
-    const dateString = values.date ? new Date(values.date).toISOString() : null;
-        const updatedValues = { ...values, date: dateString };
-        console.log(updatedValues);
+    
   }
   // ...
 
