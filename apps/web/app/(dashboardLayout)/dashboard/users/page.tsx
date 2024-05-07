@@ -12,7 +12,7 @@ const page = () => {
         <DeletePopupComp InputText="delete" setState={setState}/>
         </DialogBox> */}
 
-      <DataTable columns={userColumns} data={usersSampleData} />
+      <DataTable columns={userColumns} data={usersSampleData} text="Create user" url="/dashboard/users/createUser" />
 
     </div>
   );

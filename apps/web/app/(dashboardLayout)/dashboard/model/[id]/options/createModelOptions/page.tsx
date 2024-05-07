@@ -1,8 +1,11 @@
 import React from 'react'
+import CreatModelOptions from '../../../../../../../containers/createModelOptions'
 
 function page() {
   return (
-    <div>page</div>
+    <div>
+        <CreatModelOptions/>
+    </div>
   )
 }
 
