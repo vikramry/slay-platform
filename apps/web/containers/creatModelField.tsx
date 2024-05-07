@@ -269,7 +269,7 @@ const CreatModelField = () => {
             name="default"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Value</FormLabel>
+                <FormLabel>Default Value</FormLabel>
                 <FormControl>
                   <DateTimePicker
                     granularity="second"
