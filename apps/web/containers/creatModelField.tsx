@@ -20,6 +20,7 @@ import {
   SelectLabel,
   SelectGroup,
 } from "@repo/ui";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -63,6 +64,15 @@ const CreatModelField = () => {
       enumValues: [],
     },
   });
+
+  useEffect(() => {
+    form.setValue("default", "");
+    form.setValue("enumType", "");
+    form.setValue("enumValues", []);
+    form.setValue("foreignField", "");
+    form.setValue("localField", "");
+    form.setValue("ref", "");
+  }, [form.watch("type")]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
