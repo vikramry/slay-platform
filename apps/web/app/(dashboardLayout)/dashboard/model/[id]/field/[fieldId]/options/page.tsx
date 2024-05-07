@@ -8,7 +8,7 @@ const page = ({params}: {params: {fieldId: string}}) => {
     console.log(params.fieldId)
     return (
         <div>
-            <DataTable columns={fieldOptionsColumns} data={FieldOptionsData} />
+            <DataTable columns={fieldOptionsColumns} data={FieldOptionsData} text={"Create Field Option"} url={"options/add"}  />
 
         </div>
     )
