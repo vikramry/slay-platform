@@ -66,4 +66,4 @@ const rules = [
   },
 ];
 
-export const AdminProfile = mercury.access.createProfile("ADMIN", rules);
+export const AdminProfile = mercury.access.createProfile("Admin", rules);

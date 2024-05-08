@@ -15,7 +15,7 @@ export const User = mercury.createModel(
     },
     role: {
       type: "enum",
-      enum: ["ADMIN", "ANONYMOUS"],
+      enum: ["Admin", "ANONYMOUS"],
       enumType: "string",
     },
   },

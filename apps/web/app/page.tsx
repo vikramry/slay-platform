@@ -9,6 +9,7 @@ import DynamicLayout from "./dynamicLayout";
 import Login from "./login";
 import FieldOptionsContainer from "../containers/FieldOptionsContainer";
 
+
 function Gradient({
   conic,
   className,
@@ -72,6 +73,7 @@ export default function Page(): JSX.Element {
   useEffect(() => {
     console.log(data, loading, error);
   }, [data, loading, error]);
+
   return (
     <div className="h-screen w-screen ">
       <FieldOptionsContainer />
