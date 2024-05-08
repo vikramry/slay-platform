@@ -1,7 +1,11 @@
 "use client"
 
+import { serverFetch } from "@/app/action"
+import { useLazyQuery } from "@/app/hook"
+import { CreateTabQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -18,6 +22,8 @@ const formSchema = z.object({
 })
 
 const CreatTab = () => {
+  const [createTab,{ data, loading, error }] = useLazyQuery(serverFetch);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -26,7 +32,32 @@ const CreatTab = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
+
+        createTab(
+            CreateTabQuary,
+            {
+                "input": {
+                  "createdBy": null,
+                  "icon": null,
+                  "label": values?.label,
+                  "model": null,
+                  "order": values?.order,
+                  "updatedBy": null
+                }
+              },
+            {
+                cache: "no-store"
+            }
+        );
     }
+
+    useEffect(()=>{
+        if(data){
+        
+        }else if(error){
+          
+        }
+        },[data, loading, error])
     // ...
 
     return (

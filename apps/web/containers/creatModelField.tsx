@@ -1,5 +1,8 @@
 "use client";
 
+import { serverFetch } from "@/app/action";
+import { useLazyQuery } from "@/app/hook";
+import { CreateModelFieldQuary } from "@/app/queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Button,
@@ -54,6 +57,8 @@ const formSchema = z.object({
 });
 
 const CreatModelField = () => {
+  const [createModelField,{ data, loading, error }] = useLazyQuery(serverFetch);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -76,7 +81,41 @@ const CreatModelField = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
+        createModelField(
+            CreateModelFieldQuary,
+            {
+                "input": {
+                  "createdBy": null,
+                  "default": values?.default,
+                  "enumType": values?.enumType,
+                  "enumValues": values?.enumValues,
+                  "fieldName": values?.fieldName,
+                  "foreignField": values?.foreignField,
+                  "label": values?.label,
+                  "localField": values?.localField,
+                  "managed": values?.managed,
+                  "model": null,
+                  "modelName": null,
+                  "ref": values?.ref,
+                  "required": values?.required,
+                  "rounds": null,
+                  "type": values?.type,
+                  "unique": values?.unique,
+                  "updatedBy": null
+                }
+              },
+            {
+                cache: "no-store"
+            }
+        );
     }
+    useEffect(() => {
+    if(data){
+
+    }else if(error){
+        
+    }
+    }, [data,error,loading])
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
