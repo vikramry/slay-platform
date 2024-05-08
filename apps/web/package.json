@@ -9,14 +9,22 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@as-integrations/next": "^3.0.0",
+    "@graphql-tools/schema": "^10.0.3",
     "@hookform/resolvers": "^3.3.4",
+    "@mercury-js/core": "^2.0.0-beta.21",
     "@repo/ui": "*",
+    "graphql": "^16.8.1",
+    "graphql-middleware": "^6.1.35",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.376.0",
     "next": "^14.1.1",
     "next-themes": "^0.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
+    "redis": "^4.6.13",
     "zod": "^3.23.6"
   },
   "devDependencies": {
