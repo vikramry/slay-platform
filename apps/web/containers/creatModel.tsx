@@ -4,6 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useLazyQuery } from "../app/hook"
+import { serverFetch } from "../app/action"
+import { CreateModelQuary } from "../app/queries"
+import { useEffect } from "react"
 
 
 
@@ -15,6 +19,8 @@ const formSchema = z.object({
 })
 
 const CreatModel = () => {
+  const [createModel,{ data, loading, error }] = useLazyQuery(serverFetch);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -22,10 +28,33 @@ const CreatModel = () => {
     },
   })
 
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
+    createModel(
+      CreateModelQuary,
+      {
+        "input": {
+          "createdBy": null,
+          "label": values?.label,
+          "managed": values?.managed,
+          "name": values?.name,
+          "prefix": null,
+          "updatedBy": null
+        }
+      },
+      {
+          cache: "no-store"
+      }
+  );
   }
+useEffect(()=>{
+if(data){
 
+}else if(error){
+  
+}
+},[data, loading, error])
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
