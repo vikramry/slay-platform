@@ -84,7 +84,7 @@ const data: Record<string, SideBarProps[]> = {
   "default": [
     {
       title: "Models",
-      link: "dashboard"
+      link: "dashboard/model"
     },
     {
       title: "Components",
