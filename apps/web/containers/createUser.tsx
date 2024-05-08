@@ -4,6 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Form, FormControl, FormDescription, DateTimePicker, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useLazyQuery } from "../app/hook"
+import { serverFetch } from "../app/action"
+import { CreateUserQuary } from "../app/queries"
 
 
 
@@ -14,10 +17,18 @@ const formSchema = z.object({
     email: z.string({
         required_error: "Email is required",
     }),
+    password:z.string({
+        required_error: "Password is required",
+    }),
+    role:z.string({
+        required_error: "role is required",
+    })
 
 })
 
 const CreateUser = () => {
+    const [createUser,{ data, loading, error }] = useLazyQuery(serverFetch);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -26,6 +37,20 @@ const CreateUser = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
+        createUser(
+            CreateUserQuary,
+            {
+                "input": {
+                  "email": values?.email,
+                  "name": values?.name,
+                  "password": values?.password,
+                  "role": null
+                }
+              },
+            {
+                cache: "no-store"
+            }
+        );
 
     }
     // ...
@@ -56,6 +81,19 @@ const CreateUser = () => {
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
                                     <Input placeholder="email" {...field} type="email" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Password" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

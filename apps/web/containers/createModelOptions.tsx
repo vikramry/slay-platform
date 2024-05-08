@@ -1,7 +1,11 @@
 "use client"
 
+import { serverFetch } from "@/app/action"
+import { useLazyQuery } from "@/app/hook"
+import { CreateModelOptionsQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -26,6 +30,8 @@ const formSchema = z.object({
 })
 
 const CreatModelOptions = () => {
+  const [createModelOption,{ data, loading, error }] = useLazyQuery(serverFetch);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -35,7 +41,33 @@ const CreatModelOptions = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
+        createModelOption(
+            CreateModelOptionsQuary,
+            {
+                "input": {
+                  "createdBy": null,
+                  "keyName": values?.keyName,
+                  "managed": values?.managed,
+                  "model": null,
+                  "modelName": null,
+                  "type": values?.type,
+                  "updatedBy": null,
+                  "value": values?.value
+                }
+              },
+            {
+                cache: "no-store"
+            }
+        );
     }
+    useEffect(() => {
+        if(data){
+
+        }else if(error){
+            
+        }
+    
+    }, [data,error,loading])
     // ...
 
     return (

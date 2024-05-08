@@ -14,7 +14,8 @@ import { useEffect } from "react"
 const formSchema = z.object({
   name: z.string(),
   label: z.string(),
-  managed: z.boolean()
+  managed: z.boolean(),
+  prefix:z.string()
 
 })
 
@@ -39,7 +40,7 @@ const CreatModel = () => {
           "label": values?.label,
           "managed": values?.managed,
           "name": values?.name,
-          "prefix": null,
+          "prefix": values?.prefix,
           "updatedBy": null
         }
       },
@@ -81,6 +82,19 @@ if(data){
                 <FormLabel>Label</FormLabel>
                 <FormControl>
                   <Input placeholder="Model label" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+           <FormField
+            control={form.control}
+            name="prefix"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Prefix</FormLabel>
+                <FormControl>
+                  <Input placeholder="Prefix" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -23,8 +23,13 @@ import {
   DateTimePicker,
 } from "@repo/ui";
 import { Input } from "@repo/ui";
+import { useLazyQuery } from "@/app/hook";
+import { serverFetch } from "@/app/action";
+import { CreateFieldOptionQuary } from "@/app/queries";
 
 const FieldOptionsContainer = () => {
+  const [createModelField,{ data, loading, error }] = useLazyQuery(serverFetch);
+
   const fieldOptionSchema = z.object({
     model: z.string({
       required_error: "Model is required",
@@ -63,6 +68,25 @@ const FieldOptionsContainer = () => {
   });
   const handleSubmit = (data: FieldOptionType) => {
     console.log(data);
+    createModelField(
+      CreateFieldOptionQuary,
+      {
+        "input": {
+          "fieldName": data?.fieldName,
+          "keyName": data?.keyName,
+          "managed": data?.managed,
+          "model": data?.model,
+          "modelField": data?.modelField,
+          "modelName": data?.modelName,
+          "prefix": data?.prefix,
+          "type": data?.type,
+          "value": data?.value
+        }
+      },
+      {
+          cache: "no-store"
+      }
+  );
   };
 
   return (
