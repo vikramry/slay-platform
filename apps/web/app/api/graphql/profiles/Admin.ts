@@ -10,6 +10,60 @@ const rules = [
       delete: true,
     },
   },
+  {
+    modelName: "Model",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "ModelField",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "FieldOption",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "ModelOption",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "Component",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "Tab",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
 ];
 
-export const AdminProfile = mercury.access.createProfile("ADMIN", rules);
+export const AdminProfile = mercury.access.createProfile("Admin", rules);
