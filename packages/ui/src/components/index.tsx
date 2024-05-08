@@ -10,3 +10,5 @@ export * from './ui/label'
 export * from './ui/textarea'
 export * from './ui/popover'
 export * from './ui/date-time-picker'
+export * from './ui/alert'
+
