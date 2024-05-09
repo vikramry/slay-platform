@@ -1,3 +1,4 @@
+
 import { serverFetch } from '@/app/action';
 import { useLazyQuery } from '@/app/hook'
 import { getlistmodels } from '@/app/queries';
@@ -25,7 +26,7 @@ const ListModels = () => {
    },[data,loading,error])
 
   return (
-    <div>index</div>
+    <div></div>
   )
 }
 
