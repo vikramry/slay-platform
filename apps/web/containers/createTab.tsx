@@ -2,7 +2,7 @@
 
 import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
-import { CreateTabQuary, GetTabQuary } from "@/app/queries"
+import { CreateTabQuary, GetTabQuary, UpdateTabQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, toast } from "@repo/ui"
 import { useSearchParams } from "next/navigation"
@@ -22,9 +22,11 @@ const formSchema = z.object({
 
 })
 
-const CreatTab = ({edit=false}:{edit:boolean}) => {
+const CreatTab = ({edit=false}:{edit?:boolean}) => {
   const [createTab,{ data, loading, error }] = useLazyQuery(serverFetch);
   const [getTab, getTabResponse] = useLazyQuery(serverFetch);
+  const [updateTab, updateTabResponse] = useLazyQuery(serverFetch);
+
   const params = useSearchParams();
   console.log(params.get("edit"), "fjyfjhvjgy");
   console.log(params.get("id"), "fjyfjhvjgy");
@@ -72,7 +74,7 @@ useEffect(() => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
-
+if(edit == false){
         createTab(
             CreateTabQuary,
             {
@@ -90,6 +92,26 @@ useEffect(() => {
             }
         );
     }
+    else if(edit == true){
+        updateTab(
+            UpdateTabQuary,
+            {
+                "input": {
+                  "createdBy": null,
+                  "icon": null,
+                  "label": values?.label,
+                  "model": null,
+                  "order": values?.order,
+                  "updatedBy": null,
+                  "id":null
+                }
+              },
+            {
+                cache: "no-store"
+            }
+        );
+    }
+    }
 
     useEffect(()=>{
         if(data){
@@ -106,6 +128,22 @@ useEffect(() => {
               });
         }
         },[data, loading, error])
+
+        useEffect(() => {
+            if(updateTabResponse.data){
+              toast({
+                title: "Success",
+                description: "Successful updated",
+              })
+            }
+            else if(updateTabResponse?.error){
+              toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: updateTabResponse?.error?.message,
+              });
+            }
+            }, [updateTabResponse])
     // ...
 
     return (

@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLazyQuery } from "../app/hook";
 import { serverFetch } from "../app/action";
-import { CreateUserQuary, GetUserQuary, GetUserquary } from "../app/queries";
+import { CreateUserQuary, GetUserQuary, UpdateUserQuary } from "../app/queries";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -38,9 +38,11 @@ const formSchema = z.object({
   }),
 });
 
-const CreateUser = ({edit=false}:{edit:boolean}) => {
+const CreateUser = ({edit=false}:{edit?:boolean}) => {
   const [createUser, { data, loading, error }] = useLazyQuery(serverFetch);
   const [getUser, getUserResponse] = useLazyQuery(serverFetch);
+  const [updateUser, updateUserResponse] = useLazyQuery(serverFetch);
+
   const params = useSearchParams();
   console.log(params.get("edit"), "fjyfjhvjgy");
   console.log(params.get("id"), "fjyfjhvjgy");
@@ -87,6 +89,7 @@ useEffect(() => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    if(edit == false){
     createUser(
       CreateUserQuary,
       {
@@ -100,7 +103,25 @@ useEffect(() => {
       {
         cache: "no-store",
       }
-    );
+    );}
+
+    else if(edit == true){
+        updateUser(
+            UpdateUserQuary,
+            {
+              input: {
+                email: values?.email,
+                name: values?.name,
+                password: values?.password,
+                role: null,
+                id:null
+              },
+            },
+            {
+              cache: "no-store",
+            }
+          )
+    }
   }
   useEffect(()=>{
     if(data){
@@ -117,6 +138,21 @@ useEffect(() => {
           });
     }
     },[data, loading, error])
+    useEffect(() => {
+        if(updateUserResponse.data){
+          toast({
+            title: "Success",
+            description: "Successful updated",
+          })
+        }
+        else if(updateUserResponse?.error){
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: updateUserResponse?.error?.message,
+          });
+        }
+        }, [updateUserResponse])
   // ...
 
   return (

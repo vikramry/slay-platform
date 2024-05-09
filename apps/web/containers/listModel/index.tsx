@@ -1,3 +1,4 @@
+"use client"
 import { serverFetch } from '@/app/action';
 import { useLazyQuery } from '@/app/hook'
 import { getlistmodels } from '@/app/queries';

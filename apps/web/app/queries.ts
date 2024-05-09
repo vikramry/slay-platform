@@ -301,7 +301,8 @@ mutation CreateUser($input: UserInput!) {
   }
   `
 
-  export const getlistmodels=`query ListModels($where: whereModelInput) {
+  export const getlistmodels=`
+  query ListModels($where: whereModelInput) {
     listModels(where: $where) {
       docs {
         createdBy {
@@ -380,4 +381,50 @@ mutation CreateUser($input: UserInput!) {
       limit
     }
   }
+  `
+
+  export const UpdateFieldOptionsQuary=`
+  mutation UpdateFieldOptions($input: [updateFieldOptionInput!]!) {
+    updateFieldOptions(input: $input) {
+      keyName
+      managed
+      model {
+        id
+      }
+      modelName
+      prefix
+      type
+      value
+      fieldName
+    }
+  }
+  `
+  export const UpdateModelOptionQuary=`
+  mutation UpdateModelOption($input: updateModelOptionInput!) {
+    updateModelOption(input: $input) {
+      keyName
+      managed
+      model {
+        id
+      }
+      modelName
+      type
+      value
+    }
+  }
+  `
+  export const UpdateTabQuary=`
+  mutation UpdateTab($input: updateTabInput!) {
+    updateTab(input: $input) {
+      icon
+      id
+      label
+      model {
+        id
+      }
+      order
+    }
+  }
+  `
+  export const UpdateUserQuary=`
   `
