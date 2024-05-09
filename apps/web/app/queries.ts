@@ -542,3 +542,57 @@ query ListModels($where: whereModelInput, $limit: Int!) {
     limit
   }
 }`;
+  export const  listtabs=`
+  query ListTabs($where: whereTabInput) {
+    listTabs(where: $where) {
+      docs {
+        model {
+          name
+        }
+        label
+        order
+        createdBy {
+          id
+          name
+          role
+        }
+        updatedBy {
+          id
+          name
+          role
+        }
+      }
+    }
+  }
+  `
+  export const listusers=`
+  query ListUsers($where: whereUserInput) {
+    listUsers(where: $where) {
+      docs {
+        name
+        email
+      }
+    }
+  }
+  `
+  export const listcomponents=`
+  query ListComponents($where: whereComponentInput) {
+    listComponents(where: $where) {
+      docs {
+        name
+        label
+        createdBy {
+          id
+          name
+          role
+        }
+        updatedBy {
+          id
+          name
+          role
+        }
+      }
+      limit
+    }
+  }
+  `
