@@ -516,33 +516,34 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
   `
 
   export const  listtabs=`
-  query ListTabs($where: whereTabInput) {
-    listTabs(where: $where) {
+  query Docs {
+    listTabs {
       docs {
-        model {
-          name
-        }
         label
-        order
-        createdBy {
+        model {
           id
           name
-          role
         }
         updatedBy {
           id
           name
-          role
         }
+        createdBy {
+          id
+          name
+        }
+        order
+        id
       }
     }
   }
   `
   export const listusers=`
-  query ListUsers($where: whereUserInput) {
-    listUsers(where: $where) {
+  query Docs {
+    listUsers {
       docs {
         name
+        id
         email
       }
     }
