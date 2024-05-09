@@ -301,34 +301,24 @@ export const getModelOptionQuary = `
   `;
 
 export const getlistmodels = `
-  query ListModels($where: whereModelInput) {
-    listModels(where: $where) {
-      docs {
-        createdBy {
-          createdOn
-          email
-          name
-          role
-        }
-        label
-        managed
-        prefix
+query ListModels {
+  listModels {
+    docs {
+      createdBy {
         name
         id
-        updatedBy {
-          id
-          name
-          email
-          role
-          createdOn
-          updatedOn
-        }
       }
-      offset
-      limit
-      totalDocs
+      label
+      managed
+      name
+      id
+      updatedBy {
+        name
+        id
+      }
     }
-  }`;
+  }
+}`;
 export const getlistmodeloptions = `
   query ListModelOptions($where: whereModelOptionInput) {
     listModelOptions(where: $where) {
@@ -358,6 +348,7 @@ export const getlistmodelfields = `
   query ListModelFields($where: whereModelFieldInput) {
     listModelFields(where: $where) {
       docs {
+        fieldName
         createdBy {
           id
           name
