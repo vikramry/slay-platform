@@ -13,9 +13,7 @@ import { z } from "zod"
 
 
 const formSchema = z.object({
-    order: z.number({
-        required_error: "Order is required",
-    }),
+    order: z.coerce.number(),
     label: z.string({
         required_error: "Label is required",
     }),
@@ -79,12 +77,12 @@ if(edit == false){
             CreateTabQuary,
             {
                 "input": {
-                  "createdBy": null,
-                  "icon": null,
+                //   "createdBy": null,
+                  "icon": "icon",
                   "label": values?.label,
-                  "model": null,
+                //   "model": null,
                   "order": values?.order,
-                  "updatedBy": null
+                //   "updatedBy": null
                 }
               },
             {

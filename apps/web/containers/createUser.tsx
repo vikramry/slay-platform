@@ -14,13 +14,19 @@ import {
   FormMessage,
   Input,
   toast,
+  Toaster,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
 } from "@repo/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLazyQuery } from "../app/hook";
 import { serverFetch } from "../app/action";
 import { CreateUserQuary, GetUserQuary, UpdateUserQuary } from "../app/queries";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const formSchema = z.object({
@@ -42,27 +48,24 @@ const CreateUser = ({edit=false}:{edit?:boolean}) => {
   const [createUser, { data, loading, error }] = useLazyQuery(serverFetch);
   const [getUser, getUserResponse] = useLazyQuery(serverFetch);
   const [updateUser, updateUserResponse] = useLazyQuery(serverFetch);
-
+const router =useRouter()
   const params = useSearchParams();
-  console.log(params.get("edit"), "fjyfjhvjgy");
-  console.log(params.get("id"), "fjyfjhvjgy");
+  console.log(params.get("id"), "fjyfjhvjgyg");
+const UserId=params.get("id")
 
-  const getUserFun=()=>{
+useEffect(()=>{
+if(edit){
     getUser(
         GetUserQuary,{
         "where": {
           "id": {
-            "is": null
+            "is": UserId
           }
         }
       },{
             cache: "no-store",
           }
     )
-  }
-useEffect(()=>{
-if(edit){
-    getUserFun()
 }
 
 },[])
@@ -71,6 +74,7 @@ useEffect(() => {
     form.reset({
         name:getUserResponse.data.getUser.name,
         email:getUserResponse.data.getUser.email,
+        password:getUserResponse.data.getUser.password
       })
   }
   else if(getUserResponse?.error){
@@ -81,7 +85,7 @@ useEffect(() => {
       });
   }
 
-}, [getUserResponse])
+}, [getUserResponse?.data,getUserResponse?.loading,getUserResponse.error])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
@@ -97,7 +101,7 @@ useEffect(() => {
           email: values?.email,
           name: values?.name,
           password: values?.password,
-          role: null,
+          role: values?.role,
         },
       },
       {
@@ -112,9 +116,8 @@ useEffect(() => {
               input: {
                 email: values?.email,
                 name: values?.name,
-                password: values?.password,
-                role: null,
-                id:null
+                role: values?.role,
+                id:UserId
               },
             },
             {
@@ -129,6 +132,7 @@ useEffect(() => {
             title: "Success",
             description: "Successful created",
           })
+          router.push("/dashboard/users")
     
     }else if(error){
         toast({
@@ -157,6 +161,7 @@ useEffect(() => {
 
   return (
     <Form {...form}>
+        <Toaster/>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
           <FormField
@@ -198,6 +203,28 @@ useEffect(() => {
               </FormItem>
             )}
           />
+              <FormField
+                        control={form.control}
+                        name="role"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Role</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a role" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Admin">Admin</SelectItem>
+                                        <SelectItem value="ANONYMOUS">ANONYMOUS</SelectItem>
+
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
         </div>
         <div className="flex justify-center items-center">
           <Button
