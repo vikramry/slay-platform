@@ -27,7 +27,7 @@ const formSchema = z.object({
 
 })
 
-const CreatComponent = () => {
+const CreatComponent = ({edit=false}:{edit?:boolean}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

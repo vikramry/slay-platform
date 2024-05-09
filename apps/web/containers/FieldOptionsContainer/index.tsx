@@ -26,13 +26,14 @@ import {
 import { Input } from "@repo/ui";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { CreateFieldOptionQuary, GetFieldOptionQuary } from "@/app/queries";
+import { CreateFieldOptionQuary, GetFieldOptionQuary, UpdateFieldOptionsQuary } from "@/app/queries";
 import { useSearchParams } from "next/navigation";
 
 const FieldOptionsContainer = ({edit=false}:{edit:boolean}) => {
   const [createModelField,{ data, loading, error }] = useLazyQuery(serverFetch);
 
   const [getFieldOption, getFieldOptionResponse] = useLazyQuery(serverFetch);
+  const [updateFieldOption, updateFieldOptionResponse] = useLazyQuery(serverFetch);
 
   const getFieldOptionFun=()=>{
     getFieldOption(
@@ -119,6 +120,7 @@ useEffect(() => {
 
   const handleSubmit = (data: FieldOptionType) => {
     console.log(data);
+    if(edit==false){
     createModelField(
       CreateFieldOptionQuary,
       {
@@ -138,6 +140,30 @@ useEffect(() => {
           cache: "no-store"
       }
   );
+}
+else if(edit == true){
+  updateFieldOption(
+    UpdateFieldOptionsQuary,
+    {
+      "input": {
+        "fieldName": data?.fieldName,
+        "keyName": data?.keyName,
+        "managed": data?.managed,
+        "model": data?.model,
+        "modelField": data?.modelField,
+        "modelName": data?.modelName,
+        "prefix": data?.prefix,
+        "type": data?.type,
+        "value": data?.value,
+        "id":null
+      }
+    },
+    {
+        cache: "no-store"
+    }
+);
+
+}
   };
   useEffect(()=>{
     if(data){
@@ -154,6 +180,21 @@ useEffect(() => {
           });
     }
     },[data, loading, error])
+    useEffect(() => {
+    if(updateFieldOptionResponse.data){
+      toast({
+        title: "Success",
+        description: "Successful updated",
+      })
+    }
+    else if(updateFieldOptionResponse?.error){
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: updateFieldOptionResponse?.error?.message,
+      });
+    }
+    }, [updateFieldOptionResponse])
 
   return (
     <Form {...form}>

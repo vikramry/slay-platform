@@ -2,7 +2,7 @@
 
 import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
-import { CreateModelOptionsQuary, getModelOptionQuary } from "@/app/queries"
+import { CreateModelOptionsQuary, UpdateModelOptionQuary, getModelOptionQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from "@repo/ui"
 import { useEffect } from "react"
@@ -31,6 +31,7 @@ const formSchema = z.object({
 
 const CreatModelOptions = ({edit=false}:{edit:boolean}) => {
   const [createModelOption,{ data, loading, error }] = useLazyQuery(serverFetch);
+  const [updateModelOption, updateModelOptionResponse] = useLazyQuery(serverFetch);
 
   const [getModelOption, getModelOptionResponse] = useLazyQuery(serverFetch);
 
@@ -76,6 +77,21 @@ useEffect(() => {
   }
 
 }, [getModelOptionResponse])
+useEffect(() => {
+    if(updateModelOptionResponse.data){
+      toast({
+        title: "Success",
+        description: "Successful updated",
+      })
+    }
+    else if(updateModelOptionResponse?.error){
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: updateModelOptionResponse?.error?.message,
+      });
+    }
+    }, [updateModelOptionResponse])
 
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -85,6 +101,7 @@ useEffect(() => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
+        if(edit == false){
         createModelOption(
             CreateModelOptionsQuary,
             {
@@ -102,7 +119,28 @@ useEffect(() => {
             {
                 cache: "no-store"
             }
-        );
+        );}
+        else if(edit ==true){
+            updateModelOption(
+                UpdateModelOptionQuary,
+                {
+                    "input": {
+                      "createdBy": null,
+                      "keyName": values?.keyName,
+                      "managed": values?.managed,
+                      "model": null,
+                      "modelName": null,
+                      "type": values?.type,
+                      "updatedBy": null,
+                      "value": values?.value,
+                      "id":null
+                    }
+                  },
+                {
+                    cache: "no-store"
+                }
+            )
+        }
     }
     useEffect(() => {
         if(data){

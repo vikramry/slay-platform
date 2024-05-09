@@ -300,7 +300,8 @@ export const getModelOptionQuary = `
   }
   `;
 
-export const getlistmodels = `query ListModels($where: whereModelInput) {
+  export const getlistmodels=`
+  query ListModels($where: whereModelInput) {
     listModels(where: $where) {
       docs {
         createdBy {
@@ -468,3 +469,48 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     updatedOn
   }
 }`
+  export const UpdateFieldOptionsQuary=`
+  mutation UpdateFieldOptions($input: [updateFieldOptionInput!]!) {
+    updateFieldOptions(input: $input) {
+      keyName
+      managed
+      model {
+        id
+      }
+      modelName
+      prefix
+      type
+      value
+      fieldName
+    }
+  }
+  `
+  export const UpdateModelOptionQuary=`
+  mutation UpdateModelOption($input: updateModelOptionInput!) {
+    updateModelOption(input: $input) {
+      keyName
+      managed
+      model {
+        id
+      }
+      modelName
+      type
+      value
+    }
+  }
+  `
+  export const UpdateTabQuary=`
+  mutation UpdateTab($input: updateTabInput!) {
+    updateTab(input: $input) {
+      icon
+      id
+      label
+      model {
+        id
+      }
+      order
+    }
+  }
+  `
+  export const UpdateUserQuary=`
+  `
