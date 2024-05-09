@@ -146,7 +146,6 @@ const page = () => {
         <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
 <ListModels/>
-      <DataTable columns={modelColumns} data={Modeldata} filterBy="name" text="Creat Model" url="model/createModel"/>
     </div>
   );
 };

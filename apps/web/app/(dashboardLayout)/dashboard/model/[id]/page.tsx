@@ -3,6 +3,7 @@ import React from "react";
 import { DataTable } from '@repo/ui';
 import { modelFieldColumns } from "../../columns";
 import { ModelFieldData } from "../../../../../tempData";
+import ListModelfields from "@/containers/listmodelfields";
 const page = () => {
   return (
     <div >
@@ -11,8 +12,7 @@ const page = () => {
       <DialogBox setState={setState} state={state} title="Confirm Delete?">
         <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
-
-      <DataTable columns={modelFieldColumns} data={ModelFieldData} text="Create Model Field" url={`/dashboard/model/1/createField`}/>
+<ListModelfields/>
     </div>
   );
 };
