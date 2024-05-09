@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { CreateModelQuary, GET_MODEL } from "@/app/queries";
+import { CreateModelQuary, GET_MODEL, UPDATE_MODEL } from "@/app/queries";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 
@@ -29,9 +29,10 @@ const formSchema = z.object({
   prefix: z.string(),
 });
 
-const CreatModel = ({ edit = false }: { edit: boolean }) => {
+const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
   const { id } = useParams();
   const [createModel, { data, loading, error }] = useLazyQuery(serverFetch);
+  const [updateModel, updateModelResponse] = useLazyQuery(serverFetch);
   const [getModel, getModelResponse] = useLazyQuery(serverFetch);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,28 +79,71 @@ const CreatModel = ({ edit = false }: { edit: boolean }) => {
   }, [getModelResponse.data, getModelResponse.error, getModelResponse.loading]);
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    createModel(
-      CreateModelQuary,
-      {
-        input: {
-          createdBy: null,
-          label: values?.label,
-          managed: values?.managed,
-          name: values?.name,
-          prefix: values?.prefix,
-          updatedBy: null,
+
+    if (edit) {
+      updateModel(UPDATE_MODEL,
+        {
+          "input": {
+            "id": id,
+            "label": values?.label,
+            "managed": values?.managed,
+            "name": values?.name,
+            "prefix": values?.prefix,
+            "updatedBy": null
+          }
         },
-      },
-      {
-        cache: "no-store",
-      }
-    );
+        {
+          cache: "no-store"
+        }
+      )
+    }
+    else
+      createModel(
+        CreateModelQuary,
+        {
+          input: {
+            createdBy: null,
+            label: values?.label,
+            managed: values?.managed,
+            name: values?.name,
+            prefix: values?.prefix,
+            updatedBy: null,
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
   }
+
   useEffect(() => {
     if (data) {
+      toast({
+        title: "Model Created"
+      });
     } else if (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message,
+      });
     }
   }, [data, loading, error]);
+
+  useEffect(() => {
+    if (updateModelResponse.data) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getModelResponse.error?.message,
+      });
+    }
+    if (updateModelResponse.error) {
+      toast({
+        title: "Model Updated"
+      });
+    }
+  }, [updateModelResponse.data, updateModelResponse.error, updateModelResponse.loading])
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -174,4 +218,4 @@ const CreatModel = ({ edit = false }: { edit: boolean }) => {
     </Form>
   );
 };
-export default CreatModel;
+export default ModelFormContainer;

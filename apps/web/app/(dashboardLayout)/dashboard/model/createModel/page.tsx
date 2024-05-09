@@ -1,9 +1,9 @@
 import React from 'react'
-import CreatModel from '../../../../../containers/creatModel'
+import ModelFormContainer from '../../../../../containers/ModelFormContainer'
 
 function page() {
   return (
-     <div><CreatModel/></div>
+    <div><ModelFormContainer /></div>
   )
 }
 

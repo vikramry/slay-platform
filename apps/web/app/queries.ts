@@ -402,3 +402,13 @@ export const GET_MODEL = `query GetModel($where: whereModelInput!) {
       updatedOn
     }
   }`;
+
+export const UPDATE_MODEL = `mutation UpdateModel($input: updateModelInput!) {
+    updateModel(input: $input) {
+      id
+      name
+      label
+      prefix
+      managed
+    }
+  }`
