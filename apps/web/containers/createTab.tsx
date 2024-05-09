@@ -4,7 +4,7 @@ import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
 import { CreateTabQuary, GetTabQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
+import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, toast } from "@repo/ui"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -55,6 +55,13 @@ useEffect(() => {
         order:getTabResponse.data.getTab.order,
       })
   }
+  else if(getTabResponse.error){
+    toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getTabResponse.error?.message,
+      });
+  }
 
 }, [getTabResponse])
     const form = useForm<z.infer<typeof formSchema>>({
@@ -86,9 +93,17 @@ useEffect(() => {
 
     useEffect(()=>{
         if(data){
+            toast({
+                title: "Success",
+                description: "Successful created",
+              })
         
         }else if(error){
-          
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error?.message,
+              });
         }
         },[data, loading, error])
     // ...

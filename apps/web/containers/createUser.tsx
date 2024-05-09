@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  toast,
 } from "@repo/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -70,6 +71,13 @@ useEffect(() => {
         email:getUserResponse.data.getUser.email,
       })
   }
+  else if(getUserResponse?.error){
+    toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getUserResponse.error?.message,
+      });
+  }
 
 }, [getUserResponse])
   const form = useForm<z.infer<typeof formSchema>>({
@@ -94,6 +102,21 @@ useEffect(() => {
       }
     );
   }
+  useEffect(()=>{
+    if(data){
+        toast({
+            title: "Success",
+            description: "Successful created",
+          })
+    
+    }else if(error){
+        toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+    }
+    },[data, loading, error])
   // ...
 
   return (

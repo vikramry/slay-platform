@@ -21,6 +21,7 @@ import {
   SelectLabel,
   SelectItem,
   DateTimePicker,
+  toast,
 } from "@repo/ui";
 import { Input } from "@repo/ui";
 import { useLazyQuery } from "@/app/hook";
@@ -72,6 +73,13 @@ useEffect(() => {
         prefix:getFieldOptionResponse.data.getFieldOption.prefix,
       })
   }
+  else if(getFieldOptionResponse?.error){
+    toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getFieldOptionResponse?.error?.message,
+      });
+}
 
 }, [getFieldOptionResponse])
 
@@ -131,6 +139,21 @@ useEffect(() => {
       }
   );
   };
+  useEffect(()=>{
+    if(data){
+      toast({
+        title: "Success",
+        description: "Successful created",
+      })
+    
+    }else if(error){
+        toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+    }
+    },[data, loading, error])
 
   return (
     <Form {...form}>

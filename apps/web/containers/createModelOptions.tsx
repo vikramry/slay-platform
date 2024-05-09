@@ -4,7 +4,7 @@ import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
 import { CreateModelOptionsQuary, getModelOptionQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui"
+import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from "@repo/ui"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -67,6 +67,13 @@ useEffect(() => {
         managed:getModelOptionResponse.data.getModelOption.managed,
       })
   }
+  else if(getModelOptionResponse?.error){
+    toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getModelOptionResponse.error?.message,
+      });
+  }
 
 }, [getModelOptionResponse])
 
@@ -101,7 +108,11 @@ useEffect(() => {
         if(data){
 
         }else if(error){
-            
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error?.message,
+              })
         }
     
     }, [data,error,loading])
