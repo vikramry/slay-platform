@@ -77,7 +77,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
             unique: false,
             managed: false,
             enumType: "",
-            enumValues: [],
+            enumValues: []
         },
     });
 
@@ -100,9 +100,24 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
     useEffect(() => {
         if (getModelFieldResponse.data) {
+            const data = getModelFieldResponse.data.getModelField;
+
             form.reset({
-                ...getModelFieldResponse.data.getModelField
+                default: data?.default,
+                enumType: data?.enumType,
+                enumValues: data?.enumValues,
+                fieldName: data?.fieldName,
+                foreignField: data?.foreignField,
+                label: data?.label,
+                localField: data?.localField,
+                managed: data?.managed || false,
+                ref: data?.ref,
+                required: data?.required || false,
+                rounds: data?.rounds,
+                type: data?.type,
+                unique: data?.unique || false
             })
+
         }
 
         if (getModelFieldResponse.error) {
@@ -171,6 +186,9 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     }, [form.watch("ref")]);
 
     useEffect(() => {
+        if (getModelFieldsLocalResponse.data) {
+            form.setValue("localField", getModelFieldResponse.data.getModelField.localField);
+        }
         if (getModelFieldsLocalResponse.error) {
             toast({
                 variant: "destructive",
@@ -182,6 +200,10 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
 
     useEffect(() => {
+
+        if (getModelFieldsForeignResponse.data) {
+            form.setValue("foreignField", getModelFieldResponse.data.getModelField.foreignField);
+        }
         if (getModelFieldsForeignResponse.error) {
             toast({
                 variant: "destructive",
@@ -192,6 +214,9 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     }, [getModelFieldsForeignResponse.data, getModelFieldsForeignResponse.error, getModelFieldsForeignResponse.loading]);
 
     useEffect(() => {
+        if (getModelsResponse.data) {
+            form.setValue("ref", getModelFieldResponse.data.getModelField.ref);
+        }
         if (getModelsResponse.error) {
             toast({
                 variant: "destructive",
@@ -324,7 +349,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                 <FormControl>
                                     <Select
                                         onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                        value={field.value}
                                     >
                                         <SelectTrigger className="">
                                             <SelectValue placeholder="Select a type" />
@@ -419,7 +444,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            value={field.value}
                                         >
                                             <SelectTrigger className="">
                                                 <SelectValue placeholder="Select a Model" />
@@ -450,7 +475,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
                                             >
                                                 <SelectTrigger className="">
                                                     <SelectValue placeholder="Select a Local Field" />
@@ -481,7 +506,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
                                             >
                                                 <SelectTrigger className="">
                                                     <SelectValue placeholder="Select a Foreign Field" />
