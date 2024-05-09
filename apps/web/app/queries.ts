@@ -3,8 +3,7 @@ query exampleQuery {
     hello
 }`;
 
-
-export const CreateUserQuary =`
+export const CreateUserQuary = `
 mutation CreateUser($input: UserInput!) {
     createUser(input: $input) {
       id
@@ -14,9 +13,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
-  export const CreateModelQuary =`
+export const CreateModelQuary = `
   mutation CreateModel($input: ModelInput!) {
     createModel(input: $input) {
       id
@@ -44,9 +43,9 @@ mutation CreateUser($input: UserInput!) {
       updatedOn
     }
   }
-  `
+  `;
 
- export const CreateTabQuary=`
+export const CreateTabQuary = `
   mutation CreateTab($input: TabInput!) {
     createTab(input: $input) {
       id
@@ -81,9 +80,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
-  export const CreateModelFieldQuary=`
+export const CreateModelFieldQuary = `
   mutation CreateModelField($input: ModelFieldInput!) {
     createModelField(input: $input) {
       id
@@ -141,9 +140,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
-  export const CreateModelOptionsQuary=`
+export const CreateModelOptionsQuary = `
   mutation CreateModelOption($input: ModelOptionInput!) {
     createModelOption(input: $input) {
       id
@@ -174,9 +173,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
- export const CreateFieldOptionQuary=`
+export const CreateFieldOptionQuary = `
   mutation CreateFieldOption($input: FieldOptionInput!) {
     createFieldOption(input: $input) {
       id
@@ -196,8 +195,8 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
- export const GetUserQuary=`
+  }`;
+export const GetUserQuary = `
   query GetUser($where: whereUserInput!) {
     getUser(where: $where) {
       id
@@ -207,9 +206,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
-  export const GetTabQuary=`
+export const GetTabQuary = `
   query GetTab($where: whereTabInput!) {
     getTab(where: $where) {
       id
@@ -241,9 +240,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
-  export const GetFieldOptionQuary=`
+export const GetFieldOptionQuary = `
   query GetFieldOption($where: whereFieldOptionInput!) {
     getFieldOption(where: $where) {
       id
@@ -264,9 +263,9 @@ mutation CreateUser($input: UserInput!) {
       createdOn
       updatedOn
     }
-  }`
+  }`;
 
-  export const getModelOptionQuary=`
+export const getModelOptionQuary = `
   query GetModelOption($where: whereModelOptionInput!) {
     getModelOption(where: $where) {
       id
@@ -299,9 +298,9 @@ mutation CreateUser($input: UserInput!) {
       updatedOn
     }
   }
-  `
+  `;
 
-  export const getlistmodels=`query ListModels($where: whereModelInput) {
+export const getlistmodels = `query ListModels($where: whereModelInput) {
     listModels(where: $where) {
       docs {
         createdBy {
@@ -328,8 +327,8 @@ mutation CreateUser($input: UserInput!) {
       limit
       totalDocs
     }
-  }`
-  export const getlistmodeloptions=`
+  }`;
+export const getlistmodeloptions = `
   query ListModelOptions($where: whereModelOptionInput) {
     listModelOptions(where: $where) {
       docs {
@@ -353,8 +352,8 @@ mutation CreateUser($input: UserInput!) {
       }
     }
   }
-  `
-  export const getlistmodelfields=`
+  `;
+export const getlistmodelfields = `
   query ListModelFields($where: whereModelFieldInput) {
     listModelFields(where: $where) {
       docs {
@@ -380,4 +379,26 @@ mutation CreateUser($input: UserInput!) {
       limit
     }
   }
-  `
+  `;
+
+export const GET_MODEL = `query GetModel($where: whereModelInput!) {
+    getModel(where: $where) {
+      id
+      name
+      label
+      prefix
+      managed
+      createdBy {
+        id
+        name
+        email
+      }
+      updatedBy {
+        id
+        name
+        email
+      }
+      createdOn
+      updatedOn
+    }
+  }`;

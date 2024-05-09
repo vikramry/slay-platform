@@ -1,66 +1,109 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { useLazyQuery } from "../app/hook"
-import { serverFetch } from "../app/action"
-import { CreateModelQuary } from "../app/queries"
-import { useEffect } from "react"
-
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  useToast,
+} from "@repo/ui";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useLazyQuery } from "@/app/hook";
+import { serverFetch } from "@/app/action";
+import { CreateModelQuary, GET_MODEL } from "@/app/queries";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string(),
   label: z.string(),
   managed: z.boolean(),
-  prefix:z.string()
+  prefix: z.string(),
+});
 
-})
-
-const CreatModel = () => {
-  const [createModel,{ data, loading, error }] = useLazyQuery(serverFetch);
-
+const CreatModel = ({ edit = false }: { edit: boolean }) => {
+  const { id } = useParams();
+  const [createModel, { data, loading, error }] = useLazyQuery(serverFetch);
+  const [getModel, getModelResponse] = useLazyQuery(serverFetch);
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      managed: false
+      managed: false,
     },
-  })
+  });
 
+  useEffect(() => {
+    if (edit) {
+      getModel(
+        GET_MODEL,
+        {
+          where: {
+            id: {
+              is: id,
+            },
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
+    }
+  }, []);
 
+  useEffect(() => {
+    if (getModelResponse.data) {
+      form.reset({
+        name: getModelResponse.data.getModel.name,
+        label: getModelResponse.data.getModel.label,
+        managed: getModelResponse.data.getModel.managed,
+        prefix: getModelResponse.data.getModel.prefix,
+      });
+    }
+    if (getModelResponse.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getModelResponse.error?.message,
+      });
+    }
+  }, [getModelResponse.data, getModelResponse.error, getModelResponse.loading]);
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log(values);
     createModel(
       CreateModelQuary,
       {
-        "input": {
-          "createdBy": null,
-          "label": values?.label,
-          "managed": values?.managed,
-          "name": values?.name,
-          "prefix": values?.prefix,
-          "updatedBy": null
-        }
+        input: {
+          createdBy: null,
+          label: values?.label,
+          managed: values?.managed,
+          name: values?.name,
+          prefix: values?.prefix,
+          updatedBy: null,
+        },
       },
       {
-          cache: "no-store"
+        cache: "no-store",
       }
-  );
+    );
   }
-useEffect(()=>{
-if(data){
-
-}else if(error){
-  
-}
-},[data, loading, error])
+  useEffect(() => {
+    if (data) {
+    } else if (error) {
+    }
+  }, [data, loading, error]);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
-
           <FormField
             control={form.control}
             name="name"
@@ -87,7 +130,7 @@ if(data){
               </FormItem>
             )}
           />
-           <FormField
+          <FormField
             control={form.control}
             name="prefix"
             render={({ field }) => (
@@ -112,9 +155,7 @@ if(data){
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>
-                    Managed
-                  </FormLabel>
+                  <FormLabel>Managed</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -128,8 +169,9 @@ if(data){
           >
             Submit
           </Button>
-        </div>      </form>
+        </div>{" "}
+      </form>
     </Form>
-  )
-}
-export default CreatModel
+  );
+};
+export default CreatModel;
