@@ -2,9 +2,9 @@
 
 import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
-import { CreateModelOptionsQuary } from "@/app/queries"
+import { CreateModelOptionsQuary, getModelOptionQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui"
+import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from "@repo/ui"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -29,14 +29,58 @@ const formSchema = z.object({
 
 })
 
-const CreatModelOptions = () => {
+const CreatModelOptions = ({edit=false}:{edit:boolean}) => {
   const [createModelOption,{ data, loading, error }] = useLazyQuery(serverFetch);
+
+  const [getModelOption, getModelOptionResponse] = useLazyQuery(serverFetch);
+
+  const getFieldOptionFun=()=>{
+    getModelOption(
+        getModelOptionQuary,{
+        "where": {
+          "id": {
+            "is": null
+          }
+        }
+      },{
+            cache: "no-store",
+          }
+    )
+  }
+useEffect(()=>{
+if(edit){
+  getFieldOptionFun()
+}else{
+  form.reset({
+    managed: false
+})
+}
+
+},[])
+useEffect(() => {
+  if(getModelOptionResponse.data){
+    form.reset({
+        name:getModelOptionResponse.data.getModelOption.name,
+        keyName:getModelOptionResponse.data.getModelOption.keyName,
+        type:getModelOptionResponse.data.getModelOption.type,
+        value:getModelOptionResponse.data.getModelOption.value,
+        managed:getModelOptionResponse.data.getModelOption.managed,
+      })
+  }
+  else if(getModelOptionResponse?.error){
+    toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getModelOptionResponse.error?.message,
+      });
+  }
+
+}, [getModelOptionResponse])
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            managed: false
-        },
+        defaultValues: {},
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -64,7 +108,11 @@ const CreatModelOptions = () => {
         if(data){
 
         }else if(error){
-            
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error?.message,
+              })
         }
     
     }, [data,error,loading])

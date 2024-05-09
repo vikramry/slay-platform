@@ -2,10 +2,11 @@
 
 import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
-import { CreateTabQuary } from "@/app/queries"
+import { CreateTabQuary, GetTabQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
-import { useEffect } from "react"
+import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, toast } from "@repo/ui"
+import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -21,9 +22,48 @@ const formSchema = z.object({
 
 })
 
-const CreatTab = () => {
+const CreatTab = ({edit=false}:{edit:boolean}) => {
   const [createTab,{ data, loading, error }] = useLazyQuery(serverFetch);
+  const [getTab, getTabResponse] = useLazyQuery(serverFetch);
+  const params = useSearchParams();
+  console.log(params.get("edit"), "fjyfjhvjgy");
+  console.log(params.get("id"), "fjyfjhvjgy");
 
+  const getTabFun=()=>{
+    getTab(
+        GetTabQuary,{
+        "where": {
+          "id": {
+            "is": null
+          }
+        }
+      },{
+            cache: "no-store",
+          }
+    )
+  }
+useEffect(()=>{
+if(edit){
+    getTabFun()
+}
+
+},[])
+useEffect(() => {
+  if(getTabResponse.data){
+    form.reset({
+        label:getTabResponse.data.getTab.label,
+        order:getTabResponse.data.getTab.order,
+      })
+  }
+  else if(getTabResponse.error){
+    toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getTabResponse.error?.message,
+      });
+  }
+
+}, [getTabResponse])
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -53,9 +93,17 @@ const CreatTab = () => {
 
     useEffect(()=>{
         if(data){
+            toast({
+                title: "Success",
+                description: "Successful created",
+              })
         
         }else if(error){
-          
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error?.message,
+              });
         }
         },[data, loading, error])
     // ...

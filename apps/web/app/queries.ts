@@ -197,6 +197,109 @@ mutation CreateUser($input: UserInput!) {
       updatedOn
     }
   }`
+ export const GetUserQuary=`
+  query GetUser($where: whereUserInput!) {
+    getUser(where: $where) {
+      id
+      name
+      email
+      role
+      createdOn
+      updatedOn
+    }
+  }`
+
+  export const GetTabQuary=`
+  query GetTab($where: whereTabInput!) {
+    getTab(where: $where) {
+      id
+      icon
+      model {
+        id
+        name
+        label
+        prefix
+      }
+      label
+      order
+      createdBy {
+        id
+        name
+        email
+        role
+        createdOn
+        updatedOn
+      }
+      updatedBy {
+        id
+        name
+        email
+        role
+        createdOn
+        updatedOn
+      }
+      createdOn
+      updatedOn
+    }
+  }`
+
+  export const GetFieldOptionQuary=`
+  query GetFieldOption($where: whereFieldOptionInput!) {
+    getFieldOption(where: $where) {
+      id
+      model {
+        id
+        name
+      }
+      modelName
+      modelField {
+        id
+      }
+      fieldName
+      keyName
+      type
+      value
+      managed
+      prefix
+      createdOn
+      updatedOn
+    }
+  }`
+
+  export const getModelOptionQuary=`
+  query GetModelOption($where: whereModelOptionInput!) {
+    getModelOption(where: $where) {
+      id
+      model {
+        id
+        name
+      }
+      modelName
+      managed
+      keyName
+      value
+      type
+      createdBy {
+        id
+        name
+        email
+        role
+        createdOn
+        updatedOn
+      }
+      updatedBy {
+        id
+        name
+        email
+        role
+        createdOn
+        updatedOn
+      }
+      createdOn
+      updatedOn
+    }
+  }
+  `
 
   export const getlistmodels=`query ListModels($where: whereModelInput) {
     listModels(where: $where) {
