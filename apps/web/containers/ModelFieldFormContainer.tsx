@@ -2,7 +2,7 @@
 
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { CreateModelFieldQuary } from "@/app/queries";
+import { CreateModelFieldQuary, GET_MODEL_FIELD, UPDATE_MODEL_FIELD } from "@/app/queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Button,
@@ -22,7 +22,10 @@ import {
     DateTimePicker,
     SelectLabel,
     SelectGroup,
+    Toaster,
+    useToast,
 } from "@repo/ui";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -54,10 +57,15 @@ const formSchema = z.object({
     ref: z.string().optional(),
     localField: z.string().optional(),
     foreignField: z.string().optional(),
+    rounds: z.number().optional(),
 });
 
-const CreatModelField = () => {
-  const [createModelField,{ data, loading, error }] = useLazyQuery(serverFetch);
+const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
+    const [createModelField, { data, loading, error }] = useLazyQuery(serverFetch);
+    const [updateModelField, updateModelFieldResponse] = useLazyQuery(serverFetch);
+    const [getModelField, getModelFieldResponse] = useLazyQuery(serverFetch);
+    const { id, fieldId } = useParams();
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -71,6 +79,39 @@ const CreatModelField = () => {
     });
 
     useEffect(() => {
+        if (edit)
+            getModelField(GET_MODEL_FIELD,
+                {
+                    "where": {
+                        "id": {
+                            "is": fieldId
+                        }
+                    }
+                },
+                {
+                    cache: "no-store"
+                }
+            )
+    }, [])
+
+
+    useEffect(() => {
+        if (getModelFieldResponse.data) {
+            form.reset({
+                ...getModelFieldResponse.data.getModelField
+            })
+        }
+
+        if (getModelFieldResponse.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: getModelFieldResponse.error?.message,
+            });
+        }
+    }, [getModelFieldResponse.data, getModelFieldResponse.error, getModelFieldResponse.loading])
+
+    useEffect(() => {
         form.setValue("default", "");
         form.setValue("enumType", "");
         form.setValue("enumValues", []);
@@ -81,43 +122,90 @@ const CreatModelField = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
-        createModelField(
-            CreateModelFieldQuary,
-            {
-                "input": {
-                  "createdBy": null,
-                  "default": values?.default,
-                  "enumType": values?.enumType,
-                  "enumValues": values?.enumValues,
-                  "fieldName": values?.fieldName,
-                  "foreignField": values?.foreignField,
-                  "label": values?.label,
-                  "localField": values?.localField,
-                  "managed": values?.managed,
-                  "model": null,
-                  "modelName": null,
-                  "ref": values?.ref,
-                  "required": values?.required,
-                  "rounds": null,
-                  "type": values?.type,
-                  "unique": values?.unique,
-                  "updatedBy": null
+        if (edit)
+            updateModelField(UPDATE_MODEL_FIELD,
+                {
+                    "input": {
+                        "createdBy": null,
+                        "default": values?.default,
+                        "enumType": values?.enumType,
+                        "enumValues": values?.enumValues,
+                        "fieldName": values?.fieldName,
+                        "foreignField": values?.foreignField,
+                        "label": values?.label,
+                        "localField": values?.localField,
+                        "managed": values?.managed,
+                        "ref": values?.ref,
+                        "required": values?.required,
+                        "rounds": values?.rounds,
+                        "type": values?.type,
+                        "unique": values?.unique,
+                        "updatedBy": null,
+                        "id": fieldId
+                    }
+                },
+                {
+                    cache: "no-store"
                 }
-              },
-            {
-                cache: "no-store"
-            }
-        );
+            )
+        else
+            createModelField(
+                CreateModelFieldQuary,
+                {
+                    "input": {
+                        "createdBy": null,
+                        "default": values?.default,
+                        "enumType": values?.enumType,
+                        "enumValues": values?.enumValues,
+                        "fieldName": values?.fieldName,
+                        "foreignField": values?.foreignField,
+                        "label": values?.label,
+                        "localField": values?.localField,
+                        "managed": values?.managed,
+                        "model": id,
+                        "modelName": null,
+                        "ref": values?.ref,
+                        "required": values?.required,
+                        "rounds": values?.rounds,
+                        "type": values?.type,
+                        "unique": values?.unique,
+                        "updatedBy": null
+                    }
+                },
+                {
+                    cache: "no-store"
+                }
+            );
     }
     useEffect(() => {
-    if(data){
-
-    }else if(error){
-        
-    }
-    }, [data,error,loading])
+        if (data) {
+            toast({
+                title: "Model Field Created"
+            });
+        } else if (error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error?.message,
+            });
+        }
+    }, [data, error, loading])
+    useEffect(() => {
+        if (updateModelFieldResponse.data) {
+            toast({
+                title: "Model Field Updated"
+            });
+        } else if (updateModelFieldResponse.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: updateModelFieldResponse.error?.message,
+            });
+        }
+    }, [updateModelFieldResponse.data, updateModelFieldResponse.error, updateModelFieldResponse.loading])
     return (
         <Form {...form}>
+            <Toaster />
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                     <FormField
@@ -180,7 +268,7 @@ const CreatModelField = () => {
                             </FormItem>
                         )}
                     />
-                    {["number", "string", "float", "decimal128"].includes(
+                    {["number", "string", "float", "decimal128", "enum"].includes(
                         form.watch("type")
                     ) && (
                             <FormField
@@ -201,6 +289,24 @@ const CreatModelField = () => {
                                 )}
                             />
                         )}
+
+                    <FormField
+                        control={form.control}
+                        name="rounds"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Rounds</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Enter Rounds value"
+                                        {...field}
+                                        type={"number"}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
                     {form.watch("type", "string") === "boolean" && (
                         <FormField
@@ -467,4 +573,4 @@ const CreatModelField = () => {
         </Form>
     );
 };
-export default CreatModelField;
+export default ModelFieldFormContainer;

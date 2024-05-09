@@ -229,6 +229,10 @@ export const modelColumns: ColumnDef<Model>[] = [
             <Link href={`/dashboard/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View Model</DropdownMenuItem>
             </Link>
+
+            <Link href={`/dashboard/model/${row.original.id}/edit`} className="cursor-pointer">
+              <DropdownMenuItem>Update Model</DropdownMenuItem>
+            </Link>
             <DropdownMenuLabel>
 
               <AlertDialog>
