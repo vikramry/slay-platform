@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -25,10 +25,56 @@ import {
 import { Input } from "@repo/ui";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { CreateFieldOptionQuary } from "@/app/queries";
+import { CreateFieldOptionQuary, GetFieldOptionQuary } from "@/app/queries";
+import { useSearchParams } from "next/navigation";
 
-const FieldOptionsContainer = () => {
+const FieldOptionsContainer = ({edit=false}:{edit:boolean}) => {
   const [createModelField,{ data, loading, error }] = useLazyQuery(serverFetch);
+
+  const [getFieldOption, getFieldOptionResponse] = useLazyQuery(serverFetch);
+
+  const getFieldOptionFun=()=>{
+    getFieldOption(
+      GetFieldOptionQuary,{
+        "where": {
+          "id": {
+            "is": null
+          }
+        }
+      },{
+            cache: "no-store",
+          }
+    )
+  }
+useEffect(()=>{
+if(edit){
+  getFieldOptionFun()
+}else{
+  form.reset({
+    prefix: "DOMAIN",
+    modelName: "some-model",
+    model: "34567",
+    modelField: "some-field",
+    managed: true,
+  })
+}
+
+},[])
+useEffect(() => {
+  if(getFieldOptionResponse.data){
+    form.reset({
+        model:getFieldOptionResponse.data.getFieldOption.model.id,
+        fieldName:getFieldOptionResponse.data.getFieldOption.fieldName,
+        keyName:getFieldOptionResponse.data.getFieldOption.keyName,
+        type:getFieldOptionResponse.data.getFieldOption.type,
+        value:getFieldOptionResponse.data.getFieldOption.value,
+        managed:getFieldOptionResponse.data.getFieldOption.managed,
+        prefix:getFieldOptionResponse.data.getFieldOption.prefix,
+      })
+  }
+
+}, [getFieldOptionResponse])
+
 
   const fieldOptionSchema = z.object({
     model: z.string({
@@ -59,13 +105,10 @@ const FieldOptionsContainer = () => {
   const form = useForm<FieldOptionType>({
     resolver: zodResolver(fieldOptionSchema),
     defaultValues: {
-      prefix: "DOMAIN",
-      modelName: "some-model",
-      model: "34567",
-      modelField: "some-field",
-      managed: false,
+     
     },
   });
+
   const handleSubmit = (data: FieldOptionType) => {
     console.log(data);
     createModelField(
@@ -255,3 +298,86 @@ const FieldOptionsContainer = () => {
 };
 
 export default FieldOptionsContainer;
+// "use client";
+// import React, { useEffect, useState } from "react";
+// import { useForm } from "react-hook-form";
+
+// interface FormValues {
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+// }
+
+// const FieldOptionsContainer: React.FC = () => {
+//   const { register, handleSubmit, setValue } = useForm<FormValues>();
+//   const [defaultValues, setDefaultValues] = useState<FormValues>({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//   });
+
+//   // Simulating fetching dynamic default values
+//   useEffect(() => {
+//     // Fetch dynamic data from an API or other source
+//     const dynamicData: FormValues = {
+//       firstName: "John",
+//       lastName: "Doe",
+//       email: "john.doe@example.com",
+//     };
+
+//     // Update default values state with dynamic data
+//     setDefaultValues(dynamicData);
+//   }, []);
+
+//   // Set default values in the form fields
+//   useEffect(() => {
+//     Object.entries(defaultValues).forEach(([fieldName, value]) => {
+//       setValue(fieldName as keyof FormValues, value);
+//     });
+//   }, [defaultValues, setValue]);
+
+//   const onSubmit = (data: FormValues) => {
+//     console.log(data);
+//     // Handle form submission
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit(onSubmit)}>
+//       <label htmlFor="firstName">First Name:</label>
+//       <input
+//         type="text"
+//         id="firstName"
+//         name="firstName"
+//         // ref={register}
+//         defaultValue={defaultValues.firstName}
+//       />
+
+//       <br />
+
+//       <label htmlFor="lastName">Last Name:</label>
+//       <input
+//         type="text"
+//         id="lastName"
+//         name="lastName"
+//         // ref={register}
+//         defaultValue={defaultValues.lastName}
+//       />
+//       <br />
+
+//       <label htmlFor="email">Email:</label>
+//       <input
+//         type="email"
+//         id="email"
+//         name="email"
+//         defaultValue={defaultValues.email}
+//         {...register("email")} 
+
+//       />
+//       <br />
+
+//       <button type="submit">Submit</button>
+//     </form>
+//   );
+// };
+
+// export default FieldOptionsContainer;
