@@ -356,6 +356,9 @@ export const getlistmodelfields = `
         }
         label
         managed
+        required
+        unique
+        type
         model {
           id
           name
