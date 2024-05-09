@@ -300,7 +300,7 @@ export const getModelOptionQuary = `
   }
   `;
 
-  export const getlistmodels=`
+export const getlistmodels = `
   query ListModels($where: whereModelInput) {
     listModels(where: $where) {
       docs {
@@ -469,7 +469,7 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     updatedOn
   }
 }`
-  export const UpdateFieldOptionsQuary=`
+export const UpdateFieldOptionsQuary = `
   mutation UpdateFieldOptions($input: [updateFieldOptionInput!]!) {
     updateFieldOptions(input: $input) {
       keyName
@@ -485,7 +485,7 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     }
   }
   `
-  export const UpdateModelOptionQuary=`
+export const UpdateModelOptionQuary = `
   mutation UpdateModelOption($input: updateModelOptionInput!) {
     updateModelOption(input: $input) {
       keyName
@@ -499,7 +499,7 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     }
   }
   `
-  export const UpdateTabQuary=`
+export const UpdateTabQuary = `
   mutation UpdateTab($input: updateTabInput!) {
     updateTab(input: $input) {
       icon
@@ -512,9 +512,36 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     }
   }
   `
-  export const UpdateUserQuary=`
+export const UpdateUserQuary = `
   `
 
+
+
+
+
+export const LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL = `
+query Docs($limit: Int!, $where: whereModelFieldInput) {
+  listModelFields(limit: $limit, where: $where) {
+    docs {
+      id
+      fieldName
+      label
+    }
+    limit
+  }
+}`
+
+export const LIST_ALL_MODELS_ID_LABEL = `
+query ListModels($where: whereModelInput, $limit: Int!) {
+  listModels(where: $where, limit: $limit) {
+    docs {
+      label
+      name
+      id
+    }
+    limit
+  }
+}`;
   export const  listtabs=`
   query Docs {
     listTabs {
