@@ -29,20 +29,7 @@ import { CreateUserQuary, GetUserQuary, UpdateUserQuary } from "../app/queries";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const formSchema = z.object({
-  name: z.string({
-    required_error: "Name is required",
-  }),
-  email: z.string({
-    required_error: "Email is required",
-  }),
-  password: z.string({
-    required_error: "Password is required",
-  }),
-  role: z.string({
-    required_error: "role is required",
-  }),
-});
+
 
 const CreateUser = ({edit=false}:{edit?:boolean}) => {
   const [createUser, { data, loading, error }] = useLazyQuery(serverFetch);
@@ -52,7 +39,18 @@ const router =useRouter()
   const params = useSearchParams();
   console.log(params.get("id"), "fjyfjhvjgyg");
 const UserId=params.get("id")
-
+const formSchema = z.object({
+    name: z.string({
+      required_error: "Name is required",
+    }),
+    email: z.string({
+      required_error: "Email is required",
+    }),
+    password: edit ?  z.string().optional():  z.string({ required_error: "Password is required" }),
+    role: z.string({
+      required_error: "role is required",
+    }),
+  });
 useEffect(()=>{
 if(edit){
     getUser(
@@ -74,7 +72,8 @@ useEffect(() => {
     form.reset({
         name:getUserResponse.data.getUser.name,
         email:getUserResponse.data.getUser.email,
-        password:getUserResponse.data.getUser.password
+        role:getUserResponse.data.getUser.role
+        // password:getUserResponse.data.getUser.password
       })
   }
   else if(getUserResponse?.error){
@@ -148,6 +147,8 @@ useEffect(() => {
             title: "Success",
             description: "Successful updated",
           })
+          router.push("/dashboard/users")
+
         }
         else if(updateUserResponse?.error){
           toast({
@@ -190,6 +191,8 @@ useEffect(() => {
               </FormItem>
             )}
           />
+                    {!edit &&
+
           <FormField
             control={form.control}
             name="password"
@@ -202,14 +205,14 @@ useEffect(() => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          />}
               <FormField
                         control={form.control}
                         name="role"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Role</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} value={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a role" />

@@ -513,6 +513,14 @@ export const UpdateTabQuary = `
   }
   `
 export const UpdateUserQuary = `
+mutation UpdateUser($input: updateUserInput!) {
+  updateUser(input: $input) {
+    email
+    id
+    name
+    role
+  }
+}
   `
 
 
