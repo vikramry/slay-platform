@@ -412,3 +412,59 @@ export const UPDATE_MODEL = `mutation UpdateModel($input: updateModelInput!) {
       managed
     }
   }`
+
+export const GET_MODEL_FIELD = `
+query GetModelField($where: whereModelFieldInput!) {
+  getModelField(where: $where) {
+    id
+    model {
+      id
+      label
+      name
+    }
+    modelName
+    createdBy {
+      id
+      name
+    }
+    updatedBy {
+      id
+      name
+    }
+    fieldName
+    label
+    type
+    required
+    default
+    rounds
+    unique
+    ref
+    localField
+    foreignField
+    enumType
+    enumValues
+    managed
+    createdOn
+    updatedOn
+  }
+}`
+export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModelFieldInput!) {
+  updateModelField(input: $input) {
+    id
+    fieldName
+    label
+    type
+    required
+    default
+    rounds
+    unique
+    ref
+    localField
+    foreignField
+    enumType
+    enumValues
+    managed
+    createdOn
+    updatedOn
+  }
+}`

@@ -1,14 +1,11 @@
 "use client"
 import React from 'react'
-import CreatModelField from '../../../../../../containers/creatModelField'
+import ModelFieldFormContainer from '@/containers/ModelFieldFormContainer'
 
-function page({params}: {params: {id: string}}) {
-  console.log(params.id)
-
-
+function page({ params }: { params: { id: string } }) {
   return (
     <div>
-        <CreatModelField/>
+      <ModelFieldFormContainer />
     </div>
   )
 }

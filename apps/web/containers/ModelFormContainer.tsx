@@ -13,6 +13,7 @@ import {
   FormMessage,
   Input,
   useToast,
+  Toaster
 } from "@repo/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,10 +24,14 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string(),
-  label: z.string(),
+  name: z.string({
+    required_error: "Name is required"
+  }),
+  label: z.string({
+    required_error: "Label is required"
+  }),
   managed: z.boolean(),
-  prefix: z.string(),
+  prefix: z.string().nullable(),
 });
 
 const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
@@ -133,19 +138,21 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
   useEffect(() => {
     if (updateModelResponse.data) {
       toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: getModelResponse.error?.message,
+        title: "Model Updated"
       });
     }
     if (updateModelResponse.error) {
+
       toast({
-        title: "Model Updated"
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: updateModelResponse.error?.message,
       });
     }
   }, [updateModelResponse.data, updateModelResponse.error, updateModelResponse.loading])
   return (
     <Form {...form}>
+      <Toaster />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
           <FormField
