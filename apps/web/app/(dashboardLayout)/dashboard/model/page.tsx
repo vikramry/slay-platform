@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button, DataTable } from '@repo/ui';
 import { Payment, columns, modelColumns } from "../columns"
 import { Modeldata } from "../../../../tempData";
+import ListModels from "@/containers/listModel";
 const page = () => {
   const [state, setState] = useState(false)
 
@@ -144,7 +145,7 @@ const page = () => {
       <DialogBox setState={setState} state={state} title="Confirm Delete?">
         <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
-
+<ListModels/>
       <DataTable columns={modelColumns} data={Modeldata} filterBy="name" text="Creat Model" url="model/createModel"/>
     </div>
   );
