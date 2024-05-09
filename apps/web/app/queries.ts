@@ -197,3 +197,84 @@ mutation CreateUser($input: UserInput!) {
       updatedOn
     }
   }`
+
+  export const getlistmodels=`query ListModels($where: whereModelInput) {
+    listModels(where: $where) {
+      docs {
+        createdBy {
+          createdOn
+          email
+          name
+          role
+        }
+        label
+        managed
+        prefix
+        name
+        id
+        updatedBy {
+          id
+          name
+          email
+          role
+          createdOn
+          updatedOn
+        }
+      }
+      offset
+      limit
+      totalDocs
+    }
+  }`
+  export const getlistmodeloptions=`
+  query ListModelOptions($where: whereModelOptionInput) {
+    listModelOptions(where: $where) {
+      docs {
+        createdBy {
+          name
+        }
+        managed
+        model {
+          id
+          name
+        }
+        updatedBy {
+          name
+          id
+        }
+        value
+        id
+        keyName
+        modelName
+        type
+      }
+    }
+  }
+  `
+  export const getlistmodelfields=`
+  query ListModelFields($where: whereModelFieldInput) {
+    listModelFields(where: $where) {
+      docs {
+        createdBy {
+          id
+          name
+          role
+        }
+        label
+        managed
+        model {
+          id
+          name
+          label
+          prefix
+        }
+        updatedBy {
+          id
+          name
+          role
+        }
+      }
+      limit
+    }
+  }
+  `
