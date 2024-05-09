@@ -1,5 +1,3 @@
-"use server";
-
 
 export async function serverFetch(query:string, variables:any, options:any) {
   try {
