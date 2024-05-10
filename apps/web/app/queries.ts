@@ -636,3 +636,20 @@ query ListModels($where: whereModelInput, $limit: Int!) {
     deleteModelOption(id: $deleteModelOptionId)
   }
   `
+export const LIST_FIELD_OPTIONS =`
+query ListFieldOptions($where: whereFieldOptionInput) {
+  listFieldOptions(where: $where) {
+    docs {
+      id
+      modelName
+      fieldName
+      keyName
+      type
+      value
+      managed
+      prefix
+      createdOn
+      updatedOn
+    }
+  }
+}`

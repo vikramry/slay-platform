@@ -3,6 +3,7 @@ import React from 'react'
 import { DataTable } from '@repo/ui';
 import { fieldOptionsColumns } from '../../../../../columns';
 import { FieldOptionsData } from '../../../../../../../../tempData';
+import ListFieldOptions from '@/containers/ListFieldOptions';
 
 const page = ({params}: {params: {fieldId: string}}) => {
     console.log(params.fieldId)
@@ -14,7 +15,7 @@ const page = ({params}: {params: {fieldId: string}}) => {
 // console.log(modelId);
     return (
         <div>
-            <DataTable columns={fieldOptionsColumns} data={FieldOptionsData} text={"Create Field Option"} url={"options/add"}  />
+            <ListFieldOptions/>
 
         </div>
     )
