@@ -14,6 +14,8 @@ import {
   AlertDialogTrigger,
   DeletePopupComp,
   toast,
+  useToast,
+  Toaster,
 } from "@repo/ui";
 import { ChevronsUpDown, CircleEllipsis, Trash2 } from "lucide-react";
 import {
@@ -29,7 +31,15 @@ import Link from "next/link";
 import { cache, useEffect, useState } from "react";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { DELETE_COMPONENT, DELETE_MODEL, DELETE_MODELFIELD, DELETE_MODELOPTION, DELETE_TAB, DELETE_USER } from "@/app/queries";
+import {
+  DELETE_COMPONENT,
+  DELETE_FIELD_OPTION,
+  DELETE_MODEL,
+  DELETE_MODELFIELD,
+  DELETE_MODELOPTION,
+  DELETE_TAB,
+  DELETE_USER,
+} from "@/app/queries";
 import { title } from "process";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
@@ -233,7 +243,8 @@ export const modelColumns: ColumnDef<Model>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const [handledeleteModel, { data, loading, error }] = useLazyQuery(serverFetch)
+      const [handledeleteModel, { data, loading, error }] =
+        useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
           toast({
@@ -251,14 +262,14 @@ export const modelColumns: ColumnDef<Model>[] = [
 
       const handleModelDelete = () => {
         handledeleteModel(
-          DELETE_MODEL, {
-          "deleteModelId": row.original.id
-        }, {
-          cache: "no-store"
-        }
-        )
-
-
+          DELETE_MODEL,
+          {
+            deleteModelId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
       };
 
       return (
@@ -441,7 +452,8 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
     cell: ({ row }) => {
       const payment = row.original;
 
-      const [handleModelField, { data, loading, error }] = useLazyQuery(serverFetch)
+      const [handleModelField, { data, loading, error }] =
+        useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
           toast({
@@ -458,15 +470,15 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       }, [data, loading, error]);
 
       const handleModelFieldDelete = () => {
-  handleModelField(
-    DELETE_MODELFIELD,{
-      "deleteModelFieldId": row.original.id
-    },{
-      cache:"no-store"
-    }
-  
-
-        )
+        handleModelField(
+          DELETE_MODELFIELD,
+          {
+            deleteModelFieldId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
       };
       return (
         <DropdownMenu>
@@ -608,7 +620,8 @@ export const tabsColumns: ColumnDef<TabType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const [handleDeleteTab, { data, loading, error }] = useLazyQuery(serverFetch)
+      const [handleDeleteTab, { data, loading, error }] =
+        useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
           toast({
@@ -625,14 +638,14 @@ export const tabsColumns: ColumnDef<TabType>[] = [
       }, [data, loading, error]);
       const handleTabDelete = () => {
         handleDeleteTab(
-          DELETE_TAB, {
-          "deleteTabId": row.original.id
-        }, {
-          cache: "no-store"
-        }
-        )
-
-
+          DELETE_TAB,
+          {
+            deleteTabId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
       };
       return (
         <DropdownMenu>
@@ -653,7 +666,10 @@ export const tabsColumns: ColumnDef<TabType>[] = [
             {/* <Link href={`/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View Tab</DropdownMenuItem>
             </Link> */}
-            <Link href={`/dashboard/tabs/edit?id=${row.original.id}`} className="cursor-pointer">
+            <Link
+              href={`/dashboard/tabs/edit?id=${row.original.id}`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>Edit Tab</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
@@ -781,7 +797,8 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const [handleDeleteModeloption, { data, loading, error }] = useLazyQuery(serverFetch)
+      const [handleDeleteModeloption, { data, loading, error }] =
+        useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
           toast({
@@ -797,16 +814,15 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
         }
       }, [data, loading, error]);
       const handleModeloptionDelete = () => {
-
-
         handleDeleteModeloption(
-          DELETE_MODELOPTION, {
-          "deleteModelOptionId": row.original.id
-        }, {
-          cache: "no-store"
-        }
-        )
-
+          DELETE_MODELOPTION,
+          {
+            deleteModelOptionId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
       };
       return (
         <DropdownMenu>
@@ -850,20 +866,20 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
 
 export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
   {
-    accessorKey: "model.name",
+    accessorKey: "keyName",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Model
+          Key Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.original.model?.name || "-"}</div>
+      <div className="lowercase">{row.original.keyName || "-"}</div>
     ),
   },
   {
@@ -931,7 +947,9 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const [handleDeleteFieldoption, { data, loading, error }] = useLazyQuery(serverFetch)
+      const [handleDeleteFieldoption, { data, loading, error }] =
+        useLazyQuery(serverFetch);
+      const { toast } = useToast();
       useEffect(() => {
         if (data) {
           toast({
@@ -947,20 +965,19 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
         }
       }, [data, loading, error]);
       const handleFieldoptionDelete = () => {
-
-
         handleDeleteFieldoption(
+          DELETE_FIELD_OPTION,
           {
-            "deleteModelFieldId": row.original.id
-          }, {
-          cache: "no-store"
-        }
-        )
-
-
+            deleteFieldOptionId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
       };
       return (
         <DropdownMenu>
+          <Toaster />
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -986,7 +1003,7 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
                   </div>
                 </AlertDialogTrigger>
                 <DeletePopupComp
-                  inputText={row.original.fieldName}
+                  inputText={row.original.keyName}
                   onclick={handleFieldoptionDelete}
                   type="FIELDOPTION"
                 />
@@ -1071,7 +1088,8 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const [handleDeletecomponent, { data, loading, error }] = useLazyQuery(serverFetch)
+      const [handleDeletecomponent, { data, loading, error }] =
+        useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
           toast({
@@ -1087,17 +1105,15 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
         }
       }, [data, loading, error]);
       const handlecomponentDelete = () => {
-
-
         handleDeletecomponent(
-          DELETE_COMPONENT, {
-          "deleteComponentId": row.original.id
-        }, {
-          cache: "no-store"
-        }
-        )
-
-
+          DELETE_COMPONENT,
+          {
+            deleteComponentId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
       };
       return (
         <DropdownMenu>
@@ -1176,8 +1192,8 @@ export const userColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const payment = row.original;
 
-
-      const [handeleDeleteuser, { data, loading, error }] = useLazyQuery(serverFetch);
+      const [handeleDeleteuser, { data, loading, error }] =
+        useLazyQuery(serverFetch);
 
       useEffect(() => {
         if (data) {
@@ -1195,7 +1211,6 @@ export const userColumns: ColumnDef<User>[] = [
       }, [data, loading, error]);
 
       const handleuserDelete = () => {
-
         handeleDeleteuser(
           DELETE_USER,
           {
@@ -1226,7 +1241,10 @@ export const userColumns: ColumnDef<User>[] = [
             {/* <Link href={`/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View User</DropdownMenuItem>
             </Link> */}
-            <Link href={`/dashboard/users/edit?id=${row.original.id}`} className="cursor-pointer">
+            <Link
+              href={`/dashboard/users/edit?id=${row.original.id}`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>Edit User</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>

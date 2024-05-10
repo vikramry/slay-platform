@@ -179,13 +179,6 @@ export const CreateFieldOptionQuary = `
   mutation CreateFieldOption($input: FieldOptionInput!) {
     createFieldOption(input: $input) {
       id
-      model {
-        id
-      }
-      modelName
-      modelField {
-        id
-      }
       fieldName
       keyName
       type
@@ -410,7 +403,7 @@ export const UPDATE_MODEL = `mutation UpdateModel($input: updateModelInput!) {
       prefix
       managed
     }
-  }`
+  }`;
 
 export const GET_MODEL_FIELD = `
 query GetModelField($where: whereModelFieldInput!) {
@@ -446,7 +439,7 @@ query GetModelField($where: whereModelFieldInput!) {
     createdOn
     updatedOn
   }
-}`
+}`;
 export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModelFieldInput!) {
   updateModelField(input: $input) {
     id
@@ -466,7 +459,7 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     createdOn
     updatedOn
   }
-}`
+}`;
 export const UpdateFieldOptionsQuary = `
   mutation UpdateFieldOptions($input: [updateFieldOptionInput!]!) {
     updateFieldOptions(input: $input) {
@@ -482,7 +475,7 @@ export const UpdateFieldOptionsQuary = `
       fieldName
     }
   }
-  `
+  `;
 export const UpdateModelOptionQuary = `
   mutation UpdateModelOption($input: updateModelOptionInput!) {
     updateModelOption(input: $input) {
@@ -496,7 +489,7 @@ export const UpdateModelOptionQuary = `
       value
     }
   }
-  `
+  `;
 export const UpdateTabQuary = `
   mutation UpdateTab($input: updateTabInput!) {
     updateTab(input: $input) {
@@ -509,7 +502,7 @@ export const UpdateTabQuary = `
       order
     }
   }
-  `
+  `;
 export const UpdateUserQuary = `
 mutation UpdateUser($input: updateUserInput!) {
   updateUser(input: $input) {
@@ -519,11 +512,7 @@ mutation UpdateUser($input: updateUserInput!) {
     role
   }
 }
-  `
-
-
-
-
+  `;
 
 export const LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL = `
 query Docs($limit: Int!, $where: whereModelFieldInput) {
@@ -535,7 +524,7 @@ query Docs($limit: Int!, $where: whereModelFieldInput) {
     }
     limit
   }
-}`
+}`;
 
 export const LIST_ALL_MODELS_ID_LABEL = `
 query ListModels($where: whereModelInput, $limit: Int!) {
@@ -548,7 +537,7 @@ query ListModels($where: whereModelInput, $limit: Int!) {
     limit
   }
 }`;
-  export const  listtabs=`
+export const listtabs = `
   query Docs {
     listTabs {
       docs {
@@ -571,8 +560,8 @@ query ListModels($where: whereModelInput, $limit: Int!) {
       }
     }
   }
-  `
-  export const listusers=`
+  `;
+export const listusers = `
   query Docs {
     id
     listUsers {
@@ -583,8 +572,8 @@ query ListModels($where: whereModelInput, $limit: Int!) {
       }
     }
   }
-  `
-  export const listcomponents=`
+  `;
+export const listcomponents = `
   query ListComponents($where: whereComponentInput) {
     listComponents(where: $where) {
       docs {
@@ -605,38 +594,44 @@ query ListModels($where: whereModelInput, $limit: Int!) {
       limit
     }
   }
-  `
-  export const DELETE_TAB=`
+  `;
+export const DELETE_TAB = `
   mutation DeleteTab($deleteTabId: ID!) {
     deleteTab(id: $deleteTabId)
   }
-  `
-  export const DELETE_USER=`
+  `;
+export const DELETE_USER = `
   mutation DeleteUser($deleteUserId: ID!) {
     deleteUser(id: $deleteUserId)
   }
-  `
-  export const DELETE_MODEL=`
+  `;
+export const DELETE_MODEL = `
   mutation DeleteModel($deleteModelId: ID!) {
     deleteModel(id: $deleteModelId)
   }
-  `
-  export const  DELETE_COMPONENT=`
+  `;
+export const DELETE_COMPONENT = `
   mutation DeleteComponent($deleteComponentId: ID!) {
     deleteComponent(id: $deleteComponentId)
   }
-  `
-  export const DELETE_MODELFIELD=`
+  `;
+export const DELETE_MODELFIELD = `
   mutation DeleteModelField($deleteModelFieldId: ID!) {
     deleteModelField(id: $deleteModelFieldId)
   }
-  `
-  export const DELETE_MODELOPTION=`
+  `;
+export const DELETE_MODELOPTION = `
   mutation DeleteModelOption($deleteModelOptionId: ID!) {
     deleteModelOption(id: $deleteModelOptionId)
   }
-  `
-export const LIST_FIELD_OPTIONS =`
+  `;
+
+export const DELETE_FIELD_OPTION = `
+  mutation DeleteFieldOption($deleteFieldOptionId: ID!) {
+    deleteFieldOption(id: $deleteFieldOptionId)
+  }
+  `;
+export const LIST_FIELD_OPTIONS = `
 query ListFieldOptions($where: whereFieldOptionInput) {
   listFieldOptions(where: $where) {
     docs {
@@ -652,4 +647,4 @@ query ListFieldOptions($where: whereFieldOptionInput) {
       updatedOn
     }
   }
-}`
+}`;

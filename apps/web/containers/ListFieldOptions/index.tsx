@@ -4,19 +4,20 @@ import { LIST_FIELD_OPTIONS } from "@/app/queries";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "@repo/ui";
 import { useParams } from "next/navigation";
-import { modelFieldColumns } from "@/app/(dashboardLayout)/dashboard/columns";
+import { fieldOptionsColumns, modelFieldColumns } from "@/app/(dashboardLayout)/dashboard/columns";
 
 const ListFieldOptions = () => {
-  const [ListFieldOptions, { data, loading, error }] = useLazyQuery(serverFetch);
+  const [ListFieldOptions, { data, loading, error }] =
+    useLazyQuery(serverFetch);
   const [ListFieldOptionsData, setListFieldOptionsData] = useState([]);
-    const { id } = useParams();
+  const { fieldId } = useParams();
   useEffect(() => {
     ListFieldOptions(
       LIST_FIELD_OPTIONS,
       {
         where: {
           modelField: {
-            is: id,
+            is: fieldId,
           },
         },
       },
@@ -28,7 +29,7 @@ const ListFieldOptions = () => {
   useEffect(() => {
     if (data) {
       console.log(data, "ListFieldOptionsData");
-      setListFieldOptionsData(data?.listFieldOptions?.docs)
+      setListFieldOptionsData(data?.listFieldOptions?.docs);
     }
     if (loading) {
       console.log(loading, "ListFieldOptionsloading");
@@ -43,17 +44,17 @@ const ListFieldOptions = () => {
     }
   }, [data, loading, error]);
 
-  
-  return(
+  return (
     <div>
-    <DataTable
-      columns={modelFieldColumns}
-      data={ListFieldOptionsData}
-      text={"Create Field Option"}
-      url={"options/add"}
-    />
-  </div>
-  )
+      <DataTable
+        columns={fieldOptionsColumns}
+        data={ListFieldOptionsData || []}
+        filterBy={"keyName"}
+        text={"Create Field Option"}
+        url={"options/add"}
+      />
+    </div>
+  );
 };
 
 export default ListFieldOptions;
