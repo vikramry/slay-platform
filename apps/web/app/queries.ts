@@ -350,6 +350,7 @@ export const getlistmodelfields = `
   query ListModelFields($where: whereModelFieldInput) {
     listModelFields(where: $where) {
       docs {
+        id
         fieldName
         id
         createdBy {

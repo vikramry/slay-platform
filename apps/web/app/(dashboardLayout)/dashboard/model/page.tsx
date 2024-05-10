@@ -145,7 +145,7 @@ const page = () => {
       <DialogBox setState={setState} state={state} title="Confirm Delete?">
         <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
-<ListModels/>
+      <ListModels />
     </div>
   );
 };

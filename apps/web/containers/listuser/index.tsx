@@ -8,35 +8,32 @@ import { DataTable } from '@repo/ui'
 import React, { useEffect, useState } from 'react'
 
 const ListUsers = () => {
-    const[listusersdata,{data,loading,error}]=useLazyQuery(serverFetch)
-const [usersData,setUsersData]=useState([])
-    useEffect(()=>{
+    const [listusersdata, { data, loading, error }] = useLazyQuery(serverFetch)
+    const [usersData, setUsersData] = useState([])
+    useEffect(() => {
         listusersdata(
-            listusers,{},{
-                cache:"no-store",
-              }
-              
-            
-            
+            listusers, {}, {
+            cache: "no-store",
+        }
+
+
+
         )
-    },[])
-    useEffect(()=>{
-if(data){
-    console.log(data?.listUsers?.docs,'checkdata')
-    setUsersData(data?.listUsers?.docs)
-}if(error){
-    console.log(error,'checkerror')
-}
-    },[data,loading,error])
-    useEffect(()=>{
-console.log(usersData)
-    },[usersData])
-  return (
-    <div>
+    }, [])
+    useEffect(() => {
+        if (data) {
+            setUsersData(data?.listUsers?.docs)
+        } if (error) {
+            console.log(error, 'checkerror')
+        }
+    }, [data, loading, error])
+
+    return (
+        <div>
             <DataTable columns={userColumns} data={usersData} text="Create user" url="/dashboard/users/createUser" />
 
-    </div>
-  )
+        </div>
+    )
 }
 
 export default ListUsers

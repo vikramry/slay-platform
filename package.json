@@ -16,7 +16,8 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "ui": "yarn workspace ui",
-		"ui:add": "yarn workspace ui ui:add"
+    "ui:add": "yarn workspace ui ui:add",
+    "postinstall": "patch-package"
   },
   "workspaces": [
     "apps/*",
@@ -24,6 +25,9 @@
   ],
   "dependencies": {
     "next-themes": "^0.3.0",
-    "react-icons": "^5.1.0"
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
+    "react-icons": "^5.1.0",
+    "web": "^0.0.2"
   }
 }
