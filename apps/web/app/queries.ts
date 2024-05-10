@@ -304,6 +304,7 @@ export const getlistmodels = `
 query ListModels {
   listModels {
     docs {
+      id
       createdBy {
         name
         id
@@ -323,6 +324,7 @@ export const getlistmodeloptions = `
   query ListModelOptions($where: whereModelOptionInput) {
     listModelOptions(where: $where) {
       docs {
+        id
         createdBy {
           name
         }
@@ -349,6 +351,7 @@ export const getlistmodelfields = `
     listModelFields(where: $where) {
       docs {
         fieldName
+        id
         createdBy {
           id
           name
@@ -549,6 +552,7 @@ query ListModels($where: whereModelInput, $limit: Int!) {
     listTabs {
       docs {
         label
+        id
         model {
           id
           name
@@ -569,6 +573,7 @@ query ListModels($where: whereModelInput, $limit: Int!) {
   `
   export const listusers=`
   query Docs {
+    id
     listUsers {
       docs {
         name
@@ -584,6 +589,7 @@ query ListModels($where: whereModelInput, $limit: Int!) {
       docs {
         name
         label
+        id
         createdBy {
           id
           name

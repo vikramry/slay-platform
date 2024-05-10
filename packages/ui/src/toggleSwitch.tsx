@@ -25,7 +25,7 @@ export const ModeToggleButton = () => {
         className={`w-8 h-8 rounded-full  ${theme == "dark" ? "bg-black" : "bg-black"} flex items-center transition duration-300 focus:outline-none shadow  ${
           theme == "dark" || currentTheme ==  "dark"
             ? "bg-gray-700 translate-x-full"
-            : "bg-yellow-500 -translate-x-2"
+            : "bg-black border-[1px] border-gray-600 -translate-x-2"
         }`}
         onClick={() => {
           if (theme == "dark" || currentTheme ==  "dark") {
