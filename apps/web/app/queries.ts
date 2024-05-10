@@ -569,3 +569,33 @@ export const UPDATE_MODEL_FIELD = `mutation UpdateModelField($input: updateModel
     }
   }
   `
+  export const DELETE_TAB=`
+  mutation DeleteTab($deleteTabId: ID!) {
+    deleteTab(id: $deleteTabId)
+  }
+  `
+  export const DELETE_USER=`
+  mutation DeleteUser($deleteUserId: ID!) {
+    deleteUser(id: $deleteUserId)
+  }
+  `
+  export const DELETE_MODEL=`
+  mutation DeleteModel($deleteModelId: ID!) {
+    deleteModel(id: $deleteModelId)
+  }
+  `
+  export const  DELETE_COMPONENT=`
+  mutation DeleteComponent($deleteComponentId: ID!) {
+    deleteComponent(id: $deleteComponentId)
+  }
+  `
+  export const DELETE_MODELFIELD=`
+  mutation DeleteModelField($deleteModelFieldId: ID!) {
+    deleteModelField(id: $deleteModelFieldId)
+  }
+  `
+  export const DELETE_MODELOPTION=`
+  mutation DeleteModelOption($deleteModelOptionId: ID!) {
+    deleteModelOption(id: $deleteModelOptionId)
+  }
+  `

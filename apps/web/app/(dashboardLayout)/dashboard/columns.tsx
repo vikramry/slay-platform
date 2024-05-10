@@ -1,21 +1,46 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Checkbox, Button, DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, AlertDialog, AlertDialogTrigger, DeletePopupComp } from "@repo/ui"
-import { ChevronsUpDown, Ellipsis, Trash2 } from 'lucide-react';
-import { ComponentsType, FieldOptionsType, Model, ModelFieldType, ModelOptionType, TabType, User } from "../../../types";
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  Checkbox,
+  Button,
+  DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  AlertDialog,
+  AlertDialogTrigger,
+  DeletePopupComp,
+  toast,
+} from "@repo/ui";
+import { ChevronsUpDown, Ellipsis, Trash2 } from "lucide-react";
+import {
+  ComponentsType,
+  FieldOptionsType,
+  Model,
+  ModelFieldType,
+  ModelOptionType,
+  TabType,
+  User,
+} from "../../../types";
 import Link from "next/link";
-import { useState } from "react";
+import { cache, useEffect, useState } from "react";
+import { useLazyQuery } from "@/app/hook";
+import { serverFetch } from "@/app/action";
+import { DELETE_COMPONENT, DELETE_MODEL, DELETE_MODELFIELD, DELETE_MODELOPTION, DELETE_TAB, DELETE_USER } from "@/app/queries";
+import { title } from "process";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
+  id: string;
+  amount: number;
+  status: "pending" | "processing" | "success" | "failed";
+  email: string;
+};
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -26,7 +51,9 @@ export const columns: ColumnDef<Payment>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
-        onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value: any) =>
+          table.toggleAllPageRowsSelected(!!value)
+        }
         aria-label="Select all"
       />
     ),
@@ -58,7 +85,7 @@ export const columns: ColumnDef<Payment>[] = [
           Email
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
@@ -66,22 +93,22 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "amount",
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
+      const amount = parseFloat(row.getValue("amount"));
 
       // Format the amount as a dollar amount
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(amount)
+      }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>
+      return <div className="text-right font-medium">{formatted}</div>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const payment = row.original;
 
       return (
         <DropdownMenu>
@@ -103,10 +130,10 @@ export const columns: ColumnDef<Payment>[] = [
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export const modelColumns: ColumnDef<Model>[] = [
   {
@@ -120,11 +147,9 @@ export const modelColumns: ColumnDef<Model>[] = [
           Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "label",
@@ -137,7 +162,7 @@ export const modelColumns: ColumnDef<Model>[] = [
           Label
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
@@ -152,22 +177,22 @@ export const modelColumns: ColumnDef<Model>[] = [
           Prefix
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("prefix") || "-"}</div>,
   },
   {
     accessorKey: "managed",
     header: "Managed",
-    cell: ({ row }) => <div className="">
-      <Checkbox
-        checked={
-          row.getValue("managed")
-        }
-        readonly
-        aria-label="Select all"
-      />
-    </div>,
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("managed")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "createdBy.name",
@@ -178,13 +203,12 @@ export const modelColumns: ColumnDef<Model>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Created By
-
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      return <div className=""> {row.original.createdBy?.name || "-"}</div>
+      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
     },
   },
   {
@@ -198,18 +222,45 @@ export const modelColumns: ColumnDef<Model>[] = [
           Updated By
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="">{row.original.updatedBy?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="">{row.original.updatedBy?.name || "-"}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original;
+      const[handledeleteModel,{data,loading,error}]=useLazyQuery(serverFetch)
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Tab Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+      
+      const handleModelDelete = () => {
+  handledeleteModel(
+    DELETE_MODEL,{
+      "deleteModelFieldId": row.original.id
+    },{
+      cache:"no-store"
+    }
+  )
+
+
+};
+      
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -226,30 +277,39 @@ export const modelColumns: ColumnDef<Model>[] = [
               Copy Model ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/dashboard/model/${row.original.id}`} className="cursor-pointer">
+            <Link
+              href={`/dashboard/model/${row.original.id}`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>View Model</DropdownMenuItem>
             </Link>
 
-            <Link href={`/dashboard/model/${row.original.id}/edit`} className="cursor-pointer">
+            <Link
+              href={`/dashboard/model/${row.original.id}/edit`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>Update Model</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer">
                     <Trash2 size={14} /> Delete Model
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="MODEL" />
+                <DeletePopupComp
+                  inputText={row.original.name}
+                  onclick={handleModelDelete}
+                  type="MODEL"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
   {
@@ -263,11 +323,9 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           Field Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="">{row.getValue("fieldName")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("fieldName")}</div>,
   },
   {
     accessorKey: "label",
@@ -280,7 +338,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           Label
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
@@ -295,49 +353,52 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           Type
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("type") || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("type") || "-"}</div>
+    ),
   },
   {
     accessorKey: "required",
     header: "Required",
-    cell: ({ row }) => <div className="">
-      <Checkbox
-        checked={
-          row.getValue("required")
-        }
-        readonly
-        aria-label="Select all"
-      />
-    </div>,
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("required")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "unique",
     header: "Unique",
-    cell: ({ row }) => <div className="">
-      <Checkbox
-        checked={
-          row.getValue("unique")
-        }
-        readonly
-        aria-label="Select all"
-      />
-    </div>,
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("unique")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "managed",
     header: "Managed",
-    cell: ({ row }) => <div className="">
-      <Checkbox
-        checked={
-          row.getValue("managed")
-        }
-        readonly
-        aria-label="Select all"
-      />
-    </div>,
-  }, {
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("managed")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
+  },
+  {
     accessorKey: "createdBy.name",
     header: ({ column }) => {
       return (
@@ -346,13 +407,14 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Created By
-
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      return (
+        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      );
     },
   },
   {
@@ -366,18 +428,45 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           Updated By
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original; 
+
+    const[handleModelField,{data,loading,error}]=useLazyQuery(serverFetch)
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Tab Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+
+      const handleModelFieldDelete = () => {
+  handleModelField(
+    DELETE_MODELFIELD,{
+      "deleteModelFieldId": row.original.id
+    },{
+      cache:"no-store"
+    }
+  
+
+)
+};
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -394,29 +483,38 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
               Copy Model Field ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`${row.original.model.id}/field/${row.original.id}`} className="cursor-pointer">
+            <Link
+              href={`${row.original.model.id}/field/${row.original.id}`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>View Model Field</DropdownMenuItem>
             </Link>
-            <Link href={`${row.original.model.id}/field/${row.original.id}/options`} className="cursor-pointer">
+            <Link
+              href={`${row.original.model.id}/field/${row.original.id}/options`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>Go to Field Options</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete Model Field
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.fieldName} onclick={handleDelete} type="MODELFIELD" />
+                <DeletePopupComp
+                  inputText={row.original.fieldName}
+                  onclick={handleModelFieldDelete}
+                  type="MODELFIELD"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export const tabsColumns: ColumnDef<TabType>[] = [
   {
@@ -430,9 +528,11 @@ export const tabsColumns: ColumnDef<TabType>[] = [
           Model
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.model?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.model?.name || "-"}</div>
+    ),
   },
   {
     accessorKey: "label",
@@ -445,7 +545,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
           Label
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
@@ -460,9 +560,11 @@ export const tabsColumns: ColumnDef<TabType>[] = [
           Order
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("order") || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("order") || "-"}</div>
+    ),
   },
   {
     accessorKey: "createdBy.name",
@@ -473,13 +575,14 @@ export const tabsColumns: ColumnDef<TabType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Created By
-
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      return (
+        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      );
     },
   },
   {
@@ -493,18 +596,43 @@ export const tabsColumns: ColumnDef<TabType>[] = [
           Updated By
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original;
+      const[handleDeleteTab,{data,loading,error}]=useLazyQuery(serverFetch)
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Tab Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+      const handleTabDelete = () => {
+  handleDeleteTab(
+    DELETE_TAB,{
+      "deleteTabId": row.original.id
+    },{
+      cache:"no-store"
+    }
+  )
+
+
+};
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -525,22 +653,25 @@ export const tabsColumns: ColumnDef<TabType>[] = [
               <DropdownMenuItem>View Tab</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete Tab
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.label} onclick={handleDelete} type="TAB" />
+                <DeletePopupComp
+                  inputText={row.original.label}
+                  onclick={handleTabDelete}
+                  type="TAB"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
   {
@@ -554,9 +685,11 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
           Model
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.model?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.model?.name || "-"}</div>
+    ),
   },
   {
     accessorKey: "name",
@@ -569,22 +702,22 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
           Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "managed",
     header: "Managed",
-    cell: ({ row }) => <div className="">
-      <Checkbox
-        checked={
-          row.getValue("managed")
-        }
-        readonly
-        aria-label="Select all"
-      />
-    </div>,
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("managed")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "value",
@@ -597,9 +730,11 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
           Value
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("value") || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("value") || "-"}</div>
+    ),
   },
   {
     accessorKey: "createdBy.name",
@@ -610,13 +745,14 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Created By
-
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      return (
+        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      );
     },
   },
   {
@@ -630,18 +766,43 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
           Updated By
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original;
+      const[handleDeleteModeloption,{data,loading,error}]=useLazyQuery(serverFetch)
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "modeloption Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+      const handleModeloptionDelete = () => {
+   
+
+  handleDeleteModeloption(
+    DELETE_MODELOPTION,{
+      "deleteModelOptionId": row.original.id
+    },{cache:"no-store"
+  }
+  )
+
+};
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -662,22 +823,25 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
               <DropdownMenuItem>View Model Option</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete Model Options
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="MODELOPTION" />
+                <DeletePopupComp
+                  inputText={row.original.name}
+                  onclick={handleModeloptionDelete}
+                  type="MODELOPTION"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
   {
@@ -691,9 +855,11 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           Model
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.model?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.model?.name || "-"}</div>
+    ),
   },
   {
     accessorKey: "modelName",
@@ -706,7 +872,7 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           Model Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("modelName")}</div>,
   },
@@ -721,22 +887,22 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           Field Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("fieldName")}</div>,
   },
   {
     accessorKey: "managed",
     header: "Managed",
-    cell: ({ row }) => <div className="">
-      <Checkbox
-        checked={
-          row.getValue("managed")
-        }
-        readonly
-        aria-label="Select all"
-      />
-    </div>,
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("managed")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "prefix",
@@ -749,18 +915,45 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           Prefix
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("prefix") || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("prefix") || "-"}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original;
+      const[handleDeleteFieldoption,{data,loading,error}]=useLazyQuery(serverFetch)
+                useEffect(() => {
+                  if (data) {
+                    toast({
+                      title: "Fieldoption Deleted Successfully.",
+                    });
+                  }
+                  if (error) {
+                    toast({
+                      variant: "destructive",
+                      title: "Uh oh! Something went wrong.",
+                      description: error?.message,
+                    });
+                  }
+                }, [data, loading, error]);
+      const handleFieldoptionDelete = () => {
+                
+        
+          handleDeleteFieldoption(
+            {
+              "deleteModelFieldId": row.original.id
+            },{
+              cache:"no-store"
+            }
+          )
+
+        
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -781,22 +974,25 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
               <DropdownMenuItem>View Field Option</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete Field Option
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.fieldName} onclick={handleDelete} type="FIELDOPTION" />
+                <DeletePopupComp
+                  inputText={row.original.fieldName}
+                  onclick={handleFieldoptionDelete}
+                  type="FIELDOPTION"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export const componentsColumns: ColumnDef<ComponentsType>[] = [
   {
@@ -807,14 +1003,12 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-           Name
+          Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "label",
@@ -827,11 +1021,11 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
           Label
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
-{
+  {
     accessorKey: "createdBy.name",
     header: ({ column }) => {
       return (
@@ -840,13 +1034,14 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Created By
-
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      return <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      return (
+        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+      );
     },
   },
   {
@@ -860,18 +1055,45 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
           Updated By
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original;
+      const[handleDeletecomponent,{data,loading,error}]=useLazyQuery(serverFetch)
+        useEffect(() => {
+          if (data) {
+            toast({
+              title: "Component Deleted Successfully.",
+            });
+          }
+          if (error) {
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: error?.message,
+            });
+          }
+        }, [data, loading, error]);
+      const handlecomponentDelete = () => {
+        
+        
+          handleDeletecomponent(
+            DELETE_COMPONENT,{
+              "deleteComponentId": row.original.id
+            },{
+              cache:"no-store"
+            }
+          )
+
+        
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -892,24 +1114,27 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
               <DropdownMenuItem>View Component</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete Component
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="COMPONENT" />
+                <DeletePopupComp
+                  inputText={row.original.name}
+                  onclick={handlecomponentDelete}
+                  type="COMPONENT"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
-export const userColumns:ColumnDef<User>[]=[
+export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -918,14 +1143,12 @@ export const userColumns:ColumnDef<User>[]=[
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-           Name
+          Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "email",
@@ -935,23 +1158,50 @@ export const userColumns:ColumnDef<User>[]=[
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-           Email
+          Email
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="">{row.getValue("email")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("email")}</div>,
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-      const handleDelete = () => {
-        //delete functionality here
-      }
+      const payment = row.original;
+
+      
+        const [handeleDeleteuser, { data, loading, error }] =useLazyQuery(serverFetch);
+         
+        useEffect(() => {
+          if (data) {
+            toast({
+              title: "User deleted Successfully.",
+            });
+          }
+          if (error) {
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: error?.message,
+            });
+          }
+        }, [data, loading, error]);
+
+      const handleuserDelete = () => {
+             
+         handeleDeleteuser(
+          DELETE_USER,
+          { 
+            deleteUserId: "663ca712cc0bf8e1c6ba3a22",
+          },
+          {
+            cache: "no-store",
+          }
+        );
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -972,21 +1222,22 @@ export const userColumns:ColumnDef<User>[]=[
               <DropdownMenuItem>View User</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete User
                   </div>
                 </AlertDialogTrigger>
-                <DeletePopupComp inputText={row.original.name} onclick={handleDelete} type="USER"/>
+                <DeletePopupComp
+                  inputText={row.original.name}
+                  onclick={handleuserDelete}
+                  type="USER"
+                />
               </AlertDialog>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-
-]
-
+];
