@@ -26,63 +26,86 @@ import {
 import { Input } from "@repo/ui";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { CreateFieldOptionQuary, GetFieldOptionQuary, UpdateFieldOptionsQuary } from "@/app/queries";
-import { useSearchParams } from "next/navigation";
+import { CreateFieldOptionQuary, GET_MODEL, GET_MODEL_FIELD, GetFieldOptionQuary, UpdateFieldOptionsQuary } from "@/app/queries";
+import { useParams, useSearchParams } from "next/navigation";
 
-const FieldOptionsContainer = ({edit=false}:{edit:boolean}) => {
-  const [createModelField,{ data, loading, error }] = useLazyQuery(serverFetch);
+const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
+  const { id, fieldId, fieldOptionId } = useParams();
+  const [createModelField, { data, loading, error }] = useLazyQuery(serverFetch);
 
   const [getFieldOption, getFieldOptionResponse] = useLazyQuery(serverFetch);
   const [updateFieldOption, updateFieldOptionResponse] = useLazyQuery(serverFetch);
+  const [getCurrentModel, getCurrentModelResponse] = useLazyQuery(serverFetch);
+  const [getCurrentModelField, getCurrentModelFieldResponse] = useLazyQuery(serverFetch);
 
-  const getFieldOptionFun=()=>{
+  const getFieldOptionFun = () => {
     getFieldOption(
-      GetFieldOptionQuary,{
-        "where": {
-          "id": {
-            "is": null
-          }
+      GetFieldOptionQuary, {
+      "where": {
+        "id": {
+          "is": fieldOptionId
         }
-      },{
-            cache: "no-store",
-          }
+      }
+    }, {
+      cache: "no-store",
+    }
     )
   }
-useEffect(()=>{
-if(edit){
-  getFieldOptionFun()
-}else{
-  form.reset({
-    prefix: "DOMAIN",
-    modelName: "some-model",
-    model: "34567",
-    modelField: "some-field",
-    managed: true,
-  })
-}
-
-},[])
-useEffect(() => {
-  if(getFieldOptionResponse.data){
-    form.reset({
-        model:getFieldOptionResponse.data.getFieldOption.model.id,
-        fieldName:getFieldOptionResponse.data.getFieldOption.fieldName,
-        keyName:getFieldOptionResponse.data.getFieldOption.keyName,
-        type:getFieldOptionResponse.data.getFieldOption.type,
-        value:getFieldOptionResponse.data.getFieldOption.value,
-        managed:getFieldOptionResponse.data.getFieldOption.managed,
-        prefix:getFieldOptionResponse.data.getFieldOption.prefix,
+  useEffect(() => {
+    if (edit) {
+      getFieldOptionFun()
+    } else {
+      form.reset({
+        prefix: "DOMAIN",
+        modelName: "some-model",
+        model: id,
+        modelField: "some-field",
+        managed: true,
       })
-  }
-  else if(getFieldOptionResponse?.error){
-    toast({
+    }
+
+    getCurrentModel(GET_MODEL, {
+      where: {
+        id: {
+          is: id
+        }
+      }
+    },
+      {
+        cache: "no-store"
+      })
+
+    getCurrentModelField(GET_MODEL_FIELD, {
+      where: {
+        id: {
+          is: fieldId
+        }
+      }
+    },
+      {
+        cache: "no-store"
+      })
+
+  }, [])
+  useEffect(() => {
+    if (getFieldOptionResponse.data) {
+      form.reset({
+        keyName: getFieldOptionResponse.data.getFieldOption.keyName,
+        type: getFieldOptionResponse.data.getFieldOption.type,
+        value: getFieldOptionResponse.data.getFieldOption.value,
+        managed: getFieldOptionResponse.data.getFieldOption.managed,
+        prefix: getFieldOptionResponse.data.getFieldOption.prefix,
+      })
+    }
+    else if (getFieldOptionResponse?.error) {
+      toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: getFieldOptionResponse?.error?.message,
       });
-}
+    }
 
-}, [getFieldOptionResponse])
+  }, [getFieldOptionResponse])
 
 
   const fieldOptionSchema = z.object({
@@ -114,87 +137,83 @@ useEffect(() => {
   const form = useForm<FieldOptionType>({
     resolver: zodResolver(fieldOptionSchema),
     defaultValues: {
-     
+
     },
   });
 
   const handleSubmit = (data: FieldOptionType) => {
     console.log(data);
-    if(edit==false){
-    createModelField(
-      CreateFieldOptionQuary,
-      {
-        "input": {
-          "fieldName": data?.fieldName,
-          "keyName": data?.keyName,
-          "managed": data?.managed,
-          "model": data?.model,
-          "modelField": data?.modelField,
-          "modelName": data?.modelName,
-          "prefix": data?.prefix,
-          "type": data?.type,
-          "value": data?.value
-        }
-      },
-      {
+    if (edit == false) {
+      createModelField(
+        CreateFieldOptionQuary,
+        {
+          "input": {
+            "fieldName": getCurrentModelFieldResponse?.data?.getModelField.fieldName,
+            "keyName": data?.keyName,
+            "managed": data?.managed,
+            "model": id,
+            "modelField": id,
+            "modelName": getCurrentModelResponse?.data?.getModel.name,
+            "prefix": data?.prefix,
+            "type": data?.type,
+            "value": data?.value
+          }
+        },
+        {
           cache: "no-store"
-      }
-  );
-}
-else if(edit == true){
-  updateFieldOption(
-    UpdateFieldOptionsQuary,
-    {
-      "input": {
-        "fieldName": data?.fieldName,
-        "keyName": data?.keyName,
-        "managed": data?.managed,
-        "model": data?.model,
-        "modelField": data?.modelField,
-        "modelName": data?.modelName,
-        "prefix": data?.prefix,
-        "type": data?.type,
-        "value": data?.value,
-        "id":null
-      }
-    },
-    {
-        cache: "no-store"
+        }
+      );
     }
-);
+    else if (edit == true) {
+      updateFieldOption(
+        UpdateFieldOptionsQuary,
+        {
+          "input": {
+            "keyName": data?.keyName,
+            "managed": data?.managed,
+            "prefix": data?.prefix,
+            "type": data?.type,
+            "value": data?.value,
+            "id": fieldOptionId
+          }
+        },
+        {
+          cache: "no-store"
+        }
+      );
 
-}
+    }
   };
-  useEffect(()=>{
-    if(data){
+  useEffect(() => {
+    if (data) {
       toast({
         title: "Success",
         description: "Successful created",
       })
-    
-    }else if(error){
-        toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: error?.message,
-          });
+
+    } else if (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message,
+      });
     }
-    },[data, loading, error])
-    useEffect(() => {
-    if(updateFieldOptionResponse.data){
+  }, [data, loading, error])
+  useEffect(() => {
+    if (updateFieldOptionResponse.data) {
       toast({
         title: "Success",
         description: "Successful updated",
       })
     }
-    else if(updateFieldOptionResponse?.error){
+    else if (updateFieldOptionResponse?.error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: updateFieldOptionResponse?.error?.message,
       });
     }
-    }, [updateFieldOptionResponse])
+  }, [updateFieldOptionResponse])
 
   return (
     <Form {...form}>
@@ -434,7 +453,7 @@ export default FieldOptionsContainer;
 //         id="email"
 //         name="email"
 //         defaultValue={defaultValues.email}
-//         {...register("email")} 
+//         {...register("email")}
 
 //       />
 //       <br />

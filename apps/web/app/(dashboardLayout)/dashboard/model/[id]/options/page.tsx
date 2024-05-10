@@ -3,6 +3,7 @@ import React from "react";
 import { DataTable } from '@repo/ui';
 import { ModelOptionsData } from "../../../../../../tempData";
 import { modelOptionsColumns } from "../../../columns";
+import ListModeloptions from "@/containers/listModeloptions";
 const page = () => {
   return (
     <div >
@@ -11,8 +12,7 @@ const page = () => {
       <DialogBox setState={setState} state={state} title="Confirm Delete?">
         <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
-
-      <DataTable columns={modelOptionsColumns} data={ModelOptionsData} url="/dashboard/model/1/options/createModelOptions" text="Create model options"/>
+      <ListModeloptions />
     </div>
   );
 };
