@@ -237,7 +237,7 @@ export const modelColumns: ColumnDef<Model>[] = [
       useEffect(() => {
         if (data) {
           toast({
-            title: "Tab Deleted Successfully.",
+            title: "Model Deleted Successfully.",
           });
         }
         if (error) {
@@ -459,7 +459,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       const handleModelFieldDelete = () => {
   handleModelField(
     DELETE_MODELFIELD,{
-      "deleteModelFieldId": row.original.id
+      "deleteModelFieldId": row?.original?.id
     },{
       cache:"no-store"
     }
