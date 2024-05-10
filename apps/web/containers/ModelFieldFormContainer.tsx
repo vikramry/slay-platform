@@ -2,7 +2,7 @@
 
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { CreateModelFieldQuary, GET_MODEL_FIELD, LIST_ALL_MODELS_ID_LABEL, LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL, UPDATE_MODEL_FIELD } from "@/app/queries";
+import { CreateModelFieldQuary, GET_MODEL, GET_MODEL_FIELD, LIST_ALL_MODELS_ID_LABEL, LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL, UPDATE_MODEL_FIELD } from "@/app/queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Button,
@@ -63,6 +63,7 @@ const formSchema = z.object({
 const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     const [createModelField, { data, loading, error }] = useLazyQuery(serverFetch);
     const [updateModelField, updateModelFieldResponse] = useLazyQuery(serverFetch);
+    const [getCurrentModel, getCurrentModelResponse] = useLazyQuery(serverFetch);
     const [getModelField, getModelFieldResponse] = useLazyQuery(serverFetch);
     const [getModels, getModelsResponse] = useLazyQuery(serverFetch);
     const [getModelFieldsLocal, getModelFieldsLocalResponse] = useLazyQuery(serverFetch);
@@ -77,7 +78,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
             unique: false,
             managed: false,
             enumType: "",
-            enumValues: []
+            enumValues: [],
         },
     });
 
@@ -95,6 +96,14 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                     cache: "no-store"
                 }
             )
+        getCurrentModel(GET_MODEL, {
+            where: {
+                id: {
+                    is: id
+                }
+            }
+        })
+
     }, [])
 
 
@@ -187,7 +196,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
     useEffect(() => {
         if (getModelFieldsLocalResponse.data) {
-            form.setValue("localField", getModelFieldResponse.data.getModelField.localField);
+            form.setValue("localField", getModelFieldResponse?.data?.getModelField?.localField);
         }
         if (getModelFieldsLocalResponse.error) {
             toast({
@@ -202,7 +211,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     useEffect(() => {
 
         if (getModelFieldsForeignResponse.data) {
-            form.setValue("foreignField", getModelFieldResponse.data.getModelField.foreignField);
+            form.setValue("foreignField", getModelFieldResponse.data?.getModelField?.foreignField);
         }
         if (getModelFieldsForeignResponse.error) {
             toast({
@@ -215,7 +224,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
     useEffect(() => {
         if (getModelsResponse.data) {
-            form.setValue("ref", getModelFieldResponse.data.getModelField.ref);
+            form.setValue("ref", getModelFieldResponse.data?.getModelField?.ref);
         }
         if (getModelsResponse.error) {
             toast({
@@ -269,7 +278,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         "localField": values?.localField,
                         "managed": values?.managed,
                         "model": id,
-                        "modelName": null,
+                        "modelName": getCurrentModelResponse.data?.getModel?.name,
                         "ref": values?.ref,
                         "required": values?.required,
                         "rounds": values?.rounds,

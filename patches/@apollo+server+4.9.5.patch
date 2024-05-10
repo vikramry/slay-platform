@@ -1,0 +1,26 @@
+diff --git a/node_modules/@apollo/server/dist/esm/ApolloServer.js b/node_modules/@apollo/server/dist/esm/ApolloServer.js
+index bf07d29..5919af9 100644
+--- a/node_modules/@apollo/server/dist/esm/ApolloServer.js
++++ b/node_modules/@apollo/server/dist/esm/ApolloServer.js
+@@ -113,6 +113,21 @@ export class ApolloServer {
+     async start() {
+         return await this._start(false);
+     }
++    async setSchema(config) {
++        this.internals.state = {
++            phase: 'initialized',
++            schemaManager: new SchemaManager({
++                apiSchema: ApolloServer.constructSchema(config),
++                schemaDerivedDataProvider: (schema) =>
++                    ApolloServer.generateSchemaDerivedData(
++                        schema,
++                        null,
++                    ),
++                logger: this.logger,
++            }),
++        };
++        await this._start(false);
++    }
+     startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests() {
+         this._start(true).catch((e) => this.logStartupError(e));
+     }

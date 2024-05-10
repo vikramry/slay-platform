@@ -15,7 +15,7 @@ import {
   DeletePopupComp,
   toast,
 } from "@repo/ui";
-import { ChevronsUpDown, Ellipsis, Trash2 } from "lucide-react";
+import { ChevronsUpDown, CircleEllipsis, Trash2 } from "lucide-react";
 import {
   ComponentsType,
   FieldOptionsType,
@@ -115,7 +115,7 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -233,11 +233,11 @@ export const modelColumns: ColumnDef<Model>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const[handledeleteModel,{data,loading,error}]=useLazyQuery(serverFetch)
+      const [handledeleteModel, { data, loading, error }] = useLazyQuery(serverFetch)
       useEffect(() => {
         if (data) {
           toast({
-            title: "Tab Deleted Successfully.",
+            title: "Model Deleted Successfully.",
           });
         }
         if (error) {
@@ -248,25 +248,26 @@ export const modelColumns: ColumnDef<Model>[] = [
           });
         }
       }, [data, loading, error]);
-      
+
       const handleModelDelete = () => {
-  handledeleteModel(
-    DELETE_MODEL,{
-      "deleteModelFieldId": row.original.id
-    },{
-      cache:"no-store"
-    }
-  )
+        handledeleteModel(
+          DELETE_MODEL, {
+          "deleteModelId": row.original.id
+        }, {
+          cache: "no-store"
+        }
+        )
 
 
-};
-      
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
+              {/* <CircleEllipsis className="h-4 w-4" /> */}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -438,9 +439,9 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original; 
+      const payment = row.original;
 
-    const[handleModelField,{data,loading,error}]=useLazyQuery(serverFetch)
+      const [handleModelField, { data, loading, error }] = useLazyQuery(serverFetch)
       useEffect(() => {
         if (data) {
           toast({
@@ -457,22 +458,22 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       }, [data, loading, error]);
 
       const handleModelFieldDelete = () => {
-  handleModelField(
-    DELETE_MODELFIELD,{
-      "deleteModelFieldId": row.original.id
-    },{
-      cache:"no-store"
-    }
-  
+        handleModelField(
+          DELETE_MODELFIELD, {
+          "deleteModelFieldId": row.original.id
+        }, {
+          cache: "no-store"
+        }
 
-)
-};
+
+        )
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -607,7 +608,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const[handleDeleteTab,{data,loading,error}]=useLazyQuery(serverFetch)
+      const [handleDeleteTab, { data, loading, error }] = useLazyQuery(serverFetch)
       useEffect(() => {
         if (data) {
           toast({
@@ -623,22 +624,22 @@ export const tabsColumns: ColumnDef<TabType>[] = [
         }
       }, [data, loading, error]);
       const handleTabDelete = () => {
-  handleDeleteTab(
-    DELETE_TAB,{
-      "deleteTabId": row.original.id
-    },{
-      cache:"no-store"
-    }
-  )
+        handleDeleteTab(
+          DELETE_TAB, {
+          "deleteTabId": row.original.id
+        }, {
+          cache: "no-store"
+        }
+        )
 
 
-};
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -780,7 +781,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const[handleDeleteModeloption,{data,loading,error}]=useLazyQuery(serverFetch)
+      const [handleDeleteModeloption, { data, loading, error }] = useLazyQuery(serverFetch)
       useEffect(() => {
         if (data) {
           toast({
@@ -796,22 +797,23 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
         }
       }, [data, loading, error]);
       const handleModeloptionDelete = () => {
-   
 
-  handleDeleteModeloption(
-    DELETE_MODELOPTION,{
-      "deleteModelOptionId": row.original.id
-    },{cache:"no-store"
-  }
-  )
 
-};
+        handleDeleteModeloption(
+          DELETE_MODELOPTION, {
+          "deleteModelOptionId": row.original.id
+        }, {
+          cache: "no-store"
+        }
+        )
+
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -929,40 +931,40 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const[handleDeleteFieldoption,{data,loading,error}]=useLazyQuery(serverFetch)
-                useEffect(() => {
-                  if (data) {
-                    toast({
-                      title: "Fieldoption Deleted Successfully.",
-                    });
-                  }
-                  if (error) {
-                    toast({
-                      variant: "destructive",
-                      title: "Uh oh! Something went wrong.",
-                      description: error?.message,
-                    });
-                  }
-                }, [data, loading, error]);
+      const [handleDeleteFieldoption, { data, loading, error }] = useLazyQuery(serverFetch)
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Fieldoption Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
       const handleFieldoptionDelete = () => {
-                
-        
-          handleDeleteFieldoption(
-            {
-              "deleteModelFieldId": row.original.id
-            },{
-              cache:"no-store"
-            }
-          )
 
-        
+
+        handleDeleteFieldoption(
+          {
+            "deleteModelFieldId": row.original.id
+          }, {
+          cache: "no-store"
+        }
+        )
+
+
       };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -1069,40 +1071,40 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const[handleDeletecomponent,{data,loading,error}]=useLazyQuery(serverFetch)
-        useEffect(() => {
-          if (data) {
-            toast({
-              title: "Component Deleted Successfully.",
-            });
-          }
-          if (error) {
-            toast({
-              variant: "destructive",
-              title: "Uh oh! Something went wrong.",
-              description: error?.message,
-            });
-          }
-        }, [data, loading, error]);
+      const [handleDeletecomponent, { data, loading, error }] = useLazyQuery(serverFetch)
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Component Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
       const handlecomponentDelete = () => {
-        
-        
-          handleDeletecomponent(
-            DELETE_COMPONENT,{
-              "deleteComponentId": row.original.id
-            },{
-              cache:"no-store"
-            }
-          )
 
-        
+
+        handleDeletecomponent(
+          DELETE_COMPONENT, {
+          "deleteComponentId": row.original.id
+        }, {
+          cache: "no-store"
+        }
+        )
+
+
       };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -1174,30 +1176,30 @@ export const userColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const payment = row.original;
 
-      
-        const [handeleDeleteuser, { data, loading, error }] =useLazyQuery(serverFetch);
-         
-        useEffect(() => {
-          if (data) {
-            toast({
-              title: "User deleted Successfully.",
-            });
-          }
-          if (error) {
-            toast({
-              variant: "destructive",
-              title: "Uh oh! Something went wrong.",
-              description: error?.message,
-            });
-          }
-        }, [data, loading, error]);
+
+      const [handeleDeleteuser, { data, loading, error }] = useLazyQuery(serverFetch);
+
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "User deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
 
       const handleuserDelete = () => {
-             
-         handeleDeleteuser(
+
+        handeleDeleteuser(
           DELETE_USER,
-          { 
-            deleteUserId: "663ca712cc0bf8e1c6ba3a22",
+          {
+            deleteUserId: row.original?.id,
           },
           {
             cache: "no-store",
@@ -1210,7 +1212,7 @@ export const userColumns: ColumnDef<User>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
+              <CircleEllipsis className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

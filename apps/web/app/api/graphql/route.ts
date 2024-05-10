@@ -18,12 +18,12 @@ import resolvers from './Search.Resolvers'
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
-mercury.package([redisCache({ url: process.env.KV_URL }), platform()]);
+mercury.package([redisCache(), platform()]);
 
-mercury.addGraphqlSchema(
-  typeDefs,
-  resolvers
-);
+// mercury.addGraphqlSchema(
+//   typeDefs,
+//   resolvers
+// );
 
 const composePopulateQuery = (fields: any, deep: number, max: number): any => {
   deep++;

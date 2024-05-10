@@ -4,7 +4,7 @@ import { useLazyQuery } from '@/app/hook'
 import { getlistmodelfields } from '@/app/queries'
 import { DataTable } from '@repo/ui'
 import { toast } from '@repo/ui'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 const ListModelfields = () => {
@@ -49,7 +49,7 @@ if(data){
           },[modelFieldData])
   return (
     <div>
-            <DataTable columns={modelFieldColumns} data={modelFieldData} text="Create Model Field" url={`/dashboard/model/1/createField`}/>
+            <DataTable columns={modelFieldColumns} data={modelFieldData} text="Create Model Field" url={`${useParams()?.id}/createField`}/>
 
     </div>
   )
