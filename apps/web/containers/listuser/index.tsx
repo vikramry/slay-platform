@@ -1,20 +1,18 @@
+"use client"
+import { userColumns } from '@/app/(dashboardLayout)/dashboard/columns'
 import { serverFetch } from '@/app/action'
 import { useLazyQuery } from '@/app/hook'
 import { listcomponents, listusers } from '@/app/queries'
-import React, { useEffect } from 'react'
+import { usersSampleData } from '@/tempData'
+import { DataTable } from '@repo/ui'
+import React, { useEffect, useState } from 'react'
 
 const ListUsers = () => {
     const[listusersdata,{data,loading,error}]=useLazyQuery(serverFetch)
-
+const [usersData,setUsersData]=useState([])
     useEffect(()=>{
         listusersdata(
-            listusers,{
-                "where": {
-                  "id": {
-                    "is": null
-                  }
-                }
-              },{
+            listusers,{},{
                 cache:"no-store",
               }
               
@@ -24,15 +22,20 @@ const ListUsers = () => {
     },[])
     useEffect(()=>{
 if(data){
-    console.log(data,'checkdata')
-}if(loading){
-    console.log(loading,'checkloading')
+    console.log(data?.listUsers?.docs,'checkdata')
+    setUsersData(data?.listUsers?.docs)
 }if(error){
     console.log(error,'checkerror')
 }
     },[data,loading,error])
+    useEffect(()=>{
+console.log(usersData)
+    },[usersData])
   return (
-    <div>index</div>
+    <div>
+            <DataTable columns={userColumns} data={usersData} text="Create user" url="/dashboard/users/createUser" />
+
+    </div>
   )
 }
 

@@ -3,6 +3,7 @@ import React from "react";
 import { DataTable } from '@repo/ui';
 import { TabSampleData } from "../../../../tempData";
 import { tabsColumns } from "../columns";
+import ListTabs from "@/containers/listtab";
 const page = () => {
   return (
     <div >
@@ -11,8 +12,7 @@ const page = () => {
       <DialogBox setState={setState} state={state} title="Confirm Delete?">
         <DeletePopupComp inputText="delete" setState={setState}/>
         </DialogBox> */}
-
-      <DataTable columns={tabsColumns} data={TabSampleData} url="/dashboard/tabs/createTab" text="Create tab"/>
+<ListTabs/>
     </div>
   );
 };

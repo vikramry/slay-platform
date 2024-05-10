@@ -21,7 +21,7 @@ import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 import { CreateModelQuary, GET_MODEL, UPDATE_MODEL } from "@/app/queries";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string({
@@ -35,6 +35,7 @@ const formSchema = z.object({
 });
 
 const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
+  const router = useRouter()
   const { id } = useParams();
   const [createModel, { data, loading, error }] = useLazyQuery(serverFetch);
   const [updateModel, updateModelResponse] = useLazyQuery(serverFetch);
@@ -126,6 +127,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: "Model Created"
       });
+      router.push("/dashboard/model")
     } else if (error) {
       toast({
         variant: "destructive",
@@ -140,6 +142,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: "Model Updated"
       });
+      router.push("/dashboard/model")
     }
     if (updateModelResponse.error) {
 

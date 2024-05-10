@@ -649,8 +649,11 @@ export const tabsColumns: ColumnDef<TabType>[] = [
               Copy Tab ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+            {/* <Link href={`/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View Tab</DropdownMenuItem>
+            </Link> */}
+            <Link href={`/dashboard/tabs/edit?id=${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>Edit Tab</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
               <AlertDialog>
@@ -1218,8 +1221,11 @@ export const userColumns: ColumnDef<User>[] = [
               Copy User ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+            {/* <Link href={`/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View User</DropdownMenuItem>
+            </Link> */}
+            <Link href={`/dashboard/users/edit?id=${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>Edit User</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
               <AlertDialog>

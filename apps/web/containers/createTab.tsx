@@ -2,10 +2,10 @@
 
 import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
-import { CreateTabQuary, GetTabQuary, UpdateTabQuary } from "@/app/queries"
+import { CreateTabQuary, GetTabQuary, LIST_ALL_MODELS_ID_LABEL, UpdateTabQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, toast } from "@repo/ui"
-import { useSearchParams } from "next/navigation"
+import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, Toaster, toast } from "@repo/ui"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -13,12 +13,13 @@ import { z } from "zod"
 
 
 const formSchema = z.object({
-    order: z.number({
-        required_error: "Order is required",
-    }),
+    order: z.coerce.number(),
     label: z.string({
         required_error: "Label is required",
     }),
+    model:z.string({
+        required_error: "Model is required",
+    })
 
 })
 
@@ -26,17 +27,18 @@ const CreatTab = ({edit=false}:{edit?:boolean}) => {
   const [createTab,{ data, loading, error }] = useLazyQuery(serverFetch);
   const [getTab, getTabResponse] = useLazyQuery(serverFetch);
   const [updateTab, updateTabResponse] = useLazyQuery(serverFetch);
-
-  const params = useSearchParams();
-  console.log(params.get("edit"), "fjyfjhvjgy");
-  console.log(params.get("id"), "fjyfjhvjgy");
+  const [getModels, getModelsResponse] = useLazyQuery(serverFetch);
+const router =useRouter()
+const params = useSearchParams();
+console.log(params.get("id"), "fjyfjhvjgyg");
+const TabId=params.get("id")
 
   const getTabFun=()=>{
     getTab(
         GetTabQuary,{
         "where": {
           "id": {
-            "is": null
+            "is": TabId
           }
         }
       },{
@@ -45,16 +47,36 @@ const CreatTab = ({edit=false}:{edit?:boolean}) => {
     )
   }
 useEffect(()=>{
+    getModels(
+        LIST_ALL_MODELS_ID_LABEL,
+        {
+            "limit": 50,
+        },
+        {
+            cache: "no-store"
+        }
+    )
 if(edit){
     getTabFun()
 }
 
 },[])
 useEffect(() => {
+    if (getModelsResponse.error) {
+        toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: getModelsResponse.error?.message,
+        });
+    }
+}, [getModelsResponse.data, getModelsResponse.error, getModelsResponse.loading]);
+useEffect(() => {
   if(getTabResponse.data){
+    console.log(getTabResponse.data.getTab.model?.id)
     form.reset({
         label:getTabResponse.data.getTab.label,
         order:getTabResponse.data.getTab.order,
+        model:getTabResponse.data.getTab.model?.id
       })
   }
   else if(getTabResponse.error){
@@ -65,7 +87,7 @@ useEffect(() => {
       });
   }
 
-}, [getTabResponse])
+}, [getTabResponse?.data,getTabResponse?.loading,getTabResponse?.error])
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -79,12 +101,12 @@ if(edit == false){
             CreateTabQuary,
             {
                 "input": {
-                  "createdBy": null,
-                  "icon": null,
+                //   "createdBy": null,
+                  "icon": "icon",
                   "label": values?.label,
-                  "model": null,
+                  "model": values?.model,
                   "order": values?.order,
-                  "updatedBy": null
+                //   "updatedBy": null
                 }
               },
             {
@@ -97,13 +119,13 @@ if(edit == false){
             UpdateTabQuary,
             {
                 "input": {
-                  "createdBy": null,
-                  "icon": null,
+                //   "createdBy": null,
+                //   "icon": null,
                   "label": values?.label,
-                  "model": null,
+                  "model": values?.model,
                   "order": values?.order,
-                  "updatedBy": null,
-                  "id":null
+                //   "updatedBy": null,
+                  "id":TabId
                 }
               },
             {
@@ -119,6 +141,7 @@ if(edit == false){
                 title: "Success",
                 description: "Successful created",
               })
+              router.push("/dashboard/tabs")
         
         }else if(error){
             toast({
@@ -135,6 +158,8 @@ if(edit == false){
                 title: "Success",
                 description: "Successful updated",
               })
+              router.push("/dashboard/tabs")
+
             }
             else if(updateTabResponse?.error){
               toast({
@@ -148,6 +173,7 @@ if(edit == false){
 
     return (
         <Form {...form}>
+            <Toaster/>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
 
@@ -177,6 +203,34 @@ if(edit == false){
                             </FormItem>
                         )}
                     />
+
+<FormField
+                            control={form.control}
+                            name="model"
+                            render={({ field }) => (
+                                <FormItem className="">
+                                    <FormLabel>Reference Model</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <SelectTrigger className="">
+                                                <SelectValue placeholder="Select a Model" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Models</SelectLabel>
+                                                    {
+                                                        getModelsResponse.data?.listModels?.docs.map((item: any) => <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>)
+                                                    }
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                 </div>
                 <div className="flex justify-center items-center">
                     <Button

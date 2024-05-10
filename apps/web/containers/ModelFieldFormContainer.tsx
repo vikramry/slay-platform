@@ -2,7 +2,7 @@
 
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { CreateModelFieldQuary, GET_MODEL_FIELD, UPDATE_MODEL_FIELD } from "@/app/queries";
+import { CreateModelFieldQuary, GET_MODEL_FIELD, LIST_ALL_MODELS_ID_LABEL, LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL, UPDATE_MODEL_FIELD } from "@/app/queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Button,
@@ -57,13 +57,16 @@ const formSchema = z.object({
     ref: z.string().optional(),
     localField: z.string().optional(),
     foreignField: z.string().optional(),
-    rounds: z.number().optional(),
+    rounds: z.coerce.number().optional(),
 });
 
 const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     const [createModelField, { data, loading, error }] = useLazyQuery(serverFetch);
     const [updateModelField, updateModelFieldResponse] = useLazyQuery(serverFetch);
     const [getModelField, getModelFieldResponse] = useLazyQuery(serverFetch);
+    const [getModels, getModelsResponse] = useLazyQuery(serverFetch);
+    const [getModelFieldsLocal, getModelFieldsLocalResponse] = useLazyQuery(serverFetch);
+    const [getModelFieldsForeign, getModelFieldsForeignResponse] = useLazyQuery(serverFetch);
     const { id, fieldId } = useParams();
     const { toast } = useToast();
 
@@ -74,7 +77,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
             unique: false,
             managed: false,
             enumType: "",
-            enumValues: [],
+            enumValues: []
         },
     });
 
@@ -97,9 +100,24 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
     useEffect(() => {
         if (getModelFieldResponse.data) {
+            const data = getModelFieldResponse.data.getModelField;
+
             form.reset({
-                ...getModelFieldResponse.data.getModelField
+                default: data?.default,
+                enumType: data?.enumType,
+                enumValues: data?.enumValues,
+                fieldName: data?.fieldName,
+                foreignField: data?.foreignField,
+                label: data?.label,
+                localField: data?.localField,
+                managed: data?.managed || false,
+                ref: data?.ref,
+                required: data?.required || false,
+                rounds: data?.rounds,
+                type: data?.type,
+                unique: data?.unique || false
             })
+
         }
 
         if (getModelFieldResponse.error) {
@@ -118,7 +136,95 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
         form.setValue("foreignField", "");
         form.setValue("localField", "");
         form.setValue("ref", "");
+
+        if (["relationship", "virtual"].includes(form.watch("type"))) {
+            getModels(
+                LIST_ALL_MODELS_ID_LABEL,
+                {
+                    "limit": 50,
+                },
+                {
+                    cache: "no-store"
+                }
+            )
+        }
     }, [form.watch("type")]);
+
+    useEffect(() => {
+        if (form.watch("type") == "virtual" && form.watch("ref") != null) {
+            getModelFieldsLocal(
+                LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL,
+                {
+                    "limit": 50,
+                    "where": {
+                        "model": {
+                            "is": id
+                        }
+                    }
+                },
+                {
+                    cache: "no-store"
+                }
+            )
+
+            getModelFieldsForeign(
+                LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL,
+                {
+                    "limit": 50,
+                    "where": {
+                        "model": {
+                            "is": form.watch("ref")
+                        }
+                    }
+                },
+                {
+                    cache: "no-store"
+                }
+            )
+
+        }
+    }, [form.watch("ref")]);
+
+    useEffect(() => {
+        if (getModelFieldsLocalResponse.data) {
+            form.setValue("localField", getModelFieldResponse.data.getModelField.localField);
+        }
+        if (getModelFieldsLocalResponse.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: getModelFieldsLocalResponse.error?.message,
+            });
+        }
+    }, [getModelFieldsLocalResponse.data, getModelFieldsLocalResponse.error, getModelFieldsLocalResponse.loading]);
+
+
+    useEffect(() => {
+
+        if (getModelFieldsForeignResponse.data) {
+            form.setValue("foreignField", getModelFieldResponse.data.getModelField.foreignField);
+        }
+        if (getModelFieldsForeignResponse.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: getModelFieldsForeignResponse.error?.message,
+            });
+        }
+    }, [getModelFieldsForeignResponse.data, getModelFieldsForeignResponse.error, getModelFieldsForeignResponse.loading]);
+
+    useEffect(() => {
+        if (getModelsResponse.data) {
+            form.setValue("ref", getModelFieldResponse.data.getModelField.ref);
+        }
+        if (getModelsResponse.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: getModelsResponse.error?.message,
+            });
+        }
+    }, [getModelsResponse.data, getModelsResponse.error, getModelsResponse.loading]);
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
@@ -243,7 +349,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                 <FormControl>
                                     <Select
                                         onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                        value={field.value}
                                     >
                                         <SelectTrigger className="">
                                             <SelectValue placeholder="Select a type" />
@@ -338,7 +444,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            value={field.value}
                                         >
                                             <SelectTrigger className="">
                                                 <SelectValue placeholder="Select a Model" />
@@ -346,10 +452,9 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                             <SelectContent>
                                                 <SelectGroup>
                                                     <SelectLabel>Models</SelectLabel>
-                                                    <SelectItem value="1234213242">Model1</SelectItem>
-                                                    <SelectItem value="123421324122">Model2</SelectItem>
-                                                    <SelectItem value="12342132123">Model3</SelectItem>
-                                                    <SelectItem value="1234216783">Model4</SelectItem>
+                                                    {
+                                                        getModelsResponse.data?.listModels?.docs.map((item: any) => <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>)
+                                                    }
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -370,7 +475,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
                                             >
                                                 <SelectTrigger className="">
                                                     <SelectValue placeholder="Select a Local Field" />
@@ -378,9 +483,12 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                                 <SelectContent>
                                                     <SelectGroup>
                                                         <SelectLabel>Fields</SelectLabel>
-                                                        <SelectItem value="_id">Id</SelectItem>
-                                                        <SelectItem value="name">Name</SelectItem>
-                                                        <SelectItem value="email">Email</SelectItem>
+                                                        {
+                                                            getModelFieldsLocalResponse.data?.listModelFields?.docs.map(
+                                                                (item: { id: string, fieldName: string, label: string }) =>
+                                                                    <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                                                            )
+                                                        }
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>
@@ -398,7 +506,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
                                             >
                                                 <SelectTrigger className="">
                                                     <SelectValue placeholder="Select a Foreign Field" />
@@ -406,9 +514,12 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                                 <SelectContent>
                                                     <SelectGroup>
                                                         <SelectLabel>Fields</SelectLabel>
-                                                        <SelectItem value="_id">Id</SelectItem>
-                                                        <SelectItem value="name">Name</SelectItem>
-                                                        <SelectItem value="email">Email</SelectItem>
+                                                        {
+                                                            getModelFieldsForeignResponse.data?.listModelFields?.docs.map(
+                                                                (item: { id: string, fieldName: string, label: string }) =>
+                                                                    <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                                                            )
+                                                        }
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>
