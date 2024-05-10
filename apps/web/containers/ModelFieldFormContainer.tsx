@@ -181,7 +181,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                 {
                     "limit": 50,
                     "where": {
-                        "model": {
+                        "modelName": {
                             "is": form.watch("ref")
                         }
                     }
@@ -462,7 +462,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                                 <SelectGroup>
                                                     <SelectLabel>Models</SelectLabel>
                                                     {
-                                                        getModelsResponse.data?.listModels?.docs.map((item: any) => <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>)
+                                                        getModelsResponse.data?.listModels?.docs.map((item: any) => <SelectItem key={item.id} value={item.name}>{item.label}</SelectItem>)
                                                     }
                                                 </SelectGroup>
                                             </SelectContent>
@@ -492,10 +492,11 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                                 <SelectContent>
                                                     <SelectGroup>
                                                         <SelectLabel>Fields</SelectLabel>
+                                                        <SelectItem value={"_id"}>id</SelectItem>
                                                         {
                                                             getModelFieldsLocalResponse.data?.listModelFields?.docs.map(
                                                                 (item: { id: string, fieldName: string, label: string }) =>
-                                                                    <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                                                                    <SelectItem key={item.id} value={item.fieldName}>{item.label}</SelectItem>
                                                             )
                                                         }
                                                     </SelectGroup>
@@ -523,10 +524,11 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                                                 <SelectContent>
                                                     <SelectGroup>
                                                         <SelectLabel>Fields</SelectLabel>
+                                                        <SelectItem value={"_id"}>id</SelectItem>
                                                         {
                                                             getModelFieldsForeignResponse.data?.listModelFields?.docs.map(
                                                                 (item: { id: string, fieldName: string, label: string }) =>
-                                                                    <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                                                                    <SelectItem key={item.id} value={item.fieldName}>{item.label}</SelectItem>
                                                             )
                                                         }
                                                     </SelectGroup>

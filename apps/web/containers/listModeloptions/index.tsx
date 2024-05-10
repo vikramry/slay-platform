@@ -1,39 +1,42 @@
 import { serverFetch } from '@/app/action'
 import { useLazyQuery } from '@/app/hook'
 import { getlistmodeloptions } from '@/app/queries'
+import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
+import { DataTable } from '@repo/ui'
+import { modelOptionsColumns } from '@/app/(dashboardLayout)/dashboard/columns'
 
-const listModeloptions = () => {
-    const[modeloptionlists,{data,loading,error}]=useLazyQuery(serverFetch)
-    useEffect(()=>{
-        modeloptionlists(
-            
-            getlistmodeloptions,{
-                
-                    "where": {
-                      "id": {
-                        "is": null
-                      }
-                    }
-                  
-            },{
-                cache:"no-store",
-            }
-        )
-    },[])
+const ListModeloptions = () => {
+  const [modeloptionlists, { data, loading, error }] = useLazyQuery(serverFetch)
+  const { id } = useParams();
+  useEffect(() => {
+    modeloptionlists(
 
-    useEffect(()=>{
-if(data){
-    console.log(data,'checkdata')
-}if(loading){
-    console.log(loading,'checkloading')
-}if(error){
-    console.log(error,'checkerror')
-}
-    },[data,loading,error])
+      getlistmodeloptions, {
+
+      "where": {
+        "model": {
+          "is": id
+        }
+      }
+
+    }, {
+      cache: "no-store",
+    }
+    )
+  }, [])
+
+  useEffect(() => {
+    if (data) {
+      console.log(data, 'checkdata')
+    } if (error) {
+      console.log(error, 'checkerror')
+    }
+  }, [data, loading, error])
   return (
-    <div>index</div>
+    <DataTable columns={modelOptionsColumns} data={modeloptionlists?.data?.listModelOptions?.docs || []} url="options/createModelOptions" text="Create model options" />
+
   )
 }
 
-export default listModeloptions
+export default ListModeloptions
