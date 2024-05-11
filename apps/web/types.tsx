@@ -65,7 +65,6 @@ export interface enumType{
 export interface ModelOptionType  {
   id: string
   model: Model
-  name: string
   managed: boolean
   keyName: string
   value: string

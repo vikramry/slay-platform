@@ -497,10 +497,10 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link
-              href={`${row.original.model.id}/field/${row.original.id}`}
+              href={`${row.original.model.id}/field/${row.original.id}/edit`}
               className="cursor-pointer"
             >
-              <DropdownMenuItem>View Model Field</DropdownMenuItem>
+              <DropdownMenuItem>Update Model Field</DropdownMenuItem>
             </Link>
             <Link
               href={`${row.original.model.id}/field/${row.original.id}/options`}
@@ -712,19 +712,19 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
     ),
   },
   {
-    accessorKey: "name",
+    accessorKey: "keyName",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Key Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("keyName")}</div>,
   },
   {
     accessorKey: "managed",
@@ -840,8 +840,8 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
               Copy Model Options ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
-              <DropdownMenuItem>View Model Option</DropdownMenuItem>
+            <Link href={`options/${row.original.id}`} className="cursor-pointer">
+              <DropdownMenuItem>Update Model Option</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
               <AlertDialog>

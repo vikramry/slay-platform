@@ -33,7 +33,7 @@ const ListModels = () => {
 
   return (
     <div>
-      <DataTable columns={modelColumns} data={modelData} filterBy="name" text="Creat Model" url="model/createModel" />
+      <DataTable columns={modelColumns} data={modelData} filterBy="name" text="Create Model" url="model/createModel" />
 
     </div>
   )

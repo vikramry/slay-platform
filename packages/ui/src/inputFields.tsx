@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react";
+
 interface InputFieldProps {
   type?: "text" | "password" | "number" | "radio" | "checkbox" | "email";
   size?: "sm" | "md" | "lg" | "default";

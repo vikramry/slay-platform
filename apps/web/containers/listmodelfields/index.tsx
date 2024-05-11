@@ -52,9 +52,10 @@ const ListModelfields = () => {
     <div>
       <DataTable
         columns={modelFieldColumns}
+        filterBy="fieldName"
         data={modelFieldData}
         text="Create Model Field"
-        url={`/dashboard/model/1/createField`}
+        url={`${useParams()?.id}/createField`}
       />
     </div>
   );

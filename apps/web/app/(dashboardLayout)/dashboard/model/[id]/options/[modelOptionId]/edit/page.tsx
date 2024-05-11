@@ -1,8 +1,11 @@
+import CreatModelOptions from '@/containers/createModelOptions'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>page</div>
+        <>
+            <CreatModelOptions edit={true} />
+        </>
     )
 }
 

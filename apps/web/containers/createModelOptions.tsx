@@ -13,9 +13,6 @@ import { z } from "zod"
 
 
 const formSchema = z.object({
-    name: z.string({
-        required_error: "Name is required",
-    }),
     keyName: z.string({
         required_error: "KeyName is required",
     }),
@@ -30,20 +27,20 @@ const formSchema = z.object({
 
 })
 
-const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
+const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
     const [createModelOption, { data, loading, error }] = useLazyQuery(serverFetch);
     const [updateModelOption, updateModelOptionResponse] = useLazyQuery(serverFetch);
     const [getCurrentModel, getCurrentModelResponse] = useLazyQuery(serverFetch);
 
     const [getModelOption, getModelOptionResponse] = useLazyQuery(serverFetch);
 
-    const { id, modelOptionsId } = useParams();
+    const { id, modelOptionId } = useParams();
     const getFieldOptionFun = () => {
         getModelOption(
             getModelOptionQuary, {
             "where": {
                 "id": {
-                    "is": null
+                    "is": modelOptionId
                 }
             }
         }, {
@@ -76,10 +73,9 @@ const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
     useEffect(() => {
         if (getModelOptionResponse.data) {
             form.reset({
-                name: getModelOptionResponse.data.getModelOption.name,
                 keyName: getModelOptionResponse.data.getModelOption.keyName,
                 type: getModelOptionResponse.data.getModelOption.type,
-                value: getModelOptionResponse.data.getModelOption.value,
+                value: getModelOptionResponse.data.getModelOption.type === "boolean" ? getModelOptionResponse.data.getModelOption.value == "true" : getModelOptionResponse.data.getModelOption.value,
                 managed: getModelOptionResponse.data.getModelOption.managed,
             })
         }
@@ -147,7 +143,7 @@ const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
                         "type": values?.type,
                         "updatedBy": null,
                         "value": values?.value,
-                        "id": modelOptionsId
+                        "id": modelOptionId
                     }
                 },
                 {
@@ -175,19 +171,6 @@ const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
 
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name="keyName"
@@ -226,16 +209,16 @@ const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Type</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} value={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a type of the field" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="text">Text</SelectItem>
+                                        <SelectItem value="string">Text</SelectItem>
                                         <SelectItem value="number">Number</SelectItem>
-                                        <SelectItem value="checkBox">Boolean</SelectItem>
+                                        <SelectItem value="boolean">Boolean</SelectItem>
 
                                     </SelectContent>
                                 </Select>
@@ -243,7 +226,7 @@ const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
                             </FormItem>
                         )}
                     />
-                    {form.watch("type") !== "" && (
+                    {form.watch("type") !== "boolean" ? (
                         <FormField
                             control={form.control}
                             name="value"
@@ -251,13 +234,32 @@ const CreatModelOptions = ({ edit = false }: { edit: boolean }) => {
                                 <FormItem>
                                     <FormLabel>Value</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter value" {...field} type={form.watch("type")} />
+                                        <Input placeholder="Enter value" {...field} type={form.watch("type") == "string" ? "text" : "number"} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                    )}
+                    )
+                        :
+                        <FormField
+                            control={form.control}
+                            name="value"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>Value</FormLabel>
+                                    </div>
+                                </FormItem>
+                            )}
+                        />
+                    }
                 </div>
                 <div className="flex justify-center items-center">
                     <Button
