@@ -1,10 +1,9 @@
-import { SideBar } from "@repo/ui/sideBar";
 import "./globals.css";
 import "@repo/ui/styles.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
-import { Header } from "@repo/ui/header";
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <script src="https://cdn.tailwindcss.com"></script> */}
       <body className={inter.className}>
         <ThemeProvider attribute="class">{children}</ThemeProvider>
-      </body>{" "}
+        <NextTopLoader color="#817994" />
+      </body>
     </html>
   );
 }

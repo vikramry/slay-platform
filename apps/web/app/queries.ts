@@ -305,6 +305,7 @@ query ListModels {
       label
       managed
       name
+      prefix
       id
       updatedBy {
         name

@@ -60,7 +60,6 @@ let server = new ApolloServer({
 });
 
 mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
-  console.log("PLATFORM_INITIALIZE");
   const newSchema = applyMiddleware(
     makeExecutableSchema({
       typeDefs: mercury.typeDefs,
