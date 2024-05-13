@@ -4,7 +4,7 @@ import { InputField } from "./inputFields";
 import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./components";
 
 export function DeletePopupComp({ inputText, type, onclick, ...rest }: {
-    inputText: string, type: "MODEL" | "MODELFIELD" | "FIELDOPTION" | "MODELOPTION" | "COMPONENT" | "TAB" | "USER", onclick?: () => void
+    inputText: string, type: "MODEL" | "MODELFIELD" | "FIELDOPTION" | "MODELOPTION" | "COMPONENT" | "TAB" | "USER" | "PROFILE", onclick?: () => void
 }) {
     const typeMap: Record<string, string> = {
         "MODEL": "model",
@@ -14,6 +14,7 @@ export function DeletePopupComp({ inputText, type, onclick, ...rest }: {
         "COMPONENT": "component",
         "TAB": "tab",
         "USER": "user",
+        "PROFILE": "Profile"
     }
     const [confirmDeleteText, setConfirmDeleteText] = useState("")
     const [confirmDelete, setConfirmDelete] = useState(true)

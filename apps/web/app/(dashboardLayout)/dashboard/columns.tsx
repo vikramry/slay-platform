@@ -24,6 +24,7 @@ import {
   Model,
   ModelFieldType,
   ModelOptionType,
+  ProfileType,
   TabType,
   User,
 } from "../../../types";
@@ -1258,6 +1259,156 @@ export const userColumns: ColumnDef<User>[] = [
                   inputText={row.original.name}
                   onclick={handleuserDelete}
                   type="USER"
+                />
+              </AlertDialog>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];
+
+export const profileColumns: ColumnDef<ProfileType>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "label",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Label
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
+  },
+  {
+    accessorKey: "createdBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created By
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
+    },
+  },
+  {
+    accessorKey: "updatedBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated By
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="">{row.original.updatedBy?.name || "-"}</div>
+    ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original;
+      const [handledeleteModel, { data, loading, error }] =
+        useLazyQuery(serverFetch);
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Model Deleted Successfully.",
+          });
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+
+      const handleModelDelete = () => {
+        handledeleteModel(
+          DELETE_MODEL,
+          {
+            deleteModelId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
+      };
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <CircleEllipsis className="h-4 w-4" />
+              {/* <CircleEllipsis className="h-4 w-4" /> */}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy Profile ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <Link
+              href={`/dashboard/model/${row.original.id}`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>View Profile</DropdownMenuItem>
+            </Link>
+
+            <Link
+              href={`/dashboard/model/${row.original.id}/edit`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>Update Profile</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer">
+                    <Trash2 size={14} /> Delete Profile
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp
+                  inputText={row.original.name}
+                  onclick={handleModelDelete}
+                  type="PROFILE"
                 />
               </AlertDialog>
             </DropdownMenuLabel>

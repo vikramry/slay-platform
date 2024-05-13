@@ -89,6 +89,10 @@ export function SideBar() {
         link: "dashboard/model"
       },
       {
+        title: "Profiles",
+        link: "dashboard/profiles"
+      },
+      {
         title: "Components",
         link: "dashboard/components"
       },
@@ -133,7 +137,7 @@ export function SideBar() {
           const regex = new RegExp(`^${link}(\/|$)`);
 
           let isActive = regex.test(usePathname());
-          if(item.title === "Fields") 
+          if (item.title === "Fields")
             isActive = usePathname().includes(`model/${useParams().id}/options`) ? false : true;
           return (
             <Link href={`/${item?.link}`} key={item?.link}>
