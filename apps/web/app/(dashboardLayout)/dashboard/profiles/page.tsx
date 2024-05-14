@@ -1,9 +1,12 @@
-import React from 'react'
+import ListProfile from "@/containers/ListProfiles";
+import React from "react";
 
 const page = () => {
-    return (
-        <div>page</div>
-    )
-}
+  return (
+    <div>
+      <ListProfile />
+    </div>
+  );
+};
 
-export default page
+export default page;

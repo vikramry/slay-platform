@@ -841,7 +841,10 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
               Copy Model Options ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`options/${row.original.id}`} className="cursor-pointer">
+            <Link
+              href={`options/${row.original.id}`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>Update Model Option</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
@@ -1385,15 +1388,9 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
               Copy Profile ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link
-              href={`/dashboard/model/${row.original.id}`}
-              className="cursor-pointer"
-            >
-              <DropdownMenuItem>View Profile</DropdownMenuItem>
-            </Link>
 
             <Link
-              href={`/dashboard/model/${row.original.id}/edit`}
+              href={`/dashboard/profiles/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Profile</DropdownMenuItem>

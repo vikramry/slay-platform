@@ -649,3 +649,25 @@ query ListFieldOptions($where: whereFieldOptionInput) {
     }
   }
 }`;
+
+export const LIST_ALL_PROFILES = `query Docs($limit: Int!) {
+  listProfiles(limit: $limit) {
+    docs {
+      id
+      name
+      label
+      createdBy {
+        id
+        name
+      }
+      updatedBy {
+        id
+        name
+      }
+      createdOn
+      updatedOn
+    }
+    limit
+  }
+}
+`;
