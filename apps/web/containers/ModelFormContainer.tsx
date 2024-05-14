@@ -31,7 +31,7 @@ const formSchema = z.object({
     required_error: "Label is required"
   }),
   managed: z.boolean(),
-  prefix: z.string().nullable(),
+  prefix: z.string().optional(),
 });
 
 const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
