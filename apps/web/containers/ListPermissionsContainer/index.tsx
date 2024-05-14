@@ -41,7 +41,7 @@ const ListPermissionContainer = () => {
             modelField: {
                 label: "Permission"
             },
-            create: true,
+            create: false,
             update: true,
             read: true,
             delete: true

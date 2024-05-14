@@ -58,6 +58,7 @@ const formSchema = z.object({
     localField: z.string().optional(),
     foreignField: z.string().optional(),
     rounds: z.coerce.number().optional(),
+    many: z.boolean()
 });
 
 const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
@@ -79,6 +80,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
             managed: false,
             enumType: "",
             enumValues: [],
+            many: false
         },
     });
 
@@ -110,7 +112,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     useEffect(() => {
         if (getModelFieldResponse.data) {
             const data = getModelFieldResponse.data.getModelField;
-
+            
             form.reset({
                 default: data?.default,
                 enumType: data?.enumType,
@@ -124,7 +126,8 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                 required: data?.required || false,
                 rounds: data?.rounds,
                 type: data?.type,
-                unique: data?.unique || false
+                unique: data?.unique || false,
+                many: data?.many || false
             })
 
         }
@@ -256,7 +259,8 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         "type": values?.type,
                         "unique": values?.unique,
                         "updatedBy": null,
-                        "id": fieldId
+                        "id": fieldId,
+                        "many": values?.many,
                     }
                 },
                 {
@@ -284,7 +288,8 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         "rounds": values?.rounds,
                         "type": values?.type,
                         "unique": values?.unique,
-                        "updatedBy": null
+                        "updatedBy": null,
+                        "many": values?.many,
                     }
                 },
                 {
@@ -442,6 +447,25 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                             )}
                         />
                     )}
+
+
+                    <FormField
+                        control={form.control}
+                        name="many"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                    <FormLabel>Many</FormLabel>
+                                </div>
+                            </FormItem>
+                        )}
+                    />
 
                     {["relationship", "virtual"].includes(form.watch("type", "string")) && (
                         <FormField

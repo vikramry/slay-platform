@@ -409,6 +409,7 @@ export const GET_MODEL_FIELD = `
 query GetModelField($where: whereModelFieldInput!) {
   getModelField(where: $where) {
     id
+    many
     model {
       id
       label
@@ -670,3 +671,30 @@ export const LIST_ALL_PROFILES = `query Docs($limit: Int!) {
   }
 }
 `;
+
+
+export const CREATE_PROFILE = `
+mutation CreateProfile($input: ProfileInput!) {
+  createProfile(input: $input) {
+    id
+    label
+    name
+  }
+}
+`
+
+export const UPDATE_PROFILE = `mutation UpdateProfile($input: updateProfileInput!) {
+  updateProfile(input: $input) {
+    id
+    name
+    label
+  }
+}`
+
+export const GET_PROFILE = `query GetProfile($where: whereProfileInput!) {
+  getProfile(where: $where) {
+    id
+    label
+    name
+  }
+}`
