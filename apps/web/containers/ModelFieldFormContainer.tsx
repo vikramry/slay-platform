@@ -428,7 +428,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                             control={form.control}
                             name="default"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                                <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
                                     <FormControl>
                                         <Checkbox
                                             checked={field.value}
@@ -634,7 +634,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         control={form.control}
                         name="required"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
                                 <FormControl>
                                     <Checkbox
                                         checked={field.value}
@@ -651,7 +651,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         control={form.control}
                         name="unique"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
                                 <FormControl>
                                     <Checkbox
                                         checked={field.value}
@@ -668,7 +668,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         control={form.control}
                         name="managed"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
                                 <FormControl>
                                     <Checkbox
                                         checked={field.value}

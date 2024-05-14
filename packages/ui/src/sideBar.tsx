@@ -72,63 +72,69 @@
 
 // // className="md:block hidden"
 
-"use client"
+"use client";
 import Link from "next/link";
-import { usePathname, useParams } from 'next/navigation';
+import { usePathname, useParams } from "next/navigation";
 
 export interface SideBarProps {
-  title: string; link: string;
+  title: string;
+  link: string;
 }
-
 
 export function SideBar() {
   const data: Record<string, SideBarProps[]> = {
-    "default": [
+    default: [
       {
         title: "Models",
-        link: "dashboard/model"
+        link: "dashboard/model",
       },
       {
         title: "Profiles",
-        link: "dashboard/profiles"
+        link: "dashboard/profiles",
       },
       {
         title: "Components",
-        link: "dashboard/components"
+        link: "dashboard/components",
       },
       {
         title: "Users",
-        link: "dashboard/users"
+        link: "dashboard/users",
       },
       {
         title: "Tabs",
-        link: "dashboard/tabs"
+        link: "dashboard/tabs",
       },
     ],
-    "model": [
+    model: [
       {
         title: "Fields",
-        link: `dashboard/model/${useParams()?.id}`
+        link: `dashboard/model/${useParams()?.id}`,
       },
       {
         title: "Options",
-        link: `dashboard/model/${useParams()?.id}/options`
+        link: `dashboard/model/${useParams()?.id}/options`,
       },
       {
         title: "Permissions",
-        link: `dashboard/model/${useParams()?.id}/permissions`
+        link: `dashboard/model/${useParams()?.id}/permissions`,
       },
       {
         title: "Functions",
-        link: `dashboard/model/${useParams()?.id}/functions`
+        link: `dashboard/model/${useParams()?.id}/functions`,
       },
       {
         title: "Layouts",
-        link: `dashboard/model/${useParams()?.id}/layouts`
+        link: `dashboard/model/${useParams()?.id}/layouts`,
       },
-    ]
+    ],
   };
-  const sidebarData = data[/\/model\/.+/.test(usePathname()) && !usePathname().includes("model/createModel") ? "model" : "default"]
+  const sidebarData =
+    data[
+      /\/model\/.+/.test(usePathname()) &&
+      !usePathname().includes("model/createModel")
+        ? "model"
+        : "default"
+    ];
   return (
     <div className="md:block hidden">
       <div className="flex flex-col gap-2 ">
@@ -138,10 +144,16 @@ export function SideBar() {
 
           let isActive = regex.test(usePathname());
           if (item.title === "Fields")
-            isActive = usePathname().includes(`model/${useParams().id}/options`) ? false : true;
+            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`].some((item) =>
+              usePathname().includes(item)
+            )
+              ? false
+              : true;
           return (
             <Link href={`/${item?.link}`} key={item?.link}>
-              <div className={`p-2 rounded-lg w-[180px] hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:bg-opacity-25 dark:hover:text-white dark:text-white  flex flex-row gap-2 text-center text-sm align-middle font-medium ${isActive ? "bg-[black] dark:bg-gray-200  text-white dark:text-black dark:bg-opacity-25" : ""} ease-in-out duration-300`}>
+              <div
+                className={`p-2 rounded-lg w-[180px] hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:bg-opacity-25 dark:hover:text-white dark:text-white  flex flex-row gap-2 text-center text-sm align-middle font-medium ${isActive ? "bg-[black] dark:bg-gray-200  text-white dark:text-black dark:bg-opacity-25" : ""} ease-in-out duration-300`}
+              >
                 <h4>{item?.title}</h4>
               </div>
             </Link>
