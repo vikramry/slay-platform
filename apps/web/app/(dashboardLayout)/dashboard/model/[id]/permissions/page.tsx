@@ -1,8 +1,11 @@
+import ListPermissionContainer from '@/containers/ListPermissionsContainer'
 import React from 'react'
 
 const page = () => {
   return (
-    <div></div>
+    <div>
+      <ListPermissionContainer />
+    </div>
   )
 }
 

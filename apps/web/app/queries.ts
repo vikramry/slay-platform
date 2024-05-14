@@ -346,7 +346,6 @@ export const getlistmodelfields = `
       docs {
         id
         fieldName
-        id
         createdBy {
           id
           name

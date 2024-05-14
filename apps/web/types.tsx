@@ -92,3 +92,14 @@ export interface ProfileType {
   createdBy: User
   updatedBy: User
 }
+
+export interface PermissionType {
+  id: string
+  create: boolean
+  read: boolean
+  update: boolean
+  delete: boolean
+  modelField: ModelFieldType
+  createdBy: User
+  updatedBy: User
+}
