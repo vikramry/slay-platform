@@ -698,3 +698,8 @@ export const GET_PROFILE = `query GetProfile($where: whereProfileInput!) {
     name
   }
 }`
+
+
+export const DELETE_PROFILE = `mutation DeleteProfile($deleteProfileId: ID!) {
+  deleteProfile(id: $deleteProfileId)
+}`

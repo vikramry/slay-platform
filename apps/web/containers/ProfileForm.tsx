@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,7 +20,7 @@ import { z } from "zod";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 import { CREATE_PROFILE, GET_PROFILE, UPDATE_PROFILE } from '@/app/queries';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     name: z.string({
@@ -31,6 +32,8 @@ const formSchema = z.object({
 });
 
 const ProfileForm = ({ edit = false }: { edit?: boolean }) => {
+    const { toast } = useToast();
+    const router = useRouter();
     const [createProfile, { data, error, loading }] = useLazyQuery(serverFetch);
     const [getProfile, getProfileResponse] = useLazyQuery(serverFetch);
     const [updateProfile, updateProfileResponse] = useLazyQuery(serverFetch);
@@ -42,8 +45,8 @@ const ProfileForm = ({ edit = false }: { edit?: boolean }) => {
         defaultValues: {},
     });
 
-    useEffect(()=>{
-        if(edit){
+    useEffect(() => {
+        if (edit) {
             getProfile(
                 GET_PROFILE,
                 {
@@ -59,6 +62,23 @@ const ProfileForm = ({ edit = false }: { edit?: boolean }) => {
             )
         }
     }, [])
+
+    useEffect(() => {
+        if (getProfileResponse.data) {
+            form.reset({
+                label: getProfileResponse.data?.getProfile.label,
+                name: getProfileResponse.data?.getProfile.name
+            })
+        }
+
+        if (getProfileResponse?.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: getProfileResponse.error?.message,
+            })
+        }
+    }, [getProfileResponse.data, getProfileResponse.error, getProfileResponse.loading])
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
@@ -95,6 +115,38 @@ const ProfileForm = ({ edit = false }: { edit?: boolean }) => {
                 }
             );
     }
+
+    useEffect(() => {
+        if (error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: error?.message,
+            })
+        }
+        if (data) {
+            toast({
+                title: "Profile Created",
+            })
+            router.back();
+        }
+    }, [data, loading, error])
+
+    useEffect(() => {
+        if (updateProfileResponse.error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: updateProfileResponse.error?.message,
+            })
+        }
+        if (updateProfileResponse.data) {
+            toast({
+                title: "Profile Updated",
+            })
+            router.back();
+        }
+    }, [updateProfileResponse.data, updateProfileResponse.loading, updateProfileResponse.error])
     return (
         <Form {...form}>
             <Toaster />

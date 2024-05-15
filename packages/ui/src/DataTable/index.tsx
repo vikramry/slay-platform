@@ -25,6 +25,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { ChevronDownIcon, ChevronsLeft, ChevronsRight, ChevronRight, ChevronLeft } from "lucide-react"
 import { useState } from "react"
 import { CustomButton } from "../CustomButton"
+import { PulseLoader } from "react-spinners"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -32,6 +33,7 @@ interface DataTableProps<TData, TValue> {
   text?: string
   url?: string
   filterBy?: string
+  loading?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -39,7 +41,8 @@ export function DataTable<TData, TValue>({
   data,
   text,
   url,
-  filterBy
+  filterBy,
+  loading = false
 }: DataTableProps<TData, TValue>) {
   // const table = useReactTable({
   //   data,
@@ -144,32 +147,42 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
+            {loading ?
+              (<TableRow>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <PulseLoader color="#817994" />
                 </TableCell>
-              </TableRow>
-            )}
+              </TableRow>)
+              :
+              table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </div>

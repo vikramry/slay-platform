@@ -1,8 +1,11 @@
+import ProfileForm from '@/containers/ProfileForm'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <ProfileForm />
+    </div>
   )
 }
 

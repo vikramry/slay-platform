@@ -39,10 +39,12 @@ import {
   DELETE_MODEL,
   DELETE_MODELFIELD,
   DELETE_MODELOPTION,
+  DELETE_PROFILE,
   DELETE_TAB,
   DELETE_USER,
 } from "@/app/queries";
 import { title } from "process";
+import { usePathname, useRouter } from "next/navigation";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
 // This type is used to define the shape of our data.
@@ -1343,6 +1345,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
+      const router = useRouter();
       const [handledeleteModel, { data, loading, error }] =
         useLazyQuery(serverFetch);
       useEffect(() => {
@@ -1350,6 +1353,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
+          window.location.reload();
         }
         if (error) {
           toast({
@@ -1362,9 +1366,11 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
 
       const handleModelDelete = () => {
         handledeleteModel(
-          DELETE_MODEL,
+          DELETE_PROFILE,
           {
-            deleteModelId: row.original.id,
+
+            "deleteProfileId": row.original.id
+
           },
           {
             cache: "no-store",
