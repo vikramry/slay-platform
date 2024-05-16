@@ -50,6 +50,7 @@ const ListPermissionContainer = () => {
   }, [data, error, loading]);
   return (
     <div>
+      
       <DataTable
         columns={permissionColumns}
         data={modelFields || []}
