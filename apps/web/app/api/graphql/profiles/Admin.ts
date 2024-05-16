@@ -73,6 +73,24 @@ const rules = [
       delete: true,
     },
   },
+  {
+    modelName: "Permission",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "FieldPermission",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
 ];
 
 export const AdminProfile = mercury.access.createProfile("Admin", rules);
