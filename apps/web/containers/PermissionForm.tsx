@@ -1,15 +1,16 @@
 "use client"
 import { serverFetch } from '@/app/action';
 import { useLazyQuery } from '@/app/hook';
-import { GET_MODEL, GET_MODEL_PERMISSIONS, LIST_ALL_PROFILES } from '@/app/queries';
+import { CREATE_PERMISSION, GET_MODEL, GET_MODEL_PERMISSIONS, LIST_ALL_PROFILES, UPDATE_PERMISSION } from '@/app/queries';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useToast, Toaster, Form, FormField, FormItem, FormLabel, FormControl, FormMessage, Input, Select, SelectValue, SelectGroup, SelectLabel, SelectItem, SelectContent, Button, SelectTrigger, Checkbox } from '@repo/ui';
+import { ProfileType } from '@/types';
 
-const PermissionForm = ({ setFieldLevelAccessFlag }: { setFieldLevelAccessFlag: Function }) => {
+const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFieldLevelAccessFlag: Function, setSelectedProfile: Function }) => {
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
   const formSchema = z.object({
@@ -34,6 +35,9 @@ const PermissionForm = ({ setFieldLevelAccessFlag }: { setFieldLevelAccessFlag: 
   const [getModelPermission, { data, loading, error }] = useLazyQuery(serverFetch);
   const [getAllProfiles, getAllProfilesResponse] = useLazyQuery(serverFetch);
   const [getCurrentModel, getCurrentModelResponse] = useLazyQuery(serverFetch);
+  const [createPermission, createPermissionResponse] = useLazyQuery(serverFetch);
+  const [updatePermission, updatePermissionResponse] = useLazyQuery(serverFetch);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -115,6 +119,10 @@ const PermissionForm = ({ setFieldLevelAccessFlag }: { setFieldLevelAccessFlag: 
         cache: "no-store"
       }
     )
+
+    if (form.watch("profile")) {
+      setSelectedProfile(form.watch("profile"));
+    }
   }, [form.watch("profile")])
 
   useEffect(() => {
@@ -140,14 +148,78 @@ const PermissionForm = ({ setFieldLevelAccessFlag }: { setFieldLevelAccessFlag: 
       });
     }
   }, [data, error, loading]);
+  //////////////
+useEffect(()=>{
+  if(updatePermissionResponse?.data){
 
+  }
+  else if(updatePermissionResponse?.error){
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: error?.message,
+    });
+  }
+
+},[updatePermissionResponse.data,updatePermissionResponse.loading,updatePermissionResponse?.error])
+useEffect(()=>{
+  if(createPermissionResponse?.data){
+
+  }
+  else if(createPermissionResponse?.error){
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: error?.message,
+    });
+  }
+
+},[createPermissionResponse.data,createPermissionResponse.loading,createPermissionResponse?.error])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (edit) {
       //update query
+      updatePermission(
+        UPDATE_PERMISSION,
+        {
+          "input": {
+            "create": values?.create,
+            "delete": values?.delete,
+            "fieldLevelAccess": values?.fieldLevelAccess,
+            "id": data?.listPermissions.docs[0].id,
+            "profile": form.watch("profile"),
+            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item:ProfileType)=>item.id === form.watch("profile")).name,
+            "read": values?.read,
+            "update": values?.update
+          }
+        },
+        {
+          cache: "no-store"
+        }
+      )
+      
     }
     else {
       //create query
+      createPermission(
+        CREATE_PERMISSION,
+        {
+          "input": {
+            "create": values?.create,
+            "delete": values?.delete,
+            "fieldLevelAccess": values?.fieldLevelAccess,
+            "model": id,
+            "modelName": getCurrentModelResponse.data?.getModel.name,
+            "profile": values?.profile,
+            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item:ProfileType)=>item.id === form.watch("profile")).name,
+            "read": values?.read,
+            "update": values?.update
+          }
+        },
+        {
+          cache: "no-store"
+        }
+      )
     }
   }
   return (
