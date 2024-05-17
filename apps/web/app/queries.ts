@@ -703,3 +703,30 @@ export const GET_PROFILE = `query GetProfile($where: whereProfileInput!) {
 export const DELETE_PROFILE = `mutation DeleteProfile($deleteProfileId: ID!) {
   deleteProfile(id: $deleteProfileId)
 }`
+
+export const GET_MODEL_PERMISSIONS = `query Docs {
+  listPermissions {
+    docs {
+      id
+      profile {
+        label
+        name
+        id
+      }
+      profileName
+      model {
+        id
+        label
+        name
+      }
+      modelName
+      create
+      update
+      delete
+      read
+      fieldLevelAccess
+      createdOn
+      updatedOn
+    }
+  }
+}`
