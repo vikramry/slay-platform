@@ -247,6 +247,7 @@ export const modelColumns: ColumnDef<Model>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
+      const {toast}=useToast()
       const [handledeleteModel, { data, loading, error }] =
         useLazyQuery(serverFetch);
       useEffect(() => {
@@ -254,6 +255,7 @@ export const modelColumns: ColumnDef<Model>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
+          window.location.reload();
         }
         if (error) {
           toast({
@@ -278,6 +280,7 @@ export const modelColumns: ColumnDef<Model>[] = [
 
       return (
         <DropdownMenu>
+          <Toaster/>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -461,8 +464,11 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       useEffect(() => {
         if (data) {
           toast({
-            title: "Tab Deleted Successfully.",
+            title: "Model Deleted Successfully.",
           });
+       
+            window.location.reload();
+      
         }
         if (error) {
           toast({
@@ -628,9 +634,17 @@ export const tabsColumns: ColumnDef<TabType>[] = [
         useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
+        
           toast({
             title: "Tab Deleted Successfully.",
+            description: "Successful Deleted",
           });
+     
+          setTimeout(function(){
+            window.location.reload();
+          },2000)
+           
+         
         }
         if (error) {
           toast({
@@ -962,6 +976,7 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           toast({
             title: "Fieldoption Deleted Successfully.",
           });
+
         }
         if (error) {
           toast({
@@ -1204,9 +1219,13 @@ export const userColumns: ColumnDef<User>[] = [
 
       useEffect(() => {
         if (data) {
+        
           toast({
-            title: "User deleted Successfully.",
-          });
+            title: "User deleted Successfully."
+          }),
+          setTimeout(function() {
+            window.location.reload();
+        }, 2000);
         }
         if (error) {
           toast({
@@ -1231,6 +1250,7 @@ export const userColumns: ColumnDef<User>[] = [
 
       return (
         <DropdownMenu>
+          <Toaster/>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -1346,12 +1366,12 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
     cell: ({ row }) => {
       const payment = row.original;
       const router = useRouter();
-      const [handledeleteModel, { data, loading, error }] =
+      const [handledeleteProfile, { data, loading, error }] =
         useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
           toast({
-            title: "Model Deleted Successfully.",
+            title: "Profile Deleted Successfully.",
           });
           window.location.reload();
         }
@@ -1364,14 +1384,15 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
         }
       }, [data, loading, error]);
 
-      const handleModelDelete = () => {
-        handledeleteModel(
+      const handleProfileDelete = () => {
+        handledeleteProfile(
           DELETE_PROFILE,
           {
 
             "deleteProfileId": row.original.id
 
           },
+
           {
             cache: "no-store",
           }
@@ -1411,7 +1432,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
                 </AlertDialogTrigger>
                 <DeletePopupComp
                   inputText={row.original.name}
-                  onclick={handleModelDelete}
+                  onclick={handleProfileDelete}
                   type="PROFILE"
                 />
               </AlertDialog>
@@ -1535,6 +1556,9 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
+          setTimeout(function(){
+            window.location.reload();
+          },2000)
         }
         if (error) {
           toast({

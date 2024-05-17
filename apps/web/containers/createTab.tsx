@@ -155,10 +155,12 @@ if(edit == false){
         useEffect(() => {
             if(updateTabResponse.data){
               toast({
-                title: "Success",
+                title: "Success upadated",
                 description: "Successful updated",
               })
-              router.push("/dashboard/tabs")
+              setTimeout(function(){
+                router.push("/dashboard/tabs")
+              },2000)
 
             }
             else if(updateTabResponse?.error){

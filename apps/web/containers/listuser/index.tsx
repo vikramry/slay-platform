@@ -15,9 +15,6 @@ const ListUsers = () => {
             listusers, {}, {
             cache: "no-store",
         }
-
-
-
         )
     }, [])
     useEffect(() => {

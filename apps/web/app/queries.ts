@@ -564,14 +564,14 @@ export const listtabs = `
   `;
 export const listusers = `
   query Docs {
-    id
+   
     listUsers {
       docs {
         name
         id
         email
       }
-    }
+    },
   }
   `;
 export const listcomponents = `

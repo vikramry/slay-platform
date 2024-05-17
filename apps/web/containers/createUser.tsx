@@ -132,7 +132,9 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         title: "Success",
         description: "Successful created",
       })
-      router.push("/dashboard/users")
+      setTimeout(function() {
+        router.push("/dashboard/users")
+    }, 2000);
 
     } else if (error) {
       toast({
@@ -145,10 +147,13 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
   useEffect(() => {
     if (updateUserResponse.data) {
       toast({
-        title: "Success",
+        title: "Success Upadted",
         description: "Successful updated",
       })
-      router.push("/dashboard/users")
+      setTimeout(function() {
+        router.push("/dashboard/users")
+    }, 2000);
+  
 
     }
     else if (updateUserResponse?.error) {
