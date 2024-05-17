@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useToast, Toaster, Form, FormField, FormItem, FormLabel, FormControl, FormMessage, Input, Select, SelectValue, SelectGroup, SelectLabel, SelectItem, SelectContent, Button, SelectTrigger, Checkbox } from '@repo/ui';
 
-const PermissionForm = ({ setFieldLevelAccessFlag }: { setFieldLevelAccessFlag: Function }) => {
+const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFieldLevelAccessFlag: Function, setSelectedProfile: Function }) => {
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
   const formSchema = z.object({
@@ -115,6 +115,10 @@ const PermissionForm = ({ setFieldLevelAccessFlag }: { setFieldLevelAccessFlag: 
         cache: "no-store"
       }
     )
+
+    if (form.watch("profile")) {
+      setSelectedProfile(form.watch("profile"));
+    }
   }, [form.watch("profile")])
 
   useEffect(() => {
