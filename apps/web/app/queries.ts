@@ -730,3 +730,47 @@ export const GET_MODEL_PERMISSIONS = `query Docs {
     }
   }
 }`
+
+export const CREATE_PERMISSION =`
+mutation CreatePermission($input: PermissionInput!) {
+  createPermission(input: $input) {
+    id
+    profile {
+      id
+    }
+    profileName
+    model {
+      id
+    }
+    modelName
+    create
+    update
+    delete
+    read
+    fieldLevelAccess
+    createdOn
+    updatedOn
+  }
+}`
+
+export const UPDATE_PERMISSION =`
+mutation UpdatePermission($input: updatePermissionInput!) {
+  updatePermission(input: $input) {
+    id
+    profile {
+      id
+    }
+    profileName
+    model {
+      id
+    }
+    modelName
+    create
+    update
+    delete
+    read
+    fieldLevelAccess
+    createdOn
+    updatedOn
+  }
+}`
