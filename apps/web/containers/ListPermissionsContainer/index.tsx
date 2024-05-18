@@ -16,7 +16,7 @@ export const FieldActionContext = createContext<{
   setActions: React.Dispatch<React.SetStateAction<Map<string, { read: boolean; create: boolean; update: boolean; delete: boolean; }>>>,
   crudAccess: { read: boolean, create: boolean, update: boolean, delete: boolean }
 }>(
-  { actions: defaultActions, setActions: () => { } }
+  { actions: defaultActions, setActions: () => { }, crudAccess: { create: false, read: false, update: false, delete: false } }
 );
 const ListPermissionContainer = ({ selectedProfile, crudAccess }: { selectedProfile: string, crudAccess: { create: boolean, delete: boolean, update: boolean, read: boolean } }) => {
   const [getAllFields, { data, error, loading }] = useLazyQuery(serverFetch);
@@ -69,8 +69,6 @@ const ListPermissionContainer = ({ selectedProfile, crudAccess }: { selectedProf
           columns={permissionColumns}
           data={modelFields || []}
           filterBy={""}
-          text={"Edit"}
-          url={"#"}
         />
       </FieldActionContext.Provider>
     </div>
