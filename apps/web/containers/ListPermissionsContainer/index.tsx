@@ -11,10 +11,14 @@ import { ModelFieldType, PermissionType } from "@/types";
 
 const defaultActions = new Map<string, { read: boolean; create: boolean; update: boolean; delete: boolean; }>();
 
-export const FieldActionContext = createContext<{ actions: Map<string, { read: boolean; create: boolean; update: boolean; delete: boolean; }>; setActions: React.Dispatch<React.SetStateAction<Map<string, { read: boolean; create: boolean; update: boolean; delete: boolean; }>>> }>(
+export const FieldActionContext = createContext<{
+  actions: Map<string, { read: boolean; create: boolean; update: boolean; delete: boolean; }>;
+  setActions: React.Dispatch<React.SetStateAction<Map<string, { read: boolean; create: boolean; update: boolean; delete: boolean; }>>>,
+  crudAccess: { read: boolean, create: boolean, update: boolean, delete: boolean }
+}>(
   { actions: defaultActions, setActions: () => { } }
 );
-const ListPermissionContainer = ({ selectedProfile }: { selectedProfile: string }) => {
+const ListPermissionContainer = ({ selectedProfile, crudAccess }: { selectedProfile: string, crudAccess: { create: boolean, delete: boolean, update: boolean, read: boolean } }) => {
   const [getAllFields, { data, error, loading }] = useLazyQuery(serverFetch);
   const { id } = useParams();
   const [modelFields, setModelFields] = useState<PermissionType[]>([]);
@@ -45,19 +49,22 @@ const ListPermissionContainer = ({ selectedProfile }: { selectedProfile: string 
         return {
           id: field.id,
           modelField: field,
-          create: true,
-          read: true,
-          delete: true,
-          update: true,
+          ...crudAccess
         }
       })
 
       setModelFields(modifiedFields);
     }
   }, [data, error, loading]);
+
+
+  useEffect(() => {
+    console.log(actions);
+
+  }, [actions])
   return (
     <div>
-      <FieldActionContext.Provider value={{ actions, setActions }}>
+      <FieldActionContext.Provider value={{ actions, setActions, crudAccess }}>
         <DataTable
           columns={permissionColumns}
           data={modelFields || []}
@@ -71,11 +78,3 @@ const ListPermissionContainer = ({ selectedProfile }: { selectedProfile: string 
 };
 
 export default ListPermissionContainer;
-
-
-export const setActionFromTable = (id: string, accessType: "CREATE" | "READ" | "UPDATE" | "DELETE", value: boolean) => {
-  const context = useContext(FieldActionContext);
-  // context.setActions(action);
-  console.log(id, "     ", accessType, "     ", value);
-
-}

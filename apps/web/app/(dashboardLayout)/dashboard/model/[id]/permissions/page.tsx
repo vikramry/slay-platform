@@ -6,12 +6,18 @@ import React, { useState } from 'react'
 const page = () => {
   const [fieldLevelAccessFlag, setFieldLevelAccessFlag] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<string>("");
+  const [crudAccess, setCrudAccess] = useState<{ create: boolean, delete: boolean, update: boolean, read: boolean }>({
+    create: false,
+    delete: false,
+    update: false,
+    read: false
+  })
 
 
   return (
     <div>
-      <PermissionForm setFieldLevelAccessFlag={setFieldLevelAccessFlag} setSelectedProfile={setSelectedProfile} />
-      {fieldLevelAccessFlag && <ListPermissionContainer selectedProfile={selectedProfile}/>}
+      <PermissionForm setFieldLevelAccessFlag={setFieldLevelAccessFlag} setSelectedProfile={setSelectedProfile} setCrudAccess={setCrudAccess} />
+      {fieldLevelAccessFlag && <ListPermissionContainer selectedProfile={selectedProfile} crudAccess={crudAccess} />}
     </div>
   )
 }

@@ -30,7 +30,7 @@ import {
   User,
 } from "../../../types";
 import Link from "next/link";
-import { cache, useEffect, useState } from "react";
+import { cache, useContext, useEffect, useState } from "react";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 import {
@@ -45,6 +45,7 @@ import {
 } from "@/app/queries";
 import { title } from "process";
 import { usePathname, useRouter } from "next/navigation";
+import { FieldActionContext, setActionFromTable } from "@/containers/ListPermissionsContainer";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
 // This type is used to define the shape of our data.
@@ -247,7 +248,7 @@ export const modelColumns: ColumnDef<Model>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const {toast}=useToast()
+      const { toast } = useToast()
       const [handledeleteModel, { data, loading, error }] =
         useLazyQuery(serverFetch);
       useEffect(() => {
@@ -280,7 +281,7 @@ export const modelColumns: ColumnDef<Model>[] = [
 
       return (
         <DropdownMenu>
-          <Toaster/>
+          <Toaster />
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -466,9 +467,9 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
-       
-            window.location.reload();
-      
+
+          window.location.reload();
+
         }
         if (error) {
           toast({
@@ -634,17 +635,17 @@ export const tabsColumns: ColumnDef<TabType>[] = [
         useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
-        
+
           toast({
             title: "Tab Deleted Successfully.",
             description: "Successful Deleted",
           });
-     
-          setTimeout(function(){
+
+          setTimeout(function () {
             window.location.reload();
-          },2000)
-           
-         
+          }, 2000)
+
+
         }
         if (error) {
           toast({
@@ -1219,13 +1220,13 @@ export const userColumns: ColumnDef<User>[] = [
 
       useEffect(() => {
         if (data) {
-        
+
           toast({
             title: "User deleted Successfully."
           }),
-          setTimeout(function() {
-            window.location.reload();
-        }, 2000);
+            setTimeout(function () {
+              window.location.reload();
+            }, 2000);
         }
         if (error) {
           toast({
@@ -1250,7 +1251,7 @@ export const userColumns: ColumnDef<User>[] = [
 
       return (
         <DropdownMenu>
-          <Toaster/>
+          <Toaster />
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -1464,51 +1465,114 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
   {
     accessorKey: "create",
     header: "Create",
-    cell: ({ row }) => (
-      <div className="">
-        <Checkbox
-          checked={row.getValue("create")}
-          onCheckedChange={(value: boolean) => console.log(value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+
+      const context = useContext(FieldActionContext);
+
+      return (
+        <div className="">
+          <Checkbox
+            defaultChecked={row.getValue("create")}
+            onCheckedChange={(value: boolean) => {
+              const newActions = new Map(context.actions);
+              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              newActions.set(row.original.id, {
+                read: oldValuesIfExists?.read || false,
+                create: value,
+                update: oldValuesIfExists?.update || false,
+                delete: oldValuesIfExists?.delete || false,
+              });
+              context.setActions(newActions);
+            }}
+            aria-label="Select all"
+          />
+        </div>
+      )
+    }
   },
   {
     accessorKey: "update",
     header: "Update",
-    cell: ({ row }) => (
-      <div className="">
-        <Checkbox
-          checked={row.getValue("update")}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-  },
-  {
-    accessorKey: "delete",
-    header: "Delete",
-    cell: ({ row }) => (
-      <div className="">
-        <Checkbox
-          checked={row.getValue("delete")}
-          aria-label="Select all"
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+
+      const context = useContext(FieldActionContext);
+
+      return (
+        <div className="">
+          <Checkbox
+            defaultChecked={row.getValue("update")}
+            onCheckedChange={(value: boolean) => {
+              const newActions = new Map(context.actions);
+              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              newActions.set(row.original.id, {
+                read: oldValuesIfExists?.read || false,
+                create: oldValuesIfExists?.create || false,
+                update: value,
+                delete: oldValuesIfExists?.delete || false,
+              });
+              context.setActions(newActions);
+            }}
+            aria-label="Select all"
+          />
+        </div>
+      )
+    }
   },
   {
     accessorKey: "read",
     header: "Read",
-    cell: ({ row }) => (
-      <div className="">
-        <Checkbox
-          checked={row.getValue("read")}
-          aria-label="Select all"
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+
+      const context = useContext(FieldActionContext);
+
+      return (
+        <div className="">
+          <Checkbox
+            defaultChecked={row.getValue("read")}
+            onCheckedChange={(value: boolean) => {
+              const newActions = new Map(context.actions);
+              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              newActions.set(row.original.id, {
+                read: value,
+                create: oldValuesIfExists?.create || false,
+                update: oldValuesIfExists?.read || false,
+                delete: oldValuesIfExists?.delete || false,
+              });
+              context.setActions(newActions);
+            }}
+            aria-label="Select all"
+          />
+        </div>
+      )
+    }
+  },
+  {
+    accessorKey: "delete",
+    header: "Delete",
+    cell: ({ row }) => {
+
+      const context = useContext(FieldActionContext);
+
+      return (
+        <div className="">
+          <Checkbox
+            defaultChecked={row.getValue("delete")}
+            onCheckedChange={(value: boolean) => {
+              const newActions = new Map(context.actions);
+              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              newActions.set(row.original.id, {
+                read: oldValuesIfExists?.read || false,
+                create: oldValuesIfExists?.create || false,
+                update: oldValuesIfExists?.update || false,
+                delete: value,
+              });
+              context.setActions(newActions);
+            }}
+            aria-label="Select all"
+          />
+        </div>
+      )
+    }
   },
   {
     accessorKey: "createdBy.name",
@@ -1556,9 +1620,9 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
-          setTimeout(function(){
+          setTimeout(function () {
             window.location.reload();
-          },2000)
+          }, 2000)
         }
         if (error) {
           toast({

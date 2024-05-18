@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { useToast, Toaster, Form, FormField, FormItem, FormLabel, FormControl, FormMessage, Input, Select, SelectValue, SelectGroup, SelectLabel, SelectItem, SelectContent, Button, SelectTrigger, Checkbox } from '@repo/ui';
 import { ProfileType } from '@/types';
 
-const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFieldLevelAccessFlag: Function, setSelectedProfile: Function }) => {
+const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAccess }: { setFieldLevelAccessFlag: Function, setSelectedProfile: Function, setCrudAccess: Function }) => {
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
   const formSchema = z.object({
@@ -130,6 +130,12 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFi
       if (data?.listPermissions.docs.length > 0) {
         setEdit(true);
         setFieldLevelAccessFlag(data?.listPermissions.docs[0].fieldLevelAccess);
+        setCrudAccess({
+          create: data?.listPermissions.docs[0].create,
+          update: data?.listPermissions.docs[0].update,
+          delete: data?.listPermissions.docs[0].delete,
+          read: data?.listPermissions.docs[0].read
+        })
         form.setValue('create', data?.listPermissions.docs[0].create);
         form.setValue('delete', data?.listPermissions.docs[0].delete);
         form.setValue('fieldLevelAccess', data?.listPermissions.docs[0].fieldLevelAccess);
