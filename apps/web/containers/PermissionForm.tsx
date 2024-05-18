@@ -99,28 +99,28 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFi
   }, [getAllProfilesResponse.data, getAllProfilesResponse.error])
 
   useEffect(() => {
-    getModelPermission(
-      GET_MODEL_PERMISSIONS,
-      {
-        "where": {
-          "AND": [
-            {
-              "model": {
-                "is": id
-              },
-              "profile": {
-                "is": form.watch("profile")
-              }
-            }
-          ]
-        }
-      },
-      {
-        cache: "no-store"
-      }
-    )
 
     if (form.watch("profile")) {
+      getModelPermission(
+        GET_MODEL_PERMISSIONS,
+        {
+          "where": {
+            "AND": [
+              {
+                "model": {
+                  "is": id
+                },
+                "profile": {
+                  "is": form.watch("profile")
+                }
+              }
+            ]
+          }
+        },
+        {
+          cache: "no-store"
+        }
+      )
       setSelectedProfile(form.watch("profile"));
     }
   }, [form.watch("profile")])
@@ -130,14 +130,12 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFi
       if (data?.listPermissions.docs.length > 0) {
         setEdit(true);
         setFieldLevelAccessFlag(data?.listPermissions.docs[0].fieldLevelAccess);
-        form.reset({
-          create: data?.listPermissions.docs[0].create,
-          delete: data?.listPermissions.docs[0].delete,
-          fieldLevelAccess: data?.listPermissions.docs[0].fieldLevelAccess,
-          modelName: data?.listPermissions.docs[0].model?.label, //for user experience showinf label
-          read: data?.listPermissions.docs[0].read,
-          update: data?.listPermissions.docs[0].update
-        })
+        form.setValue('create', data?.listPermissions.docs[0].create);
+        form.setValue('delete', data?.listPermissions.docs[0].delete);
+        form.setValue('fieldLevelAccess', data?.listPermissions.docs[0].fieldLevelAccess);
+        form.setValue('modelName', data?.listPermissions.docs[0].model?.label); // for user experience showing label
+        form.setValue('read', data?.listPermissions.docs[0].read);
+        form.setValue('update', data?.listPermissions.docs[0].update);
       }
     }
     if (error) {
@@ -149,32 +147,38 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile }: { setFi
     }
   }, [data, error, loading]);
   //////////////
-useEffect(()=>{
-  if(updatePermissionResponse?.data){
+  useEffect(() => {
+    if (updatePermissionResponse?.data) {
+      toast({
+        title: "Permission Updated"
+      });
+      window.location.reload();
+    }
+    else if (updatePermissionResponse?.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message,
+      });
+    }
 
-  }
-  else if(updatePermissionResponse?.error){
-    toast({
-      variant: "destructive",
-      title: "Uh oh! Something went wrong.",
-      description: error?.message,
-    });
-  }
+  }, [updatePermissionResponse.data, updatePermissionResponse.loading, updatePermissionResponse?.error])
+  useEffect(() => {
+    if (createPermissionResponse?.data) {
+      toast({
+        title: "Permission Updated"
+      });
+      window.location.reload();
+    }
+    else if (createPermissionResponse?.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message,
+      });
+    }
 
-},[updatePermissionResponse.data,updatePermissionResponse.loading,updatePermissionResponse?.error])
-useEffect(()=>{
-  if(createPermissionResponse?.data){
-
-  }
-  else if(createPermissionResponse?.error){
-    toast({
-      variant: "destructive",
-      title: "Uh oh! Something went wrong.",
-      description: error?.message,
-    });
-  }
-
-},[createPermissionResponse.data,createPermissionResponse.loading,createPermissionResponse?.error])
+  }, [createPermissionResponse.data, createPermissionResponse.loading, createPermissionResponse?.error])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (edit) {
@@ -188,7 +192,7 @@ useEffect(()=>{
             "fieldLevelAccess": values?.fieldLevelAccess,
             "id": data?.listPermissions.docs[0].id,
             "profile": form.watch("profile"),
-            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item:ProfileType)=>item.id === form.watch("profile")).name,
+            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item: ProfileType) => item.id === form.watch("profile")).name,
             "read": values?.read,
             "update": values?.update
           }
@@ -197,7 +201,7 @@ useEffect(()=>{
           cache: "no-store"
         }
       )
-      
+
     }
     else {
       //create query
@@ -211,7 +215,7 @@ useEffect(()=>{
             "model": id,
             "modelName": getCurrentModelResponse.data?.getModel.name,
             "profile": values?.profile,
-            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item:ProfileType)=>item.id === form.watch("profile")).name,
+            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item: ProfileType) => item.id === form.watch("profile")).name,
             "read": values?.read,
             "update": values?.update
           }
