@@ -45,7 +45,7 @@ import {
 } from "@/app/queries";
 import { title } from "process";
 import { usePathname, useRouter } from "next/navigation";
-import { FieldActionContext, setActionFromTable } from "@/containers/ListPermissionsContainer";
+import { FieldActionContext } from "@/containers/ListPermissionsContainer";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
 // This type is used to define the shape of our data.
