@@ -5,7 +5,7 @@ import { LIST_ALL_FIELD_PERMISSIONS, getlistmodelfields } from "@/app/queries";
 import { useParams } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { DataTable } from "@repo/ui";
-import { permissionColumns } from "@/app/(dashboardLayout)/dashboard/columns";
+import { fieldOptionsColumns, permissionColumns } from "@/app/(dashboardLayout)/dashboard/columns";
 import { ModelFieldType, PermissionType } from "@/types";
 import { Button } from "@repo/ui";
 
@@ -35,7 +35,7 @@ export const FieldActionContext = createContext<{
   };
 }>({
   actions: defaultActions,
-  setActions: () => {},
+  setActions: () => { },
   crudAccess: { create: false, read: false, update: false, delete: false },
 });
 const ListPermissionContainer = ({
@@ -53,6 +53,9 @@ const ListPermissionContainer = ({
   const [getAllFields, { data, error, loading }] = useLazyQuery(serverFetch);
   const [getAllFieldPermissions, getAllFieldPermissionsResponse] =
     useLazyQuery(serverFetch);
+
+  const [createMultipleFieldPermission, createMultipleFieldPermissionResponse] = useLazyQuery(serverFetch);
+  const [updateMultipleFieldPermission, updateMultipleFieldPermissionResponse] = useLazyQuery(serverFetch);
   const { id } = useParams();
   const [modelFields, setModelFields] = useState<PermissionType[]>([]);
   const [actions, setActions] =
@@ -68,16 +71,12 @@ const ListPermissionContainer = ({
       LIST_ALL_FIELD_PERMISSIONS,
       {
         where: {
-          AND: [
-            {
-              model: {
-                is: id,
-              },
-              profile: {
-                is: selectedProfile,
-              },
-            },
-          ],
+          model: {
+            is: id,
+          },
+          profile: {
+            is: selectedProfile,
+          },
         },
         limit: 100,
       },
@@ -142,15 +141,48 @@ const ListPermissionContainer = ({
           else return null;
         })
         .filter((item: any) => item !== null);
-      console.log([...modifiedFields, ...modifiedFieldsWithModelAccess]);
 
       setModelFields([...modifiedFields, ...modifiedFieldsWithModelAccess]);
     }
   }, [data, error, loading]);
 
   const handleTabelUpdate = () => {
-    console.log(actions);
-  };
+    const fieldPermissionIds: string[] =
+      getAllFieldPermissionsResponse.data?.listFieldPermissions?.docs.map(
+        (item: PermissionType) => item?.id
+      );
+
+    const modelFieldIds: string[] = data?.listModelFields?.docs.map((item: ModelFieldType) => item?.id);
+    const createInput: { modelField: string, read: boolean, update: boolean, create: boolean, delete: boolean, profile: string }[] = [];
+    const updateInput: { id: string, read: boolean, update: boolean, create: boolean, delete: boolean }[] = [];
+    actions.forEach((value, key, map) => {
+      if (modelFieldIds.includes(key)) {
+        createInput.push({
+          modelField: key,
+          create: value.create,
+          update: value.update,
+          delete: value.delete,
+          read: value.read,
+          profile: selectedProfile
+        })
+      }
+    })
+
+    actions.forEach((value, key, map) => {
+      if (fieldPermissionIds.includes(key)) {
+        updateInput.push({
+          id: key,
+          create: value.create,
+          update: value.update,
+          delete: value.delete,
+          read: value.read
+        })
+      }
+    })
+
+    console.log(createInput, "    ", updateInput);
+
+  }
   return (
     <div className="flex flex-col justify-center items-center">
       <FieldActionContext.Provider value={{ actions, setActions, crudAccess }}>
