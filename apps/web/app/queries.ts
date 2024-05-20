@@ -672,7 +672,6 @@ export const LIST_ALL_PROFILES = `query Docs($limit: Int!) {
 }
 `;
 
-
 export const CREATE_PROFILE = `
 mutation CreateProfile($input: ProfileInput!) {
   createProfile(input: $input) {
@@ -681,7 +680,7 @@ mutation CreateProfile($input: ProfileInput!) {
     name
   }
 }
-`
+`;
 
 export const UPDATE_PROFILE = `mutation UpdateProfile($input: updateProfileInput!) {
   updateProfile(input: $input) {
@@ -689,7 +688,7 @@ export const UPDATE_PROFILE = `mutation UpdateProfile($input: updateProfileInput
     name
     label
   }
-}`
+}`;
 
 export const GET_PROFILE = `query GetProfile($where: whereProfileInput!) {
   getProfile(where: $where) {
@@ -697,12 +696,11 @@ export const GET_PROFILE = `query GetProfile($where: whereProfileInput!) {
     label
     name
   }
-}`
-
+}`;
 
 export const DELETE_PROFILE = `mutation DeleteProfile($deleteProfileId: ID!) {
   deleteProfile(id: $deleteProfileId)
-}`
+}`;
 
 export const GET_MODEL_PERMISSIONS = `query Docs {
   listPermissions {
@@ -729,9 +727,9 @@ export const GET_MODEL_PERMISSIONS = `query Docs {
       updatedOn
     }
   }
-}`
+}`;
 
-export const CREATE_PERMISSION =`
+export const CREATE_PERMISSION = `
 mutation CreatePermission($input: PermissionInput!) {
   createPermission(input: $input) {
     id
@@ -751,9 +749,9 @@ mutation CreatePermission($input: PermissionInput!) {
     createdOn
     updatedOn
   }
-}`
+}`;
 
-export const UPDATE_PERMISSION =`
+export const UPDATE_PERMISSION = `
 mutation UpdatePermission($input: updatePermissionInput!) {
   updatePermission(input: $input) {
     id
@@ -773,4 +771,33 @@ mutation UpdatePermission($input: updatePermissionInput!) {
     createdOn
     updatedOn
   }
-}`
+}`;
+
+export const LIST_ALL_FIELD_PERMISSIONS = `query Docs($where: whereFieldPermissionInput, $limit: Int!) {
+  listFieldPermissions(where: $where, limit: $limit) {
+    docs {
+      id
+      profile {
+        id
+        label
+        name
+      }
+      profileName
+      model {
+        id
+        label
+        name
+      }
+      modelName
+      fieldName
+      modelField {
+        id
+        label
+        fieldName
+      }
+      action
+      createdOn
+      updatedOn
+    }
+  }
+}`;
