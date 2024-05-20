@@ -68,16 +68,12 @@ const ListPermissionContainer = ({
       LIST_ALL_FIELD_PERMISSIONS,
       {
         where: {
-          AND: [
-            {
-              model: {
-                is: id,
-              },
-              profile: {
-                is: selectedProfile,
-              },
-            },
-          ],
+          model: {
+            is: id,
+          },
+          profile: {
+            is: selectedProfile,
+          },
         },
         limit: 100,
       },

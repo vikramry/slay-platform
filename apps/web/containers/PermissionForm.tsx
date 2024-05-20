@@ -1,16 +1,49 @@
-"use client"
-import { serverFetch } from '@/app/action';
-import { useLazyQuery } from '@/app/hook';
-import { CREATE_PERMISSION, GET_MODEL, GET_MODEL_PERMISSIONS, LIST_ALL_PROFILES, UPDATE_PERMISSION } from '@/app/queries';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useToast, Toaster, Form, FormField, FormItem, FormLabel, FormControl, FormMessage, Input, Select, SelectValue, SelectGroup, SelectLabel, SelectItem, SelectContent, Button, SelectTrigger, Checkbox } from '@repo/ui';
-import { ProfileType } from '@/types';
+"use client";
+import { serverFetch } from "@/app/action";
+import { useLazyQuery } from "@/app/hook";
+import {
+  CREATE_PERMISSION,
+  GET_MODEL,
+  GET_MODEL_PERMISSIONS,
+  LIST_ALL_PROFILES,
+  UPDATE_PERMISSION,
+} from "@/app/queries";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  useToast,
+  Toaster,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  Input,
+  Select,
+  SelectValue,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+  SelectContent,
+  Button,
+  SelectTrigger,
+  Checkbox,
+} from "@repo/ui";
+import { ProfileType } from "@/types";
 
-const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAccess }: { setFieldLevelAccessFlag: Function, setSelectedProfile: Function, setCrudAccess: Function }) => {
+const PermissionForm = ({
+  setFieldLevelAccessFlag,
+  setSelectedProfile,
+  setCrudAccess,
+}: {
+  setFieldLevelAccessFlag: Function;
+  setSelectedProfile: Function;
+  setCrudAccess: Function;
+}) => {
   const { toast } = useToast();
   const [edit, setEdit] = useState(false);
   const formSchema = z.object({
@@ -32,11 +65,14 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
       fieldLevelAccess: false,
     },
   });
-  const [getModelPermission, { data, loading, error }] = useLazyQuery(serverFetch);
+  const [getModelPermission, { data, loading, error }] =
+    useLazyQuery(serverFetch);
   const [getAllProfiles, getAllProfilesResponse] = useLazyQuery(serverFetch);
   const [getCurrentModel, getCurrentModelResponse] = useLazyQuery(serverFetch);
-  const [createPermission, createPermissionResponse] = useLazyQuery(serverFetch);
-  const [updatePermission, updatePermissionResponse] = useLazyQuery(serverFetch);
+  const [createPermission, createPermissionResponse] =
+    useLazyQuery(serverFetch);
+  const [updatePermission, updatePermissionResponse] =
+    useLazyQuery(serverFetch);
 
   const { id } = useParams();
 
@@ -47,28 +83,28 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
         limit: 100,
       },
       {
-        cahce: "no-store"
+        cahce: "no-store",
       }
-    )
+    );
 
     getCurrentModel(
       GET_MODEL,
       {
         where: {
           id: {
-            is: id
-          }
-        }
+            is: id,
+          },
+        },
       },
       {
-        cache: "no-store"
+        cache: "no-store",
       }
-    )
-  }, [])
+    );
+  }, []);
 
   useEffect(() => {
     if (getCurrentModelResponse.data) {
-      form.setValue("modelName", getCurrentModelResponse.data?.getModel.label)
+      form.setValue("modelName", getCurrentModelResponse.data?.getModel.label);
     }
     if (getCurrentModelResponse.error) {
       toast({
@@ -77,15 +113,14 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
         description: getCurrentModelResponse.error?.message,
       });
     }
-  }, [getCurrentModelResponse.data, getCurrentModelResponse.error])
-
+  }, [getCurrentModelResponse.data, getCurrentModelResponse.error]);
 
   useEffect(() => {
     if (getAllProfilesResponse.data) {
       if (getAllProfilesResponse.data?.listProfiles?.docs.length <= 0) {
         toast({
           variant: "destructive",
-          title: "No profiles found!!"
+          title: "No profiles found!!",
         });
       }
     }
@@ -96,34 +131,29 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
         description: getAllProfilesResponse.error?.message,
       });
     }
-  }, [getAllProfilesResponse.data, getAllProfilesResponse.error])
+  }, [getAllProfilesResponse.data, getAllProfilesResponse.error]);
 
   useEffect(() => {
-
     if (form.watch("profile")) {
       getModelPermission(
         GET_MODEL_PERMISSIONS,
         {
-          "where": {
-            "AND": [
-              {
-                "model": {
-                  "is": id
-                },
-                "profile": {
-                  "is": form.watch("profile")
-                }
-              }
-            ]
-          }
+          where: {
+            model: {
+              is: id,
+            },
+            profile: {
+              is: form.watch("profile"),
+            },
+          },
         },
         {
-          cache: "no-store"
+          cache: "no-store",
         }
-      )
+      );
       setSelectedProfile(form.watch("profile"));
     }
-  }, [form.watch("profile")])
+  }, [form.watch("profile")]);
 
   useEffect(() => {
     if (data) {
@@ -134,14 +164,28 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
           create: data?.listPermissions.docs[0].create,
           update: data?.listPermissions.docs[0].update,
           delete: data?.listPermissions.docs[0].delete,
-          read: data?.listPermissions.docs[0].read
-        })
-        form.setValue('create', data?.listPermissions.docs[0].create);
-        form.setValue('delete', data?.listPermissions.docs[0].delete);
-        form.setValue('fieldLevelAccess', data?.listPermissions.docs[0].fieldLevelAccess);
-        form.setValue('modelName', data?.listPermissions.docs[0].model?.label); // for user experience showing label
-        form.setValue('read', data?.listPermissions.docs[0].read);
-        form.setValue('update', data?.listPermissions.docs[0].update);
+          read: data?.listPermissions.docs[0].read,
+        });
+        form.setValue("create", data?.listPermissions.docs[0].create);
+        form.setValue("delete", data?.listPermissions.docs[0].delete);
+        form.setValue(
+          "fieldLevelAccess",
+          data?.listPermissions.docs[0].fieldLevelAccess
+        );
+        form.setValue("modelName", data?.listPermissions.docs[0].model?.label); // for user experience showing label
+        form.setValue("read", data?.listPermissions.docs[0].read);
+        form.setValue("update", data?.listPermissions.docs[0].update);
+      }
+      else{
+        form.setValue("create", false);
+        form.setValue("delete", false);
+        form.setValue(
+          "fieldLevelAccess",
+          false
+        );
+        form.setValue("read", false);
+        form.setValue("update", false);
+        setFieldLevelAccessFlag(false)
       }
     }
     if (error) {
@@ -156,35 +200,39 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
   useEffect(() => {
     if (updatePermissionResponse?.data) {
       toast({
-        title: "Permission Updated"
+        title: "Permission Updated",
       });
       window.location.reload();
-    }
-    else if (updatePermissionResponse?.error) {
+    } else if (updatePermissionResponse?.error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: error?.message,
       });
     }
-
-  }, [updatePermissionResponse.data, updatePermissionResponse.loading, updatePermissionResponse?.error])
+  }, [
+    updatePermissionResponse.data,
+    updatePermissionResponse.loading,
+    updatePermissionResponse?.error,
+  ]);
   useEffect(() => {
     if (createPermissionResponse?.data) {
       toast({
-        title: "Permission Updated"
+        title: "Permission Updated",
       });
       window.location.reload();
-    }
-    else if (createPermissionResponse?.error) {
+    } else if (createPermissionResponse?.error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: error?.message,
       });
     }
-
-  }, [createPermissionResponse.data, createPermissionResponse.loading, createPermissionResponse?.error])
+  }, [
+    createPermissionResponse.data,
+    createPermissionResponse.loading,
+    createPermissionResponse?.error,
+  ]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (edit) {
@@ -192,44 +240,46 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
       updatePermission(
         UPDATE_PERMISSION,
         {
-          "input": {
-            "create": values?.create,
-            "delete": values?.delete,
-            "fieldLevelAccess": values?.fieldLevelAccess,
-            "id": data?.listPermissions.docs[0].id,
-            "profile": form.watch("profile"),
-            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item: ProfileType) => item.id === form.watch("profile")).name,
-            "read": values?.read,
-            "update": values?.update
-          }
+          input: {
+            create: values?.create,
+            delete: values?.delete,
+            fieldLevelAccess: values?.fieldLevelAccess,
+            id: data?.listPermissions.docs[0].id,
+            profile: form.watch("profile"),
+            profileName: getAllProfilesResponse.data?.listProfiles?.docs.find(
+              (item: ProfileType) => item.id === form.watch("profile")
+            ).name,
+            read: values?.read,
+            update: values?.update,
+          },
         },
         {
-          cache: "no-store"
+          cache: "no-store",
         }
-      )
-
-    }
-    else {
+      );
+    } else {
       //create query
       createPermission(
         CREATE_PERMISSION,
         {
-          "input": {
-            "create": values?.create,
-            "delete": values?.delete,
-            "fieldLevelAccess": values?.fieldLevelAccess,
-            "model": id,
-            "modelName": getCurrentModelResponse.data?.getModel.name,
-            "profile": values?.profile,
-            "profileName": getAllProfilesResponse.data?.listProfiles?.docs.find((item: ProfileType) => item.id === form.watch("profile")).name,
-            "read": values?.read,
-            "update": values?.update
-          }
+          input: {
+            create: values?.create,
+            delete: values?.delete,
+            fieldLevelAccess: values?.fieldLevelAccess,
+            model: id,
+            modelName: getCurrentModelResponse.data?.getModel.name,
+            profile: values?.profile,
+            profileName: getAllProfilesResponse.data?.listProfiles?.docs.find(
+              (item: ProfileType) => item.id === form.watch("profile")
+            ).name,
+            read: values?.read,
+            update: values?.update,
+          },
         },
         {
-          cache: "no-store"
+          cache: "no-store",
         }
-      )
+      );
     }
   }
   return (
@@ -247,20 +297,20 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
                 <FormItem>
                   <FormLabel>Profile</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="">
                         <SelectValue placeholder="Select a Profile" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Profiles</SelectLabel>
-                          {getAllProfilesResponse?.data?.listProfiles.docs.map((profile: any) =>
-                            <SelectItem value={profile.id}>{profile.label}</SelectItem>
+                          {getAllProfilesResponse?.data?.listProfiles.docs.map(
+                            (profile: any) => (
+                              <SelectItem value={profile.id}>
+                                {profile.label}
+                              </SelectItem>
+                            )
                           )}
-
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -269,7 +319,7 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
                 </FormItem>
               )}
             />
-            {form.watch('profile') &&
+            {form.watch("profile") && (
               <>
                 <FormField
                   control={form.control}
@@ -278,7 +328,11 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
                     <FormItem>
                       <FormLabel>Model Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Model Name" {...field} disabled={true} />
+                        <Input
+                          placeholder="Model Name"
+                          {...field}
+                          disabled={true}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -373,9 +427,7 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
                   )}
                 />
               </>
-            }
-
-
+            )}
           </div>
           <div className="flex justify-center items-center">
             <Button
@@ -389,7 +441,7 @@ const PermissionForm = ({ setFieldLevelAccessFlag, setSelectedProfile, setCrudAc
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default PermissionForm
+export default PermissionForm;

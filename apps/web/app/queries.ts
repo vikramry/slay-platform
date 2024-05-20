@@ -702,8 +702,8 @@ export const DELETE_PROFILE = `mutation DeleteProfile($deleteProfileId: ID!) {
   deleteProfile(id: $deleteProfileId)
 }`;
 
-export const GET_MODEL_PERMISSIONS = `query Docs {
-  listPermissions {
+export const GET_MODEL_PERMISSIONS = `query ListPermissions( $where: wherePermissionInput) {
+  listPermissions( where: $where) {
     docs {
       id
       profile {
