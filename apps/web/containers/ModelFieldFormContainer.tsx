@@ -25,7 +25,7 @@ import {
     Toaster,
     useToast,
 } from "@repo/ui";
-import { useParams } from "next/navigation";
+import { useParams,useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -71,6 +71,8 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     const [getModelFieldsForeign, getModelFieldsForeignResponse] = useLazyQuery(serverFetch);
     const { id, fieldId } = useParams();
     const { toast } = useToast();
+
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -300,8 +302,11 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     useEffect(() => {
         if (data) {
             toast({
-                title: "Model Field Created"
-            });
+                title: "Model Field Created",
+            }),
+            setTimeout(()=>{
+                router.back();
+            },1000)
         } else if (error) {
             toast({
                 variant: "destructive",
@@ -314,7 +319,10 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
         if (updateModelFieldResponse.data) {
             toast({
                 title: "Model Field Updated"
-            });
+            }),
+            setTimeout(()=>{
+                router.back();
+            },1000)
         } else if (updateModelFieldResponse.error) {
             toast({
                 variant: "destructive",
@@ -324,9 +332,11 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
         }
     }, [updateModelFieldResponse.data, updateModelFieldResponse.error, updateModelFieldResponse.loading])
     return (
+      
         <Form {...form}>
-            <Toaster />
+               <Toaster />
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                     <FormField
                         control={form.control}
@@ -712,7 +722,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                         variant="default"
                         className="flex justify-center items-center w-fit"
                     >
-                        Submit
+                        {loading?"loading...":"Submit"}
                     </Button>
                 </div>
             </form>

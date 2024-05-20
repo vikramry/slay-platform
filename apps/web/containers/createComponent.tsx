@@ -118,9 +118,10 @@ const CreatComponent = ({edit=false}:{edit?:boolean}) => {
           <Button
             type="submit"
             variant="default"
+            
             className="flex justify-center items-center w-fit"
           >
-            Submit
+        Submit
           </Button>
         </div>      </form>
     </Form>

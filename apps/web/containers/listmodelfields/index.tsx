@@ -52,6 +52,7 @@ const ListModelfields = () => {
     <div>
       <DataTable
         columns={modelFieldColumns}
+        loading={loading}
         filterBy="fieldName"
         data={modelFieldData}
         text="Create Model Field"

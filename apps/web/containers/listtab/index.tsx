@@ -34,6 +34,7 @@ const ListTabs = () => {
     <div>
       <DataTable
         columns={tabsColumns}
+        loading={loading}
         data={tabsData}
         url="/dashboard/tabs/createTab"
         text="Create tab"

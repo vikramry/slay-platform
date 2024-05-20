@@ -219,9 +219,10 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
           <Button
             type="submit"
             variant="default"
+            disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            Submit
+            {loading?"loading...":"Submit"}
           </Button>
         </div>{" "}
       </form>

@@ -48,6 +48,7 @@ const ListFieldOptions = () => {
     <div>
       <DataTable
         columns={fieldOptionsColumns}
+        loading={loading}
         data={ListFieldOptionsData || []}
         filterBy={"keyName"}
         text={"Create Field Option"}

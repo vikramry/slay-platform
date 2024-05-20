@@ -170,6 +170,7 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
     <Form {...form}>
       <Toaster />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
           <FormField
             control={form.control}
@@ -238,10 +239,10 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         <div className="flex justify-center items-center">
           <Button
             type="submit"
-            variant="default"
+            disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            Submit
+           {loading?"loading...":"Submit"} 
           </Button>
         </div>{" "}
       </form>

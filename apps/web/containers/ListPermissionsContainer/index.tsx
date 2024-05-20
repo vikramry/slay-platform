@@ -156,6 +156,7 @@ const ListPermissionContainer = ({
       <FieldActionContext.Provider value={{ actions, setActions, crudAccess }}>
         <DataTable
           columns={permissionColumns}
+          loading={loading}
           data={modelFields || []}
           filterBy={""}
         />

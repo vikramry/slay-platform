@@ -256,7 +256,8 @@ export const modelColumns: ColumnDef<Model>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
-          window.location.reload();
+          setTimeout(()=>{
+          window.location.reload()},1000);
         }
         if (error) {
           toast({
@@ -465,10 +466,10 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       useEffect(() => {
         if (data) {
           toast({
-            title: "Model Deleted Successfully.",
+            title: "Model Field Deleted Successfully."
           });
 
-          window.location.reload();
+          window.location.reload()
 
         }
         if (error) {
@@ -493,6 +494,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       };
       return (
         <DropdownMenu>
+            <Toaster />
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -976,7 +978,8 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
         if (data) {
           toast({
             title: "Fieldoption Deleted Successfully.",
-          });
+          }),
+          window.location.reload();
 
         }
         if (error) {
