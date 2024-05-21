@@ -153,7 +153,7 @@ const ListPermissionContainer = ({
         <DataTable
           columns={permissionColumns}
           data={modelFields || []}
-          filterBy={""}
+          filterBy={"modelField_label"}
         />
       </FieldActionContext.Provider>
       <Button className="mt-5" onClick={handleTabelUpdate}>

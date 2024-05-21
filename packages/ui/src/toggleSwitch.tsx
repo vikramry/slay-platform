@@ -5,7 +5,6 @@ import { useTheme } from "next-themes";
 export const ModeToggleButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
-  console.log(currentTheme, "theme1`");
   
   
   useEffect(() => {

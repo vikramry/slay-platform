@@ -45,7 +45,10 @@ import {
 } from "@/app/queries";
 import { title } from "process";
 import { usePathname, useRouter } from "next/navigation";
-import { FieldActionContext, setActionFromTable } from "@/containers/ListPermissionsContainer";
+import {
+  FieldActionContext,
+  setActionFromTable,
+} from "@/containers/ListPermissionsContainer";
 // import { DeletePopupComp } from "@repo/ui/deletePopupComp";
 
 // This type is used to define the shape of our data.
@@ -248,7 +251,7 @@ export const modelColumns: ColumnDef<Model>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const { toast } = useToast()
+      const { toast } = useToast();
       const [handledeleteModel, { data, loading, error }] =
         useLazyQuery(serverFetch);
       useEffect(() => {
@@ -469,7 +472,6 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
           });
 
           window.location.reload();
-
         }
         if (error) {
           toast({
@@ -635,7 +637,6 @@ export const tabsColumns: ColumnDef<TabType>[] = [
         useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
-
           toast({
             title: "Tab Deleted Successfully.",
             description: "Successful Deleted",
@@ -643,9 +644,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
 
           setTimeout(function () {
             window.location.reload();
-          }, 2000)
-
-
+          }, 2000);
         }
         if (error) {
           toast({
@@ -977,7 +976,6 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           toast({
             title: "Fieldoption Deleted Successfully.",
           });
-
         }
         if (error) {
           toast({
@@ -1220,9 +1218,8 @@ export const userColumns: ColumnDef<User>[] = [
 
       useEffect(() => {
         if (data) {
-
           toast({
-            title: "User deleted Successfully."
+            title: "User deleted Successfully.",
           }),
             setTimeout(function () {
               window.location.reload();
@@ -1389,9 +1386,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
         handledeleteProfile(
           DELETE_PROFILE,
           {
-
-            "deleteProfileId": row.original.id
-
+            deleteProfileId: row.original.id,
           },
 
           {
@@ -1445,7 +1440,6 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
   },
 ];
 
-
 export const permissionColumns: ColumnDef<PermissionType>[] = [
   {
     accessorKey: "modelField.label",
@@ -1466,7 +1460,6 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
     accessorKey: "create",
     header: "Create",
     cell: ({ row }) => {
-
       const context = useContext(FieldActionContext);
 
       return (
@@ -1475,7 +1468,8 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("create")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              const oldValuesIfExists =
+                context.actions.get(row.original.id) || context.crudAccess;
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: value,
@@ -1487,14 +1481,13 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             aria-label="Select all"
           />
         </div>
-      )
-    }
+      );
+    },
   },
   {
     accessorKey: "update",
     header: "Update",
     cell: ({ row }) => {
-
       const context = useContext(FieldActionContext);
 
       return (
@@ -1503,7 +1496,8 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("update")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              const oldValuesIfExists =
+                context.actions.get(row.original.id) || context.crudAccess;
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: oldValuesIfExists?.create || false,
@@ -1515,14 +1509,13 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             aria-label="Select all"
           />
         </div>
-      )
-    }
+      );
+    },
   },
   {
     accessorKey: "read",
     header: "Read",
     cell: ({ row }) => {
-
       const context = useContext(FieldActionContext);
 
       return (
@@ -1531,7 +1524,8 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("read")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              const oldValuesIfExists =
+                context.actions.get(row.original.id) || context.crudAccess;
               newActions.set(row.original.id, {
                 read: value,
                 create: oldValuesIfExists?.create || false,
@@ -1543,14 +1537,13 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             aria-label="Select all"
           />
         </div>
-      )
-    }
+      );
+    },
   },
   {
     accessorKey: "delete",
     header: "Delete",
     cell: ({ row }) => {
-
       const context = useContext(FieldActionContext);
 
       return (
@@ -1559,7 +1552,8 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("delete")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists = context.actions.get(row.original.id) || context.crudAccess;
+              const oldValuesIfExists =
+                context.actions.get(row.original.id) || context.crudAccess;
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: oldValuesIfExists?.create || false,
@@ -1571,8 +1565,8 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             aria-label="Select all"
           />
         </div>
-      )
-    }
+      );
+    },
   },
   {
     accessorKey: "createdBy.name",
@@ -1622,7 +1616,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
           });
           setTimeout(function () {
             window.location.reload();
-          }, 2000)
+          }, 2000);
         }
         if (error) {
           toast({
@@ -1659,30 +1653,8 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy Profile ID
+              Copy Field Permission ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-
-            <Link
-              href={`/dashboard/profiles/${row.original.id}/edit`}
-              className="cursor-pointer"
-            >
-              <DropdownMenuItem>Update Profile</DropdownMenuItem>
-            </Link>
-            <DropdownMenuLabel>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer">
-                    <Trash2 size={14} /> Delete Profile
-                  </div>
-                </AlertDialogTrigger>
-                <DeletePopupComp
-                  inputText={row.original.name}
-                  onclick={handleModelDelete}
-                  type="PROFILE"
-                />
-              </AlertDialog>
-            </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
       );
