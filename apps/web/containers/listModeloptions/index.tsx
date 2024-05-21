@@ -34,7 +34,7 @@ const ListModeloptions = () => {
     }
   }, [data, loading, error])
   return (
-    <DataTable columns={modelOptionsColumns} filterBy="keyName" data={data?.listModelOptions?.docs || []} url="options/createModelOptions" text="Create model options" />
+    <DataTable columns={modelOptionsColumns} loading={loading} filterBy="keyName" data={data?.listModelOptions?.docs || []} url="options/createModelOptions" text="Create model options" />
 
   )
 }

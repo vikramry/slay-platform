@@ -4,8 +4,8 @@ import { serverFetch } from "@/app/action"
 import { useLazyQuery } from "@/app/hook"
 import { CreateModelOptionsQuary, GET_MODEL, UpdateModelOptionQuary, getModelOptionQuary } from "@/app/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from "@repo/ui"
-import { useParams } from "next/navigation"
+import { Button, Checkbox, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue,  Toaster, toast, useToast } from "@repo/ui"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -31,9 +31,10 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
     const [createModelOption, { data, loading, error }] = useLazyQuery(serverFetch);
     const [updateModelOption, updateModelOptionResponse] = useLazyQuery(serverFetch);
     const [getCurrentModel, getCurrentModelResponse] = useLazyQuery(serverFetch);
+    const { toast } = useToast();
 
     const [getModelOption, getModelOptionResponse] = useLazyQuery(serverFetch);
-
+    const router = useRouter();
     const { id, modelOptionId } = useParams();
     const getFieldOptionFun = () => {
         getModelOption(
@@ -91,9 +92,10 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
     useEffect(() => {
         if (updateModelOptionResponse.data) {
             toast({
-                title: "Success",
+                title: "Successfully updated",
                 description: "Successful updated",
             })
+           router.back();
         }
         else if (updateModelOptionResponse?.error) {
             toast({
@@ -154,6 +156,12 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
     }
     useEffect(() => {
         if (data) {
+        toast({
+            titile:"Model Option Created Successfully.",
+        }),
+        setTimeout(()=>{
+            router.back();
+        },1000)    
 
         } else if (error) {
             toast({
@@ -168,9 +176,10 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
 
     return (
         <Form {...form}>
+              <Toaster/>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
-
+            
                     <FormField
                         control={form.control}
                         name="keyName"
@@ -265,9 +274,10 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
                     <Button
                         type="submit"
                         variant="default"
+                        disabled={loading}
                         className="flex justify-center items-center w-fit"
                     >
-                        Submit
+                       {loading?"loading...":"Submit"}
                     </Button>
                 </div>      </form>
         </Form>

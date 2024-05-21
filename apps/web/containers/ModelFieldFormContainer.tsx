@@ -32,7 +32,7 @@ import {
   Toaster,
   useToast,
 } from "@repo/ui";
-import { useParams } from "next/navigation";
+import { useParams,useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
