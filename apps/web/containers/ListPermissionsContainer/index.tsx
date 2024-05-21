@@ -1,11 +1,19 @@
 "use client";
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { LIST_ALL_FIELD_PERMISSIONS, getlistmodelfields } from "@/app/queries";
+import {
+  CREATE_BULK_FIELD_PERMISSIONS,
+  LIST_ALL_FIELD_PERMISSIONS,
+  UPDATE_BULK_FIELD_PERMISSIONS,
+  getlistmodelfields,
+} from "@/app/queries";
 import { useParams } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { DataTable } from "@repo/ui";
-import { fieldOptionsColumns, permissionColumns } from "@/app/(dashboardLayout)/dashboard/columns";
+import { DataTable, Toaster, useToast } from "@repo/ui";
+import {
+  fieldOptionsColumns,
+  permissionColumns,
+} from "@/app/(dashboardLayout)/dashboard/columns";
 import { ModelFieldType, PermissionType } from "@/types";
 import { Button } from "@repo/ui";
 
@@ -35,7 +43,7 @@ export const FieldActionContext = createContext<{
   };
 }>({
   actions: defaultActions,
-  setActions: () => { },
+  setActions: () => {},
   crudAccess: { create: false, read: false, update: false, delete: false },
 });
 const ListPermissionContainer = ({
@@ -54,9 +62,12 @@ const ListPermissionContainer = ({
   const [getAllFieldPermissions, getAllFieldPermissionsResponse] =
     useLazyQuery(serverFetch);
 
-  const [createMultipleFieldPermission, createMultipleFieldPermissionResponse] = useLazyQuery(serverFetch);
-  const [updateMultipleFieldPermission, updateMultipleFieldPermissionResponse] = useLazyQuery(serverFetch);
+  const [createMultipleFieldPermission, createMultipleFieldPermissionResponse] =
+    useLazyQuery(serverFetch);
+  const [updateMultipleFieldPermission, updateMultipleFieldPermissionResponse] =
+    useLazyQuery(serverFetch);
   const { id } = useParams();
+  const { toast } = useToast();
   const [modelFields, setModelFields] = useState<PermissionType[]>([]);
   const [actions, setActions] =
     useState<
@@ -114,7 +125,7 @@ const ListPermissionContainer = ({
     if (data) {
       const fieldPermissionIds: string[] =
         getAllFieldPermissionsResponse.data?.listFieldPermissions?.docs.map(
-          (item: PermissionType) => item?.id
+          (item: PermissionType) => item?.modelField.id
         );
       const modifiedFields =
         getAllFieldPermissionsResponse.data?.listFieldPermissions?.docs.map(
@@ -152,9 +163,25 @@ const ListPermissionContainer = ({
         (item: PermissionType) => item?.id
       );
 
-    const modelFieldIds: string[] = data?.listModelFields?.docs.map((item: ModelFieldType) => item?.id);
-    const createInput: { modelField: string, read: boolean, update: boolean, create: boolean, delete: boolean, profile: string }[] = [];
-    const updateInput: { id: string, read: boolean, update: boolean, create: boolean, delete: boolean }[] = [];
+    const modelFieldIds: string[] = data?.listModelFields?.docs.map(
+      (item: ModelFieldType) => item?.id
+    );
+    const createInput: {
+      modelField: string;
+      read: boolean;
+      update: boolean;
+      create: boolean;
+      delete: boolean;
+      profile: string;
+      model: string;
+    }[] = [];
+    const updateInput: {
+      id: string;
+      read: boolean;
+      update: boolean;
+      create: boolean;
+      delete: boolean;
+    }[] = [];
     actions.forEach((value, key, map) => {
       if (modelFieldIds.includes(key)) {
         createInput.push({
@@ -163,10 +190,11 @@ const ListPermissionContainer = ({
           update: value.update,
           delete: value.delete,
           read: value.read,
-          profile: selectedProfile
-        })
+          profile: selectedProfile,
+          model: String(id),
+        });
       }
-    })
+    });
 
     actions.forEach((value, key, map) => {
       if (fieldPermissionIds.includes(key)) {
@@ -175,16 +203,69 @@ const ListPermissionContainer = ({
           create: value.create,
           update: value.update,
           delete: value.delete,
-          read: value.read
-        })
+          read: value.read,
+        });
       }
-    })
+    });
 
-    console.log(createInput, "    ", updateInput);
+    createMultipleFieldPermission(
+      CREATE_BULK_FIELD_PERMISSIONS,
+      {
+        input: createInput,
+      },
+      {
+        cache: "no-store",
+      }
+    );
+    updateMultipleFieldPermission(
+      UPDATE_BULK_FIELD_PERMISSIONS,
+      {
+        input: updateInput,
+      },
+      {
+        cache: "no-store",
+      }
+    );
+    
+  };
 
-  }
+  useEffect(() => {
+    if (
+      createMultipleFieldPermissionResponse.data &&
+      updateMultipleFieldPermissionResponse.data
+    ) {
+      toast({
+        title: "Field permissions updated !!",
+      });
+      setActions(defaultActions);
+    }
+
+    if (
+      createMultipleFieldPermissionResponse.error ||
+      updateMultipleFieldPermissionResponse.error
+    ) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: createMultipleFieldPermissionResponse?.error?.message,
+      });
+
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: updateMultipleFieldPermissionResponse?.error?.message,
+      });
+    }
+  }, [
+    createMultipleFieldPermissionResponse.data,
+    createMultipleFieldPermissionResponse.error,
+    updateMultipleFieldPermissionResponse.data,
+    updateMultipleFieldPermissionResponse.error,
+  ]);
+
   return (
     <div className="flex flex-col justify-center items-center">
+      <Toaster />
       <FieldActionContext.Provider value={{ actions, setActions, crudAccess }}>
         <DataTable
           columns={permissionColumns}

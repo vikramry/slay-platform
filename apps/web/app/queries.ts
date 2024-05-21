@@ -777,6 +777,10 @@ export const LIST_ALL_FIELD_PERMISSIONS = `query Docs($where: whereFieldPermissi
   listFieldPermissions(where: $where, limit: $limit) {
     docs {
       id
+      read
+      create
+      update
+      delete
       profile {
         id
         label
@@ -795,9 +799,28 @@ export const LIST_ALL_FIELD_PERMISSIONS = `query Docs($where: whereFieldPermissi
         label
         fieldName
       }
-      action
       createdOn
       updatedOn
     }
+  }
+}`;
+
+export const CREATE_BULK_FIELD_PERMISSIONS = `mutation CreateFieldPermissions($input: [FieldPermissionInput!]!) {
+  createFieldPermissions(input: $input) {
+    id
+    create
+    read
+    update
+    delete
+  }
+}`;
+
+export const UPDATE_BULK_FIELD_PERMISSIONS = `mutation UpdateFieldPermissions($input: [updateFieldPermissionInput!]!) {
+  updateFieldPermissions(input: $input) {
+    id
+    delete
+    create
+    read
+    update
   }
 }`;
