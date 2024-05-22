@@ -14,7 +14,15 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
 } from "@repo/ui";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -36,14 +44,16 @@ const formSchema = z.object({
   }),
 });
 
-const CreatComponent = ({ edit = false }: { edit?: boolean }) => {
+const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
 
+  const [editorLanguage, setEditorLanguage] = useState("javascript");
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(btoa(values.code), "    ", atob("Ly8gcGFzdGUgeW91ciBjb2RlIGhlcmUNCg0KY29uc3QgYTpzdHJpbmcgPSAicHJhdmVlbiI=")); // convert string to base64 encoded string and vice-versa 
+    
   }
 
   return (
@@ -119,16 +129,30 @@ const CreatComponent = ({ edit = false }: { edit?: boolean }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Code</FormLabel>
+                  <div className="w-[200px]">
+                    <Select onValueChange={(value: string) => setEditorLanguage(value)} value={editorLanguage}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select Language" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Languages</SelectLabel>
+                          <SelectItem value="javascript">Javascript</SelectItem>
+                          <SelectItem value="typescript">Typescript</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <FormControl>
-                    {/* <Textarea placeholder="Code here."  {...field} /> */}
+
                     <Editor
                       height="350px"
                       width={`90%`}
-                      language="javascript"
+                      language={editorLanguage}
                       value={field.value}
                       theme={"hc-light"}
                       defaultValue="// paste your code here"
-                      onChange={field.handleChange}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -150,4 +174,4 @@ const CreatComponent = ({ edit = false }: { edit?: boolean }) => {
     </Form>
   );
 };
-export default CreatComponent;
+export default ComponentForm;
