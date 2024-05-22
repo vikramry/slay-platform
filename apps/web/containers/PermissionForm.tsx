@@ -153,6 +153,7 @@ const PermissionForm = ({
       );
       setSelectedProfile(form.watch("profile"));
     }
+    setEdit(false);
   }, [form.watch("profile")]);
 
   useEffect(() => {

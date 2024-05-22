@@ -95,7 +95,7 @@ const ListPermissionContainer = ({
         cache: "no-store",
       }
     );
-  }, []);
+  }, [selectedProfile]);
 
   useEffect(() => {
     if (getAllFieldPermissionsResponse.data) {

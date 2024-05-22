@@ -17,7 +17,7 @@ const page = () => {
   return (
     <div>
       <PermissionForm setFieldLevelAccessFlag={setFieldLevelAccessFlag} setSelectedProfile={setSelectedProfile} setCrudAccess={setCrudAccess} />
-      {fieldLevelAccessFlag && <ListPermissionContainer selectedProfile={selectedProfile} crudAccess={crudAccess} />}
+      {fieldLevelAccessFlag && selectedProfile && <ListPermissionContainer selectedProfile={selectedProfile} crudAccess={crudAccess} />}
     </div>
   )
 }
