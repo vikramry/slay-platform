@@ -1,11 +1,22 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Checkbox, Form, FormControl, Textarea, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from "@repo/ui"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Editor } from "@monaco-editor/react";
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  Textarea,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from "@repo/ui";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string({
@@ -22,28 +33,23 @@ const formSchema = z.object({
   }),
   modules: z.array(z.string(), {
     required_error: "Modules is required",
+  }),
+});
 
-  })
-
-})
-
-const CreatComponent = ({edit=false}:{edit?:boolean}) => {
+const CreatComponent = ({ edit = false }: { edit?: boolean }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-    },
-  })
+    defaultValues: {},
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log(values);
   }
-  // ...
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
-
           <FormField
             control={form.control}
             name="name"
@@ -78,20 +84,7 @@ const CreatComponent = ({edit=false}:{edit?:boolean}) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="description ."  {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="code"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Code</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Code here."  {...field} />
+                  <Textarea placeholder="Description" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,27 +97,57 @@ const CreatComponent = ({edit=false}:{edit?:boolean}) => {
               <FormItem>
                 <FormLabel>Modules</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Modules"  {...field} onChange={(event) => {
-                    const modules = event.target.value.split(",").map((value: string) => value.trim());
-                    field.onChange(modules);
-                  }} />
+                  <Textarea
+                    placeholder="Modules"
+                    {...field}
+                    onChange={(event) => {
+                      const modules = event.target.value
+                        .split(",")
+                        .map((value: string) => value.trim());
+                      field.onChange(modules);
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <div className="col-span-2">
+            <FormField
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Code</FormLabel>
+                  <FormControl>
+                    {/* <Textarea placeholder="Code here."  {...field} /> */}
+                    <Editor
+                      height="350px"
+                      width={`90%`}
+                      language="javascript"
+                      value={field.value}
+                      theme={"hc-light"}
+                      defaultValue="// paste your code here"
+                      onChange={field.handleChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
         <div className="flex justify-center items-center">
           <Button
             type="submit"
             variant="default"
-            
             className="flex justify-center items-center w-fit"
           >
-        Submit
+            Submit
           </Button>
-        </div>      </form>
+        </div>{" "}
+      </form>
     </Form>
-  )
-}
-export default CreatComponent
+  );
+};
+export default CreatComponent;

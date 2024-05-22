@@ -95,7 +95,7 @@ const ListPermissionContainer = ({
         cache: "no-store",
       }
     );
-  }, [selectedProfile]);
+  }, [crudAccess]);
 
   useEffect(() => {
     if (getAllFieldPermissionsResponse.data) {
