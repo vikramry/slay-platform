@@ -1,10 +1,11 @@
-import React from 'react'
-import CreatComponent from '../../../../../containers/createComponent'
-
+import ComponentForm from "@/containers/ComponentForm";
+import React from "react";
 function page() {
   return (
-    <div><CreatComponent/></div>
-  )
+    <div>
+      <ComponentForm />
+    </div>
+  );
 }
 
-export default page
+export default page;
