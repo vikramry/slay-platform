@@ -1150,8 +1150,8 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
               Copy Component ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
-              <DropdownMenuItem>View Component</DropdownMenuItem>
+            <Link href={`/dashboard/components/${row.original.id}/edit`} className="cursor-pointer">
+              <DropdownMenuItem>Update Component</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
               <AlertDialog>
