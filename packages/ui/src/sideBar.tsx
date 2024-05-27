@@ -127,11 +127,19 @@ export function SideBar() {
         link: `dashboard/model/${useParams()?.id}/layouts`,
       },
     ],
+    layout: [
+      {
+        title: "Structures",
+        link: `dashboard/model/${useParams()?.id}/layouts/${useParams()?.layoutId}/structures`,
+      },
+    ]
   };
   const sidebarData =
     data[
+
+    /\/layouts\/.+/.test(usePathname()) ? "layout" : 
       /\/model\/.+/.test(usePathname()) &&
-      !usePathname().includes("model/createModel")
+        !usePathname().includes("model/createModel")
         ? "model"
         : "default"
     ];
