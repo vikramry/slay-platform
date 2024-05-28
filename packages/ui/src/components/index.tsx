@@ -14,5 +14,6 @@ export * from './ui/alert'
 export * from './ui/toast'
 export * from './ui/use-toast'
 export * from './ui/toaster'
+export * from './ui/multi-selector'
 
 
