@@ -1,9 +1,12 @@
-import React from 'react'
+import ListLayouts from "@/containers/ListLayouts";
+import React from "react";
 
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <ListLayouts />
+    </div>
+  );
+};
 
-export default page
+export default page;

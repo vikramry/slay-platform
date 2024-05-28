@@ -91,6 +91,24 @@ const rules = [
       delete: true,
     },
   },
+  {
+    modelName: "Layout",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
+  {
+    modelName: "LayoutStructures",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+  },
 ];
 
 export const AdminProfile = mercury.access.createProfile("Admin", rules);

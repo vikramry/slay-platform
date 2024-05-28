@@ -45,7 +45,7 @@ export const CreateModelQuary = `
   }
   `;
 
-export const CreateLayoutQuery=`
+export const CreateLayoutQuery = `
 mutation CreateLayout($input: LayoutInput!) {
   createLayout(input: $input) {
     id
@@ -55,7 +55,7 @@ mutation CreateLayout($input: LayoutInput!) {
 }
 
 `;
-export const UpdateLayoutQuery=`
+export const UpdateLayoutQuery = `
 mutation UpdateLayout($input: updateLayoutInput!) {
   updateLayout(input: $input) {
     id
@@ -64,7 +64,6 @@ mutation UpdateLayout($input: updateLayoutInput!) {
   }
 }
 `;
-
 
 export const CreateTabQuary = `
   mutation CreateTab($input: TabInput!) {
@@ -631,6 +630,12 @@ export const DELETE_MODEL = `
     deleteModel(id: $deleteModelId)
   }
   `;
+
+export const DELETE_LAYOUT = `
+  mutation DeleteLayout($deleteLayoutId: ID!) {
+    deleteLayout(id: $deleteLayoutId)
+  }
+  `;
 export const DELETE_COMPONENT = `
   mutation DeleteComponent($deleteComponentId: ID!) {
     deleteComponent(id: $deleteComponentId)
@@ -701,8 +706,6 @@ mutation CreateProfile($input: ProfileInput!) {
   }
 }
 `;
-
-
 
 export const UPDATE_PROFILE = `mutation UpdateProfile($input: updateProfileInput!) {
   updateProfile(input: $input) {
@@ -885,3 +888,25 @@ query GetComponent($where: whereComponentInput!) {
   }
 }
 `;
+
+export const LIST_ALL_LAYOUTS = `query Docs($where: whereLayoutInput, $limit: Int!) {
+  listLayouts(where: $where, limit: $limit) {
+    docs {
+      id
+      model {
+        id
+        label
+        name
+      }
+      profiles {
+        id
+        label
+        name
+      }
+      name
+      label
+      createdOn
+      updatedOn
+    }
+  }
+}`;

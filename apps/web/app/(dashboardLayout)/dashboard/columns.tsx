@@ -37,6 +37,7 @@ import { serverFetch } from "@/app/action";
 import {
   DELETE_COMPONENT,
   DELETE_FIELD_OPTION,
+  DELETE_LAYOUT,
   DELETE_MODEL,
   DELETE_MODELFIELD,
   DELETE_MODELOPTION,
@@ -255,7 +256,7 @@ export const modelColumns: ColumnDef<Model>[] = [
             title: "Model Deleted Successfully.",
           });
           setTimeout(() => {
-            window.location.reload()
+            window.location.reload();
           }, 1000);
         }
         if (error) {
@@ -331,36 +332,42 @@ export const modelColumns: ColumnDef<Model>[] = [
   },
 ];
 
-export const LayoutColumns:ColumnDef<Layout>[]=[
+export const LayoutColumns: ColumnDef<Layout>[] = [
   {
-    accessorKey: "model",
+    accessorKey: "model.name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Model
+          Model Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("model")}</div>,
+    cell: ({ row }) => <div className="">{row.original.model.name}</div>,
   },
   {
-    accessorKey: "profile",
+    accessorKey: "profiles",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Profile
+          Profiles
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("profile")}</div>,
+    cell: ({ row }) => (
+      <div className="">
+        {row.original.profiles
+          ?.map((profile: ProfileType) => profile.label)
+          .join(", ") || "Default"}
+      </div>
+    ),
   },
   {
     accessorKey: "name",
@@ -439,8 +446,9 @@ export const LayoutColumns:ColumnDef<Layout>[]=[
           toast({
             title: "Layout Deleted Successfully.",
           });
-          setTimeout(()=>{
-          window.location.reload()},1000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         }
         if (error) {
           toast({
@@ -453,7 +461,7 @@ export const LayoutColumns:ColumnDef<Layout>[]=[
 
       const handleLayoutDelete = () => {
         handledeleteLayout(
-          DELETE_MODEL,
+          DELETE_LAYOUT,
           {
             deleteLayoutId: row.original.id,
           },
@@ -470,7 +478,6 @@ export const LayoutColumns:ColumnDef<Layout>[]=[
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <CircleEllipsis className="h-4 w-4" />
-              {/* <CircleEllipsis className="h-4 w-4" /> */}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -482,14 +489,14 @@ export const LayoutColumns:ColumnDef<Layout>[]=[
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link
-              href={`/dashboard/Layout/${row.original.id}`}
+              href={`/dashboard/model/${row.original.model.id}/layouts/${row.original.id}/structures`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>View Layout</DropdownMenuItem>
             </Link>
 
             <Link
-              href={`/dashboard/Layout/${row.original.id}/edit`}
+              href={`/dashboard/model/${row.original.model.id}/layouts/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Layout</DropdownMenuItem>
@@ -504,7 +511,7 @@ export const LayoutColumns:ColumnDef<Layout>[]=[
                 <DeletePopupComp
                   inputText={row.original.name}
                   onclick={handleLayoutDelete}
-                  type="Layout"
+                  type="LAYOUT"
                 />
               </AlertDialog>
             </DropdownMenuLabel>
@@ -513,7 +520,6 @@ export const LayoutColumns:ColumnDef<Layout>[]=[
       );
     },
   },
-  
 ];
 
 export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
@@ -650,7 +656,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       useEffect(() => {
         if (data) {
           toast({
-            title: "Model Field Deleted Successfully."
+            title: "Model Field Deleted Successfully.",
           });
 
           window.location.reload();
@@ -1055,7 +1061,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
                   </div>
                 </AlertDialogTrigger>
                 <DeletePopupComp
-                  inputText={row.original.name}
+                  inputText={row.original.keyName}
                   onclick={handleModeloptionDelete}
                   type="MODELOPTION"
                 />
@@ -1160,7 +1166,6 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
             title: "Fieldoption Deleted Successfully.",
           }),
             window.location.reload();
-
         }
         if (error) {
           toast({
@@ -1337,7 +1342,10 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
               Copy Component ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/dashboard/components/${row.original.id}/edit`} className="cursor-pointer">
+            <Link
+              href={`/dashboard/components/${row.original.id}/edit`}
+              className="cursor-pointer"
+            >
               <DropdownMenuItem>Update Component</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
@@ -1443,7 +1451,7 @@ export const userColumns: ColumnDef<User>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(row.original.id)}
             >
               Copy User ID
             </DropdownMenuItem>
@@ -1625,8 +1633,6 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
   },
 ];
 
-
-
 export const permissionColumns: ColumnDef<PermissionType>[] = [
   {
     accessorKey: "modelField.label",
@@ -1655,8 +1661,14 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("create")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists =
-                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
+              const oldValuesIfExists = context.actions.get(
+                row.original.id
+              ) || {
+                create: row.original.create,
+                update: row.original.update,
+                delete: row.original.delete,
+                read: row.original.read,
+              };
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: value,
@@ -1683,8 +1695,14 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("update")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists =
-                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
+              const oldValuesIfExists = context.actions.get(
+                row.original.id
+              ) || {
+                create: row.original.create,
+                update: row.original.update,
+                delete: row.original.delete,
+                read: row.original.read,
+              };
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: oldValuesIfExists?.create || false,
@@ -1711,8 +1729,14 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("read")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists =
-                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
+              const oldValuesIfExists = context.actions.get(
+                row.original.id
+              ) || {
+                create: row.original.create,
+                update: row.original.update,
+                delete: row.original.delete,
+                read: row.original.read,
+              };
               newActions.set(row.original.id, {
                 read: value,
                 create: oldValuesIfExists?.create || false,
@@ -1739,8 +1763,14 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             defaultChecked={row.getValue("delete")}
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
-              const oldValuesIfExists =
-                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
+              const oldValuesIfExists = context.actions.get(
+                row.original.id
+              ) || {
+                create: row.original.create,
+                update: row.original.update,
+                delete: row.original.delete,
+                read: row.original.read,
+              };
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: oldValuesIfExists?.create || false,

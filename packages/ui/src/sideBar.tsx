@@ -137,7 +137,7 @@ export function SideBar() {
   const sidebarData =
     data[
 
-    /\/layouts\/.+/.test(usePathname()) ? "layout" : 
+    /\/layouts\/.+/.test(usePathname()) && !usePathname().includes("layouts/add") ? "layout" : 
       /\/model\/.+/.test(usePathname()) &&
         !usePathname().includes("model/createModel")
         ? "model"
