@@ -45,6 +45,27 @@ export const CreateModelQuary = `
   }
   `;
 
+export const CreateLayoutQuery=`
+mutation CreateLayout($input: LayoutInput!) {
+  createLayout(input: $input) {
+    id
+    label
+    name
+  }
+}
+
+`;
+export const UpdateLayoutQuery=`
+mutation UpdateLayout($input: updateLayoutInput!) {
+  updateLayout(input: $input) {
+    id
+    label
+    name
+  }
+}
+`;
+
+
 export const CreateTabQuary = `
   mutation CreateTab($input: TabInput!) {
     createTab(input: $input) {
@@ -681,6 +702,8 @@ mutation CreateProfile($input: ProfileInput!) {
   }
 }
 `;
+
+
 
 export const UPDATE_PROFILE = `mutation UpdateProfile($input: updateProfileInput!) {
   updateProfile(input: $input) {

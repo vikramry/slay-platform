@@ -21,6 +21,7 @@ import { ChevronsUpDown, CircleEllipsis, Trash2 } from "lucide-react";
 import {
   ComponentsType,
   FieldOptionsType,
+  Layout,
   Model,
   ModelFieldType,
   ModelOptionType,
@@ -327,6 +328,191 @@ export const modelColumns: ColumnDef<Model>[] = [
       );
     },
   },
+];
+
+export const LayoutColumns:ColumnDef<Layout>[]=[
+  {
+    accessorKey: "model",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Model
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("model")}</div>,
+  },
+  {
+    accessorKey: "profile",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Profile
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("profile")}</div>,
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "label",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Label
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
+  },
+  {
+    accessorKey: "createdBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created By
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
+    },
+  },
+  {
+    accessorKey: "updatedBy.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated By
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="">{row.original.updatedBy?.name || "-"}</div>
+    ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original;
+      const { toast } = useToast();
+      const [handledeleteLayout, { data, loading, error }] =
+        useLazyQuery(serverFetch);
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Layout Deleted Successfully.",
+          });
+          setTimeout(()=>{
+          window.location.reload()},1000);
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+
+      const handleLayoutDelete = () => {
+        handledeleteLayout(
+          DELETE_MODEL,
+          {
+            deleteLayoutId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
+      };
+
+      return (
+        <DropdownMenu>
+          <Toaster />
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <CircleEllipsis className="h-4 w-4" />
+              {/* <CircleEllipsis className="h-4 w-4" /> */}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy Layout ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <Link
+              href={`/dashboard/Layout/${row.original.id}`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>View Layout</DropdownMenuItem>
+            </Link>
+
+            <Link
+              href={`/dashboard/Layout/${row.original.id}/edit`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>Update Layout</DropdownMenuItem>
+            </Link>
+            <DropdownMenuLabel>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer">
+                    <Trash2 size={14} /> Delete Layout
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp
+                  inputText={row.original.name}
+                  onclick={handleLayoutDelete}
+                  type="Layout"
+                />
+              </AlertDialog>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+  
 ];
 
 export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
@@ -1437,6 +1623,8 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
     },
   },
 ];
+
+
 
 export const permissionColumns: ColumnDef<PermissionType>[] = [
   {

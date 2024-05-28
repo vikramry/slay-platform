@@ -103,3 +103,21 @@ export interface PermissionType {
   createdBy: User
   updatedBy: User
 }
+
+export interface Layout{
+  id:string
+  model:Model
+  profiles?:ProfileType[]
+  name:string
+  label:string
+  createdBy: User
+  updatedBy: User
+}
+export interface LayoutStructure{
+  id:string
+  layout:Layout
+  component:ComponentsType
+  order:number
+  row:number
+  col:number
+}
