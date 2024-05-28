@@ -127,11 +127,19 @@ export function SideBar() {
         link: `dashboard/model/${useParams()?.id}/layouts`,
       },
     ],
+    layout: [
+      {
+        title: "Structures",
+        link: `dashboard/model/${useParams()?.id}/layouts/${useParams()?.layoutId}/structures`,
+      },
+    ]
   };
   const sidebarData =
     data[
+
+    /\/layouts\/.+/.test(usePathname()) ? "layout" : 
       /\/model\/.+/.test(usePathname()) &&
-      !usePathname().includes("model/createModel")
+        !usePathname().includes("model/createModel")
         ? "model"
         : "default"
     ];
@@ -144,7 +152,7 @@ export function SideBar() {
 
           let isActive = regex.test(usePathname());
           if (item.title === "Fields")
-            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`].some((item) =>
+            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`, `${useParams()?.id}/layouts`].some((item) =>
               usePathname().includes(item)
             )
               ? false

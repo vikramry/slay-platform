@@ -1,5 +1,12 @@
 "use client";
 
+import { serverFetch } from "@/app/action";
+import { useLazyQuery } from "@/app/hook";
+import {
+  CREATE_COMPONENT,
+  GET_COMPONENT,
+  UPDATE_COMPONENT,
+} from "@/app/queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@monaco-editor/react";
 import {
@@ -21,8 +28,11 @@ import {
   SelectContent,
   SelectLabel,
   SelectItem,
+  useToast,
+  Toaster,
 } from "@repo/ui";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -50,14 +60,144 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
     defaultValues: {},
   });
 
+  const { toast } = useToast();
+
+  const [createComponent, { data, error, loading }] = useLazyQuery(serverFetch);
+  const [getComponent, getComponentResponse] = useLazyQuery(serverFetch);
+  const [updateComponent, updateComponentResponse] = useLazyQuery(serverFetch);
   const [editorLanguage, setEditorLanguage] = useState("javascript");
+  const router = useRouter();
+  const { componentId } = useParams();
+
+  useEffect(() => {
+    if (edit) {
+      getComponent(
+        GET_COMPONENT,
+        {
+          where: {
+            id: {
+              is: componentId,
+            },
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
+    }
+  }, []);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(btoa(values.code), "    ", atob("Ly8gcGFzdGUgeW91ciBjb2RlIGhlcmUNCg0KY29uc3QgYTpzdHJpbmcgPSAicHJhdmVlbiI=")); // convert string to base64 encoded string and vice-versa 
-    
+    if (!edit) {
+      createComponent(
+        CREATE_COMPONENT,
+        {
+          input: {
+            code: btoa(values.code),
+            description: values.description,
+            createdBy: null,
+            label: values.label,
+            modules: values.modules,
+            name: values.name,
+            updatedBy: null,
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
+    } else {
+      updateComponent(
+        UPDATE_COMPONENT,
+        {
+          input: {
+            id: componentId,
+            code: btoa(values.code),
+            description: values.description,
+            createdBy: null,
+            label: values.label,
+            modules: values.modules,
+            name: values.name,
+            updatedBy: null,
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
+    }
   }
+
+  useEffect(() => {
+    if (getComponentResponse.data) {
+      console.log(getComponentResponse.data?.getComponent);
+
+      form.reset({
+        code: atob(getComponentResponse.data?.getComponent.code),
+        description: getComponentResponse.data?.getComponent.description,
+        label: getComponentResponse.data?.getComponent.label,
+        modules: getComponentResponse.data?.getComponent.modules,
+        name: getComponentResponse.data?.getComponent.name,
+      });
+    }
+    if (getComponentResponse.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getComponentResponse.error?.message,
+      });
+    }
+  }, [
+    getComponentResponse.data,
+    getComponentResponse.error,
+    getComponentResponse.loading,
+  ]);
+
+  useEffect(() => {
+    if (data) {
+      toast({
+        title: "Component Created",
+      });
+      setTimeout(() => {
+        router.back();
+      }, 1000);
+    }
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message,
+      });
+    }
+  }, [data, loading, error]);
+
+  useEffect(() => {
+    if (updateComponentResponse?.data) {
+      toast({
+        title: "Component Updated",
+      });
+      setTimeout(() => {
+        router.back();
+      }, 1000);
+    }
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: updateComponentResponse?.error?.message,
+      });
+    }
+  }, [
+    updateComponentResponse.data,
+    updateComponentResponse.loading,
+    updateComponentResponse.error,
+  ]);
 
   return (
     <Form {...form}>
+      <Toaster />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
           <FormField
@@ -130,7 +270,12 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
                 <FormItem>
                   <FormLabel>Code</FormLabel>
                   <div className="w-[200px]">
-                    <Select onValueChange={(value: string) => setEditorLanguage(value)} value={editorLanguage}>
+                    <Select
+                      onValueChange={(value: string) =>
+                        setEditorLanguage(value)
+                      }
+                      value={editorLanguage}
+                    >
                       <SelectTrigger className="">
                         <SelectValue placeholder="Select Language" />
                       </SelectTrigger>
@@ -144,7 +289,6 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
                     </Select>
                   </div>
                   <FormControl>
-
                     <Editor
                       height="350px"
                       width={`90%`}

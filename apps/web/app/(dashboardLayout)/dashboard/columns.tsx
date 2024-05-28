@@ -254,8 +254,9 @@ export const modelColumns: ColumnDef<Model>[] = [
           toast({
             title: "Model Deleted Successfully.",
           });
-          setTimeout(()=>{
-          window.location.reload()},1000);
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000);
         }
         if (error) {
           toast({
@@ -676,7 +677,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       };
       return (
         <DropdownMenu>
-            <Toaster />
+          <Toaster />
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -1158,7 +1159,7 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
           toast({
             title: "Fieldoption Deleted Successfully.",
           }),
-          window.location.reload();
+            window.location.reload();
 
         }
         if (error) {
@@ -1336,8 +1337,8 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
               Copy Component ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
-              <DropdownMenuItem>View Component</DropdownMenuItem>
+            <Link href={`/dashboard/components/${row.original.id}/edit`} className="cursor-pointer">
+              <DropdownMenuItem>Update Component</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
               <AlertDialog>
@@ -1655,7 +1656,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
               const oldValuesIfExists =
-                context.actions.get(row.original.id) || context.crudAccess;
+                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: value,
@@ -1683,7 +1684,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
               const oldValuesIfExists =
-                context.actions.get(row.original.id) || context.crudAccess;
+                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: oldValuesIfExists?.create || false,
@@ -1711,7 +1712,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
               const oldValuesIfExists =
-                context.actions.get(row.original.id) || context.crudAccess;
+                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
               newActions.set(row.original.id, {
                 read: value,
                 create: oldValuesIfExists?.create || false,
@@ -1739,7 +1740,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
             onCheckedChange={(value: boolean) => {
               const newActions = new Map(context.actions);
               const oldValuesIfExists =
-                context.actions.get(row.original.id) || context.crudAccess;
+                context.actions.get(row.original.id) || { create: row.original.create, update: row.original.update, delete: row.original.delete, read: row.original.read };
               newActions.set(row.original.id, {
                 read: oldValuesIfExists?.read || false,
                 create: oldValuesIfExists?.create || false,

@@ -76,13 +76,15 @@ mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
 });
 
 const handler = startServerAndCreateNextHandler(server, {
-  context: async (req, res) => ({
-    ...req,
-    user: {
-      id: "1",
-      profile: "Admin",
-    },
-  }),
+  context: async (req:any, res) => {
+    return {
+      ...req,
+      user: {
+        id: "1",
+        profile: req.headers.get("profile"),
+      },
+    }
+  }
 });
 
 // export const mercuryInstance = mercury;

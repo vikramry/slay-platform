@@ -95,7 +95,7 @@ const ListPermissionContainer = ({
         cache: "no-store",
       }
     );
-  }, [crudAccess]);
+  }, [crudAccess, selectedProfile]);
 
   useEffect(() => {
     if (getAllFieldPermissionsResponse.data) {
@@ -123,10 +123,13 @@ const ListPermissionContainer = ({
     if (error) {
     }
     if (data) {
-      const fieldPermissionIds: string[] =
+      const modelFieldIdsInFieldPermissions: string[] =
         getAllFieldPermissionsResponse.data?.listFieldPermissions?.docs.map(
           (item: PermissionType) => item?.modelField.id
         );
+
+        console.log(modelFieldIdsInFieldPermissions);
+        
       const modifiedFields =
         getAllFieldPermissionsResponse.data?.listFieldPermissions?.docs.map(
           (item: PermissionType) => {
@@ -143,7 +146,7 @@ const ListPermissionContainer = ({
 
       const modifiedFieldsWithModelAccess = data?.listModelFields?.docs
         .map((field: ModelFieldType) => {
-          if (!fieldPermissionIds.includes(field.id))
+          if (!modelFieldIdsInFieldPermissions.includes(field.id))
             return {
               id: field.id,
               modelField: field,
@@ -158,7 +161,7 @@ const ListPermissionContainer = ({
   }, [data, error, loading]);
 
   const handleTabelUpdate = () => {
-    const fieldPermissionIds: string[] =
+    const modelFieldIdsInFieldPermissions: string[] =
       getAllFieldPermissionsResponse.data?.listFieldPermissions?.docs.map(
         (item: PermissionType) => item?.id
       );
@@ -197,7 +200,7 @@ const ListPermissionContainer = ({
     });
 
     actions.forEach((value, key, map) => {
-      if (fieldPermissionIds.includes(key)) {
+      if (modelFieldIdsInFieldPermissions.includes(key)) {
         updateInput.push({
           id: key,
           create: value.create,

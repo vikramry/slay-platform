@@ -613,7 +613,6 @@ export const listcomponents = `
           role
         }
       }
-      limit
     }
   }
   `;
@@ -847,3 +846,42 @@ export const UPDATE_BULK_FIELD_PERMISSIONS = `mutation UpdateFieldPermissions($i
     update
   }
 }`;
+
+export const CREATE_COMPONENT = `
+mutation CreateComponent($input: ComponentInput!) {
+  createComponent(input: $input) {
+    id
+    label
+    description
+  }
+}`;
+
+export const UPDATE_COMPONENT = `mutation UpdateComponent($input: updateComponentInput!) {
+  updateComponent(input: $input) {
+    id
+    label
+  }
+}`;
+
+export const GET_COMPONENT = `
+query GetComponent($where: whereComponentInput!) {
+  getComponent(where: $where) {
+    id
+    name
+    label
+    description
+    code
+    modules
+    createdBy {
+      id
+      name
+    }
+    updatedBy {
+      id
+      name
+    }
+    createdOn
+    updatedOn
+  }
+}
+`;
