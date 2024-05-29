@@ -15,5 +15,7 @@ export * from './ui/toast'
 export * from './ui/use-toast'
 export * from './ui/toaster'
 export * from './ui/multi-selector'
+export * from './ui/badge'
+export * from './ui/command'
 
 

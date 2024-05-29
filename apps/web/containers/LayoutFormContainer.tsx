@@ -20,6 +20,7 @@ import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 import { CreateLayoutQuery, UpdateLayoutQuery } from "@/app/queries";
 import { useEffect } from "react";
+import { MultiSelector, MultiSelectorContent, MultiSelectorInput, MultiSelectorItem, MultiSelectorList, MultiSelectorTrigger } from "../../../packages/ui/dist";
 
 const formSchema = z.object({
   model: z.string().optional(),
@@ -133,13 +134,24 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
                 <FormItem>
                   <FormLabel>Profile</FormLabel>
                   <FormControl>
-                    <Input placeholder="Profile" {...field} />
+                    <MultiSelector values={["React"]} onValuesChange={(value) => console.log(value)} loop className="max-w-xs">
+                      <MultiSelectorTrigger>
+                        <MultiSelectorInput placeholder="Select your framework" />
+                      </MultiSelectorTrigger>
+                      <MultiSelectorContent>
+                        <MultiSelectorList>
+                          <MultiSelectorItem value={"React"}>React</MultiSelectorItem>
+                          <MultiSelectorItem value={"Vue"}>Vue</MultiSelectorItem>
+                          <MultiSelectorItem value={"Svelte"}>Svelte</MultiSelectorItem>
+                        </MultiSelectorList>
+                      </MultiSelectorContent>
+                    </MultiSelector>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="label"
