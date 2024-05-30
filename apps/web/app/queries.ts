@@ -910,3 +910,21 @@ export const LIST_ALL_LAYOUTS = `query Docs($where: whereLayoutInput, $limit: In
     }
   }
 }`;
+
+
+export const GET_LAYOUT = `query GetLayout($where: whereLayoutInput!) {
+  getLayout(where: $where) {
+    id
+    label
+    model {
+      id
+      label
+      name
+    }
+    name
+    profiles {
+      id
+      name
+    }
+  }
+}`
