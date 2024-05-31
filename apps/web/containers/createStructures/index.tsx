@@ -13,6 +13,7 @@ import {
   UpdateTabQuary,
   listcomponents,
 } from "@/app/queries";
+import { Layout } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -44,7 +45,8 @@ const formSchema = z.object({
   order: z.coerce.number(),
   row: z.coerce.number(),
   col: z.coerce.number(),
-  layout:z.string()
+  layout: z.string(),
+  component: z.string(),
 });
 
 const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
@@ -54,12 +56,11 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
   const [getLayouts, getLayoutsResponse] = useLazyQuery(serverFetch);
   const [ListComponents, ListComponentsResponse] = useLazyQuery(serverFetch);
 
-
   const router = useRouter();
   const params = useSearchParams();
   console.log(params.get("id"), "fjyfjhvjgyg");
-  const { id,layoutId,structureId}=useParams()
-console.log(structureId,"structureId")
+  const { id, layoutId, structureId } = useParams();
+  console.log(structureId, "structureId");
   const getStructureFun = () => {
     getStructure(
       GET_STRUCTURE,
@@ -78,46 +79,64 @@ console.log(structureId,"structureId")
 
   useEffect(() => {
     getLayouts(
-        LIST_GET_LAYOUTS,
-        {
-            "where": {
-              "id": {
-                "is": layoutId
-              }
-            }
-          },{
-            cache: "no-store",
-          }
+      LIST_GET_LAYOUTS,
+      {
+        where: {
+          id: {
+            is: layoutId,
+          },
+        },
+      },
+      {
+        cache: "no-store",
+      }
+    );
+    ListComponents(
+      listcomponents,
+      {},
+      {
+        cache: "no-store",
+      }
+    );
 
-    )
-    // ListComponents(
-    //     listcomponents,{
-
-    //     }
-
-    // )
-
-    if(edit){
-        getStructureFun()
+    if (edit) {
+      getStructureFun();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if(getLayoutsResponse?.data){
-        form.reset({
-            layout: getLayoutsResponse.data.getLayout.label,
-          })
+    if (getLayoutsResponse?.data) {
+      form.reset({
+        layout: getLayoutsResponse.data.getLayout.label,
+      });
+    } else if (getLayoutsResponse?.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getLayoutsResponse.error?.message,
+      });
     }
-   else if(getLayoutsResponse?.error){
-        toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: getLayoutsResponse.error?.message,
-          });
+  }, [
+    getLayoutsResponse?.data,
+    getLayoutsResponse?.error,
+    getLayoutsResponse?.loading,
+  ]);
+  //
+  useEffect(() => {
+    if (ListComponentsResponse?.data) {
+      console.log(ListComponentsResponse?.data?.listComponents?.docs, "data");
+    } else if (getLayoutsResponse?.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: ListComponentsResponse.error?.message,
+      });
     }
-    
-  
-  }, [getLayoutsResponse?.data,getLayoutsResponse?.error,getLayoutsResponse?.loading])
+  }, [
+    ListComponentsResponse?.data,
+    ListComponentsResponse?.error,
+    ListComponentsResponse?.loading,
+  ]);
 
   useEffect(() => {
     if (getStructureResponse.data) {
@@ -152,7 +171,7 @@ console.log(structureId,"structureId")
         {
           input: {
             col: values?.col,
-            component: null,
+            component: values?.component,
             layout: layoutId,
             order: values?.order,
             row: values?.row,
@@ -188,7 +207,7 @@ console.log(structureId,"structureId")
         title: "Success",
         description: "Successful created",
       });
-      router.push("/dashboard/tabs");
+      router.back();
     } else if (error) {
       toast({
         variant: "destructive",
@@ -266,7 +285,7 @@ console.log(structureId,"structureId")
               </FormItem>
             )}
           />
-           <FormField
+          <FormField
             control={form.control}
             name="layout"
             render={({ field }) => (
@@ -280,6 +299,37 @@ console.log(structureId,"structureId")
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="component"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Component</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Select a Component" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Component</SelectLabel>
+                        {ListComponentsResponse?.data?.listComponents?.docs.map(
+                          (item: any) => {
+                            return (
+                              <SelectItem value={item?.id}>
+                                {item?.label}
+                              </SelectItem>
+                            );
+                          }
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <div className="flex justify-center items-center">
           <Button

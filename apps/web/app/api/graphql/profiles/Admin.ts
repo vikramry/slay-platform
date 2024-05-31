@@ -101,7 +101,7 @@ const rules = [
     },
   },
   {
-    modelName: "LayoutStructures",
+    modelName: "LayoutStructure",
     access: {
       create: true,
       read: true,

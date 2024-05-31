@@ -983,3 +983,46 @@ export const GET_LAYOUT = `query GetLayout($where: whereLayoutInput!) {
     }
   }
 }`
+
+export const GET_STRUCTURE =`
+query GetLayoutStructure($where: whereLayoutStructureInput!) {
+  getLayoutStructure(where: $where) {
+    id
+    layout {
+      id
+      label
+    }
+    component {
+      code
+      id
+      label
+    }
+    order
+    row
+    col
+    createdOn
+    updatedOn
+  }
+}`
+
+export const LIST_ALL_LAYOUTS = `query Docs($where: whereLayoutInput, $limit: Int!) {
+  listLayouts(where: $where, limit: $limit) {
+    docs {
+      id
+      model {
+        id
+        label
+        name
+      }
+      profiles {
+        id
+        label
+        name
+      }
+      name
+      label
+      createdOn
+      updatedOn
+    }
+  }
+}`;
