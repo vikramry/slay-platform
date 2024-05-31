@@ -22,6 +22,7 @@ import {
   ComponentsType,
   FieldOptionsType,
   Layout,
+  LayoutStructure,
   Model,
   ModelFieldType,
   ModelOptionType,
@@ -1878,3 +1879,116 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
     },
   },
 ];
+
+export const StructureColumns: ColumnDef<LayoutStructure>[] = [
+  {
+    accessorKey: "order",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Order
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("order")}</div>,
+  },
+  {
+    accessorKey: "row",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Row
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("row")}</div>,
+  },
+  {
+    accessorKey: "col",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Col
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("col")}</div>,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original;
+      const [handledeleteModel, { data, loading, error }] =
+        useLazyQuery(serverFetch);
+      useEffect(() => {
+        if (data) {
+          toast({
+            title: "Model Deleted Successfully.",
+          });
+          setTimeout(function () {
+            window.location.reload();
+          }, 2000);
+        }
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error?.message,
+          });
+        }
+      }, [data, loading, error]);
+
+      const handleModelDelete = () => {
+        handledeleteModel(
+          DELETE_MODEL,
+          {
+            deleteModelId: row.original.id,
+          },
+          {
+            cache: "no-store",
+          }
+        );
+      };
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <CircleEllipsis className="h-4 w-4" />
+              {/* <CircleEllipsis className="h-4 w-4" /> */}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy Structure ID
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];
+
+// id:string
+// layout:Layout
+// component:ComponentsType
+// order:number
+// row:number
+// col:number

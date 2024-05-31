@@ -889,24 +889,106 @@ query GetComponent($where: whereComponentInput!) {
 }
 `;
 
-export const LIST_ALL_LAYOUTS = `query Docs($where: whereLayoutInput, $limit: Int!) {
-  listLayouts(where: $where, limit: $limit) {
+export const LIST_GET_LAYOUTS = `query GetLayout($where: whereLayoutInput!) {
+  getLayout(where: $where) {
+    id
+    label
+    name
+    model {
+      id
+      label
+    }
+    structures {
+      id
+    }
+    updatedOn
+    createdOn
+  }
+}`;
+
+export const LIST_ALL_LAYOUT_STRUCTURE =`
+query ListLayoutStructures($where: whereLayoutStructureInput, $limit: Int!) {
+  listLayoutStructures(where: $where, limit: $limit) {
     docs {
       id
-      model {
+      layout {
         id
         label
-        name
       }
-      profiles {
+      component {
         id
-        label
         name
+        label
       }
-      name
-      label
+      order
+      row
+      col
       createdOn
       updatedOn
     }
+    limit
   }
-}`;
+}`
+
+export const CREATE_STRUCTURE =`
+mutation CreateLayoutStructure($input: LayoutStructureInput!) {
+  createLayoutStructure(input: $input) {
+    id
+    layout {
+      name
+      id
+      label
+    }
+    component {
+      code
+      label
+    }
+    order
+    row
+    col
+    createdOn
+    updatedOn
+  }
+}` 
+
+export const GET_STRUCTURE =`
+query GetLayoutStructure($where: whereLayoutStructureInput!) {
+  getLayoutStructure(where: $where) {
+    id
+    layout {
+      id
+      label
+    }
+    component {
+      code
+      id
+      label
+    }
+    order
+    row
+    col
+    createdOn
+    updatedOn
+  }
+}` 
+
+export const UPDATE_STRUCTURE =`
+mutation UpdateLayoutStructure($input: updateLayoutStructureInput!) {
+  updateLayoutStructure(input: $input) {
+    id
+    layout {
+      label
+      id
+    }
+    component {
+      id
+      label
+    }
+    order
+    row
+    col
+    createdOn
+    updatedOn
+  }
+}`
+
