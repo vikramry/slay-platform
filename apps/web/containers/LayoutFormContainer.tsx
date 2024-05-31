@@ -15,12 +15,13 @@ import {
   Toaster,
   useToast,
 } from "@repo/ui";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { CreateLayoutQuery, UpdateLayoutQuery } from "@/app/queries";
+import { CreateLayoutQuery, GET_LAYOUT, LIST_ALL_PROFILES, UpdateLayoutQuery } from "@/app/queries";
 import { useEffect } from "react";
 import { MultiSelector, MultiSelectorContent, MultiSelectorInput, MultiSelectorItem, MultiSelectorList, MultiSelectorTrigger } from "../../../packages/ui/dist";
+import { ProfileType } from "@/types";
 
 const formSchema = z.object({
   model: z.string().optional(),
@@ -35,9 +36,12 @@ const formSchema = z.object({
 
 const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
   const [createLayout, { data, loading, error }] = useLazyQuery(serverFetch);
-  const [upadteLayout, upadteLayoutresponce] = useLazyQuery(serverFetch);
-  const { id } = useParams();
+  const [upadteLayout, updateLayoutresponse] = useLazyQuery(serverFetch);
+  const [getAllProfiles, getAllProfilesresponse] = useLazyQuery(serverFetch);
+  const [getCurrentLayout, getCurrentLayoutresponse] = useLazyQuery(serverFetch);
+  const { id, layoutId } = useParams();
   const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,13 +51,73 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
     },
   });
 
+  useEffect(() => {
+    getAllProfiles(
+      LIST_ALL_PROFILES,
+      {
+        limit: 100
+      },
+      {
+        cache: "no-store"
+      }
+    );
+
+    getCurrentLayout(
+      GET_LAYOUT,
+      {
+        "where": {
+          "id": {
+            "is": layoutId
+          }
+        }
+      },
+      {
+        cache: "no-store"
+      }
+    )
+  }, [])
+
+
+  useEffect(()=>{
+    if(getCurrentLayoutresponse.error){
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getCurrentLayoutresponse?.error?.message,
+      });
+    }
+    if(getCurrentLayoutresponse.data){
+      form.reset({
+        label: getCurrentLayoutresponse.data?.getLayout?.label,
+        name: getCurrentLayoutresponse?.data?.getLayout?.name,
+        model: getCurrentLayoutresponse?.data?.getLayout?.model?.id,
+        profiles: getCurrentLayoutresponse?.data?.getLayout?.profiles.map((item:ProfileType) => item.name)
+      })
+    }
+  }, [getCurrentLayoutresponse.data, getCurrentLayoutresponse.error, getCurrentLayoutresponse.loading])
+
+  useEffect(() => {
+    if (getAllProfilesresponse.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getAllProfilesresponse?.error?.message,
+      });
+    }
+  }, [getAllProfilesresponse.data, getAllProfilesresponse.loading, getAllProfilesresponse.error])
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     if (edit)
       upadteLayout(
         UpdateLayoutQuery,
         {
-          input: {},
+          "input": {
+            "id": layoutId,
+            "label": values.label,
+            "model": id,
+            "name": values.name,
+            "profiles": values.profiles?.map(profile => getAllProfilesresponse?.data?.listProfiles?.docs?.find((item: ProfileType) => item.name === profile)?.id)
+          }
         },
         {
           cache: "no-store",
@@ -65,8 +129,8 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
         {
           input: {
             label: values?.label,
-            model: values?.model,
-            profiles: values?.profiles,
+            model: id,
+            profiles: values.profiles?.map(profile => getAllProfilesresponse?.data?.listProfiles?.docs?.find((item: ProfileType) => item.name === profile)?.id),
             name: values?.name,
           },
         },
@@ -79,8 +143,9 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
   useEffect(() => {
     if (data) {
       toast({
-        titile: "Layout created successfully",
+        title: "Layout created successfully",
       });
+      router.back();
     } else if (error) {
       toast({
         variant: "destructive",
@@ -91,21 +156,21 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
   }, [data, error, loading]);
 
   useEffect(() => {
-    if (upadteLayoutresponce.data) {
+    if (updateLayoutresponse.data) {
       toast({
         title: " Layout Updated",
       });
-    } else if (upadteLayoutresponce.error) {
+    } else if (updateLayoutresponse.error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: upadteLayoutresponce.error?.message,
+        description: updateLayoutresponse.error?.message,
       });
     }
   }, [
-    upadteLayoutresponce.data,
-    upadteLayoutresponce.error,
-    upadteLayoutresponce.loading,
+    updateLayoutresponse.data,
+    updateLayoutresponse.error,
+    updateLayoutresponse.loading,
   ]);
 
   return (
@@ -134,15 +199,19 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
                 <FormItem>
                   <FormLabel>Profile</FormLabel>
                   <FormControl>
-                    <MultiSelector values={["React"]} onValuesChange={(value) => console.log(value)} loop className="max-w-xs">
+                    <MultiSelector values={form.watch("profiles") || []} onValuesChange={(values) => {
+                      form.setValue("profiles", values)
+                    }} loop>
                       <MultiSelectorTrigger>
-                        <MultiSelectorInput placeholder="Select your framework" />
+                        <MultiSelectorInput placeholder="Select profiles" />
                       </MultiSelectorTrigger>
                       <MultiSelectorContent>
                         <MultiSelectorList>
-                          <MultiSelectorItem value={"React"}>React</MultiSelectorItem>
-                          <MultiSelectorItem value={"Vue"}>Vue</MultiSelectorItem>
-                          <MultiSelectorItem value={"Svelte"}>Svelte</MultiSelectorItem>
+                          {
+                            getAllProfilesresponse?.data?.listProfiles?.docs?.map((item: any) => {
+                              return <MultiSelectorItem value={item?.name}>{item?.label}</MultiSelectorItem>
+                            })
+                          }
                         </MultiSelectorList>
                       </MultiSelectorContent>
                     </MultiSelector>

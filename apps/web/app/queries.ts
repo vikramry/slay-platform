@@ -928,6 +928,7 @@ query ListLayoutStructures($where: whereLayoutStructureInput, $limit: Int!) {
     }
     limit
   }
+<<<<<<< HEAD
 }`
 
 export const CREATE_STRUCTURE =`
@@ -938,37 +939,9 @@ mutation CreateLayoutStructure($input: LayoutStructureInput!) {
       name
       id
       label
+      createdOn
+      updatedOn
     }
-    component {
-      code
-      label
-    }
-    order
-    row
-    col
-    createdOn
-    updatedOn
-  }
-}` 
-
-export const GET_STRUCTURE =`
-query GetLayoutStructure($where: whereLayoutStructureInput!) {
-  getLayoutStructure(where: $where) {
-    id
-    layout {
-      id
-      label
-    }
-    component {
-      code
-      id
-      label
-    }
-    order
-    row
-    col
-    createdOn
-    updatedOn
   }
 }` 
 
@@ -992,3 +965,21 @@ mutation UpdateLayoutStructure($input: updateLayoutStructureInput!) {
   }
 }`
 
+
+
+export const GET_LAYOUT = `query GetLayout($where: whereLayoutInput!) {
+  getLayout(where: $where) {
+    id
+    label
+    model {
+      id
+      label
+      name
+    }
+    name
+    profiles {
+      id
+      name
+    }
+  }
+}`
