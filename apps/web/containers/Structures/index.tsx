@@ -16,14 +16,13 @@ const Structures = () => {
   useEffect(() => {
     getStructures(
         LIST_ALL_LAYOUT_STRUCTURE,
-      {
-        where: {
-          model: {
-            is: null,
-          },
+        {
+          "where": {
+            "layout": {
+              "is": layoutId
+            }
+          }
         },
-        limit: 100,
-      },
       {
         cache: "no-store",
       }
@@ -31,7 +30,10 @@ const Structures = () => {
   }, []);
 
   useEffect(() => {
-    if (error) {
+    if(data){
+console.log(data,"data")
+    }
+   else if (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -46,7 +48,7 @@ const Structures = () => {
       <DataTable
         columns={StructureColumns}
         loading={loading}
-        data={data?.listLayouts?.docs || []}
+        data={data?.listLayoutStructures?.docs || []}
         filterBy="name"
         text="Create Structure"
         url="layouts/add"

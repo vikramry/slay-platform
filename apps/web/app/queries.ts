@@ -907,28 +907,23 @@ export const LIST_GET_LAYOUTS = `query GetLayout($where: whereLayoutInput!) {
 }`;
 
 export const LIST_ALL_LAYOUT_STRUCTURE =`
-query ListLayoutStructures($where: whereLayoutStructureInput, $limit: Int!) {
-  listLayoutStructures(where: $where, limit: $limit) {
+query ListLayoutStructures($where: whereLayoutStructureInput) {
+  listLayoutStructures(where: $where) {
     docs {
+      col
       id
-      layout {
-        id
-        label
-      }
+      row
       component {
         id
-        name
         label
       }
       order
-      row
-      col
-      createdOn
-      updatedOn
+      layout {
+        label
+        id
+      }
     }
-    limit
   }
-<<<<<<< HEAD
 }`
 
 export const CREATE_STRUCTURE =`

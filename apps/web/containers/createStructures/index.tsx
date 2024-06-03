@@ -140,11 +140,13 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (getStructureResponse.data) {
-      console.log(getStructureResponse.data.getTab.model?.id);
+      console.log(getStructureResponse.data.getLayoutStructure);
       form.reset({
         row: getStructureResponse.data.getLayoutStructure.row,
         col: getStructureResponse.data.getLayoutStructure.col,
         order: getStructureResponse.data.getLayoutStructure.order,
+        component:getStructureResponse.data.getLayoutStructure.component?.id,
+        layout: getStructureResponse.data.getLayoutStructure.layout.label,
       });
     } else if (getStructureResponse.error) {
       toast({
@@ -224,7 +226,7 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
         description: "Successful updated",
       });
       setTimeout(function () {
-        router.push("/dashboard/tabs");
+        router.back();
       }, 2000);
     } else if (updateStructureResponse?.error) {
       toast({
@@ -292,7 +294,7 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
               <FormItem>
                 <FormLabel>Layout</FormLabel>
                 <FormControl>
-                  <Input placeholder="Layout" {...field} />
+                  <Input placeholder="Layout" {...field} disabled/>
                 </FormControl>
                 <FormMessage />
               </FormItem>

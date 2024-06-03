@@ -1979,7 +1979,21 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
             >
               Copy Structure ID
             </DropdownMenuItem>
+            {/* <Link
+              href={`/dashboard/model/${row.original.id}`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>View Structure</DropdownMenuItem>
+            </Link> */}
+
+            <Link
+              href={`structures/${row.original.id}/edit`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>Update Structure</DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
+
         </DropdownMenu>
       );
     },
