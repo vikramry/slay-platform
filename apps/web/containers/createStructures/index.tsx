@@ -140,11 +140,11 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (getStructureResponse.data) {
-      console.log(getStructureResponse.data.getLayoutStructure);
+      console.log(getStructureResponse.data.getLayoutStructure.component?.id,"asdfghjkytrewasdfg");
       form.reset({
-        row: getStructureResponse.data.getLayoutStructure.row,
-        col: getStructureResponse.data.getLayoutStructure.col,
-        order: getStructureResponse.data.getLayoutStructure.order,
+        row: +getStructureResponse.data.getLayoutStructure.row,
+        col: +getStructureResponse.data.getLayoutStructure.col,
+        order: +getStructureResponse.data.getLayoutStructure.order,
         component:getStructureResponse.data.getLayoutStructure.component?.id,
         layout: getStructureResponse.data.getLayoutStructure.layout.label,
       });
@@ -189,7 +189,7 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
         {
           input: {
             col: values?.col,
-            component: null,
+            component: values?.component,
             id: structureId,
             layout: layoutId,
             order: values?.order,
