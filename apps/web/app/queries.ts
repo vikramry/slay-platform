@@ -906,7 +906,7 @@ export const LIST_GET_LAYOUTS = `query GetLayout($where: whereLayoutInput!) {
   }
 }`;
 
-export const LIST_ALL_LAYOUT_STRUCTURE =`
+export const LIST_ALL_LAYOUT_STRUCTURE = `
 query ListLayoutStructures($where: whereLayoutStructureInput) {
   listLayoutStructures(where: $where) {
     docs {
@@ -926,7 +926,7 @@ query ListLayoutStructures($where: whereLayoutStructureInput) {
   }
 }`
 
-export const CREATE_STRUCTURE =`
+export const CREATE_STRUCTURE = `
 mutation CreateLayoutStructure($input: LayoutStructureInput!) {
   createLayoutStructure(input: $input) {
     id
@@ -938,9 +938,9 @@ mutation CreateLayoutStructure($input: LayoutStructureInput!) {
       updatedOn
     }
   }
-}` 
+}`
 
-export const UPDATE_STRUCTURE =`
+export const UPDATE_STRUCTURE = `
 mutation UpdateLayoutStructure($input: updateLayoutStructureInput!) {
   updateLayoutStructure(input: $input) {
     id
@@ -979,7 +979,7 @@ export const GET_LAYOUT = `query GetLayout($where: whereLayoutInput!) {
   }
 }`
 
-export const GET_STRUCTURE =`
+export const GET_STRUCTURE = `
 query GetLayoutStructure($where: whereLayoutStructureInput!) {
   getLayoutStructure(where: $where) {
     id
@@ -1021,3 +1021,38 @@ export const LIST_ALL_LAYOUTS = `query Docs($where: whereLayoutInput, $limit: In
     }
   }
 }`;
+
+
+export const LIST_ALL_LAYOUTS_LABELS = `
+query Docs {
+  listLayouts {
+    docs {
+      id
+      name
+      label
+    }
+  }
+}`
+
+export const LIST_LAYOUT_STRUCTURES = `query Docs($sort: sortLayoutStructureInput, $where: whereLayoutStructureInput) {
+  listLayoutStructures(sort: $sort, where: $where) {
+    docs {
+      id
+      component {
+        id
+        name
+        label
+        description
+        code
+        modules
+        createdOn
+        updatedOn
+      }
+      order
+      row
+      col
+      createdOn
+      updatedOn
+    }
+  }
+}`
