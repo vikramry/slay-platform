@@ -42,10 +42,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  order: z.coerce.number(),
-  row: z.coerce.number(),
-  col: z.coerce.number(),
-  layout: z.string(),
+  order: z.any(),
+  row: z.any(),
+  col: z.any(),
+  layout: z.any(),
   component: z.string(),
 });
 
