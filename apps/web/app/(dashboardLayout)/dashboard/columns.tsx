@@ -43,6 +43,7 @@ import {
   DELETE_MODELFIELD,
   DELETE_MODELOPTION,
   DELETE_PROFILE,
+  DELETE_STRUCTURE,
   DELETE_TAB,
   DELETE_USER,
 } from "@/app/queries";
@@ -1927,11 +1928,43 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
     cell: ({ row }) => <div className="">{row.getValue("col")}</div>,
   },
   {
+    accessorKey: "layout.label",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Layout
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="">{row.original.layout?.label || "-"}</div>
+    ),  },
+    {
+      accessorKey: "component.label",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Component
+            <ChevronsUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="">{row.original.component.label || "-"}</div>
+      ),  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
-      const [handledeleteModel, { data, loading, error }] =
+      const [handledeleteStructure, { data, loading, error }] =
         useLazyQuery(serverFetch);
       useEffect(() => {
         if (data) {
@@ -1951,11 +1984,11 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
         }
       }, [data, loading, error]);
 
-      const handleModelDelete = () => {
-        handledeleteModel(
-          DELETE_MODEL,
+      const handleStructureDelete = () => {
+        handledeleteStructure(
+          DELETE_STRUCTURE,
           {
-            deleteModelId: row.original.id,
+            deleteLayoutStructureId: row.original.id,
           },
           {
             cache: "no-store",
@@ -1992,6 +2025,21 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
             >
               <DropdownMenuItem>Update Structure</DropdownMenuItem>
             </Link>
+            <DropdownMenuLabel>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <Trash2 size={13} /> Delete User
+                  </div>
+                </AlertDialogTrigger>
+                <DeletePopupComp
+                  inputText={row.original.layout.label}
+                  onclick={handleStructureDelete}
+                  type="Structure"
+                />
+              </AlertDialog>
+            </DropdownMenuLabel>
+            
           </DropdownMenuContent>
 
         </DropdownMenu>

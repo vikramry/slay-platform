@@ -1056,3 +1056,8 @@ export const LIST_LAYOUT_STRUCTURES = `query Docs($sort: sortLayoutStructureInpu
     }
   }
 }`
+
+export const DELETE_STRUCTURE =`
+mutation DeleteLayoutStructure($deleteLayoutStructureId: ID!) {
+  deleteLayoutStructure(id: $deleteLayoutStructureId)
+}`
