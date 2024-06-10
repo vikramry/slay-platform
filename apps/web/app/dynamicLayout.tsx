@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import Card from "@repo/ui/card";
 import { useLazyQuery } from "./hook";
 import { serverFetch } from "./action";
-import { LIST_ALL_LAYOUTS_LABELS, LIST_LAYOUT_STRUCTURES } from "./queries";
+import { LIST_ALL_LAYOUTS, LIST_ALL_LAYOUTS_LABELS, LIST_LAYOUT_STRUCTURES, listtabs } from "./queries";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@repo/ui";
 import { Layout } from "@/types";
 import App from "@/containers/DynamicComponent";
+import { NavBar } from "@repo/ui/navBar";
 
 const LayoutCardTemplate = [
   {
@@ -38,13 +39,20 @@ const DynamicLayout = () => {
   const [listLayouts, { data, loading, error }] = useLazyQuery(serverFetch);
   const [currentLayout, setCurrentLayout] = useState("");
   const [getCurrentLayoutStructures, getCurrentLayoutStructuresResponse] = useLazyQuery(serverFetch);
+  const [ListTabs,ListTabsResponse]=useLazyQuery(serverFetch);
+  const [ListLayouts,ListLayoutsResponse]=useLazyQuery(serverFetch);
 
-
+const[modelId,setModelId]=useState("")
   useEffect(() => {
     listLayouts(
       LIST_ALL_LAYOUTS_LABELS,
       {},
       {
+        cache: 'no-store'
+      }
+    )
+    ListTabs(
+      listtabs,{}, {
         cache: 'no-store'
       }
     )
@@ -54,27 +62,55 @@ const DynamicLayout = () => {
   useEffect(() => {
 
   }, [data, error, loading])
+  useEffect(() => {
+    if(ListTabsResponse?.data){
+      console.log(ListTabsResponse?.data,"tabsdata")
+     setModelId(ListTabsResponse?.data?.listTabs?.docs[0].model?.id)
+    }
+      else if(ListTabsResponse?.error){
+        console.log(ListTabsResponse?.error)
+      }
+  
+  }, [ListTabsResponse?.data,ListTabsResponse?.error,ListTabsResponse?.loading])
 
-  useEffect(()=>{
-    if(currentLayout){
-      getCurrentLayoutStructures(
-        LIST_LAYOUT_STRUCTURES,
-        {
-          "where": {
-            "layout": {
-              "is": currentLayout
-            }
-          },
-          "sort": {
-            "order": "asc"
+
+useEffect(() => {
+  if(modelId){
+  ListLayouts(
+    LIST_ALL_LAYOUTS,{
+      "where": {
+        "model": {
+          "is": modelId
+        }
+      },
+      limit:100
+    },{
+      cache: "no-store"
+    }
+
+  )}
+}, [modelId])
+useEffect(() => {
+  if(ListLayoutsResponse?.data){
+    getCurrentLayoutStructures(
+      LIST_LAYOUT_STRUCTURES,
+      {
+        "where": {
+          "layout": {
+            "is":     ListLayoutsResponse?.data?.listLayouts?.docs.find((item:Layout)=>item.profiles && item.profiles.length === 0)?.id
           }
         },
-        {
-          cache: "no-store"
+        "sort": {
+          "order": "asc"
         }
-      )
-    }
-}, [currentLayout])
+      },
+      {
+        cache: "no-store"
+      }
+    )
+  }
+
+}, [ListLayoutsResponse?.data,ListLayoutsResponse?.loading,ListLayoutsResponse?.error])
 
   useEffect(()=>{
     if(getCurrentLayoutStructuresResponse.data){
@@ -83,7 +119,8 @@ const DynamicLayout = () => {
   }, [getCurrentLayoutStructuresResponse.data, getCurrentLayoutStructuresResponse.error, getCurrentLayoutStructuresResponse.loading])
   return (
     <div>
-      <div className="py-5">
+      <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} setACTIVETab={setModelId} aCTIVETab={modelId} loading={ListTabsResponse?.loading}/>
+      {/* <div className="py-5">
         <Select onValueChange={(value: string)=>{setCurrentLayout(value)}} value={currentLayout}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select a Layout" />
@@ -97,7 +134,7 @@ const DynamicLayout = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-[#121212] bg-gray-100 p-2">
         {getCurrentLayoutStructuresResponse.data?.listLayoutStructures.docs.map((item: any) => (
           <Card

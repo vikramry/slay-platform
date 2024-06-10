@@ -1061,3 +1061,44 @@ export const DELETE_STRUCTURE =`
 mutation DeleteLayoutStructure($deleteLayoutStructureId: ID!) {
   deleteLayoutStructure(id: $deleteLayoutStructureId)
 }`
+export const LIST_TABS =`
+query Docs {
+  listTabs {
+    docs {
+      label
+      id
+      model {
+        id
+        label
+        name
+      }
+    }
+  }
+}`
+
+export const GET_LAYOUT_BY_MODEL =`
+query GetLayout($where: whereLayoutInput!) {
+  getLayout(where: $where) {
+    model {
+      id
+    }
+    profiles {
+      id
+      label
+      name
+    }
+    structures {
+      col
+      id
+      component {
+        id
+        label
+        name
+        code
+      }
+      order
+      row
+    }
+  }
+}`
+

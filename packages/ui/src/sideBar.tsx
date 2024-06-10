@@ -75,13 +75,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
-
 export interface SideBarProps {
   title: string;
   link: string;
 }
 
 export function SideBar() {
+  const router = usePathname();
+  // const currentPath = router.pathname;
+  console.log(router,"currentpath")
   const data: Record<string, SideBarProps[]> = {
     default: [
       {
@@ -144,7 +146,7 @@ export function SideBar() {
         : "default"
     ];
   return (
-    <div className="md:block hidden">
+    <div className={`  ${router === "/dashboard" ? "hidden": "md:block hidden"}`}>
       <div className="flex flex-col gap-2 ">
         {sidebarData?.map((item: SideBarProps) => {
           const link = `/${item?.link}`;
