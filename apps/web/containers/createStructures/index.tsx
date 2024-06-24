@@ -42,10 +42,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  order: z.any(),
-  row: z.any(),
-  col: z.any(),
-  layout: z.any(),
+  order: z.coerce.number(),
+  row: z.coerce.number(),
+  col: z.coerce.number(),
+  layout: z.string(),
   component: z.string(),
 });
 
@@ -58,9 +58,7 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
 
   const router = useRouter();
   const params = useSearchParams();
-  console.log(params.get("id"), "fjyfjhvjgyg");
   const { id, layoutId, structureId } = useParams();
-  console.log(structureId, "structureId");
   const getStructureFun = () => {
     getStructure(
       GET_STRUCTURE,

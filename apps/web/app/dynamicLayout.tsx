@@ -9,40 +9,17 @@ import { Layout } from "@/types";
 import App from "@/containers/DynamicComponent";
 import { NavBar } from "@repo/ui/navBar";
 
-const LayoutCardTemplate = [
-  {
-    title: "Card1",
-    cols: 2,
-    rows: 2,
-  },
-  {
-    title: "Card2",
-    cols: 1,
-    rows: 2,
-  },
-  {
-    title: "Card3",
-    cols: 1,
-    rows: 1,
-  },
-  {
-    title: "Card3",
-    cols: 2,
-    rows: 1,
-  },
-];
 
 // to make tailwind classes work dynamically
 ("col-span-1 col-span-2 col-span-3 row-span-1 row-span-2 row-span-3 col-span-4 col-span-5 row-span-4 col-span-5");
 
 const DynamicLayout = () => {
   const [listLayouts, { data, loading, error }] = useLazyQuery(serverFetch);
-  const [currentLayout, setCurrentLayout] = useState("");
   const [getCurrentLayoutStructures, getCurrentLayoutStructuresResponse] = useLazyQuery(serverFetch);
-  const [ListTabs,ListTabsResponse]=useLazyQuery(serverFetch);
-  const [ListLayouts,ListLayoutsResponse]=useLazyQuery(serverFetch);
+  const [ListTabs, ListTabsResponse] = useLazyQuery(serverFetch);
+  const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
 
-const[modelId,setModelId]=useState("")
+  const [modelId, setModelId] = useState("")
   useEffect(() => {
     listLayouts(
       LIST_ALL_LAYOUTS_LABELS,
@@ -52,9 +29,9 @@ const[modelId,setModelId]=useState("")
       }
     )
     ListTabs(
-      listtabs,{}, {
-        cache: 'no-store'
-      }
+      listtabs, {}, {
+      cache: 'no-store'
+    }
     )
   }, [])
 
@@ -63,63 +40,64 @@ const[modelId,setModelId]=useState("")
 
   }, [data, error, loading])
   useEffect(() => {
-    if(ListTabsResponse?.data){
-      console.log(ListTabsResponse?.data,"tabsdata")
-     setModelId(ListTabsResponse?.data?.listTabs?.docs[0].model?.id)
+    if (ListTabsResponse?.data) {
+      console.log(ListTabsResponse?.data, "tabsdata")
+      setModelId(ListTabsResponse?.data?.listTabs?.docs[0].model?.id)
     }
-      else if(ListTabsResponse?.error){
-        console.log(ListTabsResponse?.error)
-      }
-  
-  }, [ListTabsResponse?.data,ListTabsResponse?.error,ListTabsResponse?.loading])
-
-
-useEffect(() => {
-  if(modelId){
-  ListLayouts(
-    LIST_ALL_LAYOUTS,{
-      "where": {
-        "model": {
-          "is": modelId
-        }
-      },
-      limit:100
-    },{
-      cache: "no-store"
+    else if (ListTabsResponse?.error) {
+      console.log(ListTabsResponse?.error)
     }
 
-  )}
-}, [modelId])
-useEffect(() => {
-  if(ListLayoutsResponse?.data){
-    getCurrentLayoutStructures(
-      LIST_LAYOUT_STRUCTURES,
-      {
+  }, [ListTabsResponse?.data, ListTabsResponse?.error, ListTabsResponse?.loading])
+
+
+  useEffect(() => {
+    if (modelId) {
+      ListLayouts(
+        LIST_ALL_LAYOUTS, {
         "where": {
-          "layout": {
-            "is":     ListLayoutsResponse?.data?.listLayouts?.docs.find((item:Layout)=>item.profiles && item.profiles.length === 0)?.id
+          "model": {
+            "is": modelId
           }
         },
-        "sort": {
-          "order": "asc"
-        }
-      },
-      {
+        limit: 100
+      }, {
         cache: "no-store"
       }
-    )
-  }
 
-}, [ListLayoutsResponse?.data,ListLayoutsResponse?.loading,ListLayoutsResponse?.error])
+      )
+    }
+  }, [modelId])
+  useEffect(() => {
+    if (ListLayoutsResponse?.data) {
+      getCurrentLayoutStructures(
+        LIST_LAYOUT_STRUCTURES,
+        {
+          "where": {
+            "layout": {
+              "is": ListLayoutsResponse?.data?.listLayouts?.docs.find((item: Layout) => item.profiles && item.profiles.length === 0)?.id
+            }
+          },
+          "sort": {
+            "order": "asc"
+          }
+        },
+        {
+          cache: "no-store"
+        }
+      )
+    }
 
-  useEffect(()=>{
-    if(getCurrentLayoutStructuresResponse.data){
+  }, [ListLayoutsResponse?.data, ListLayoutsResponse?.loading, ListLayoutsResponse?.error])
+
+  useEffect(() => {
+    if (getCurrentLayoutStructuresResponse.data) {
       console.log(getCurrentLayoutStructuresResponse.data);
     }
   }, [getCurrentLayoutStructuresResponse.data, getCurrentLayoutStructuresResponse.error, getCurrentLayoutStructuresResponse.loading])
   return (
     <div>
-      <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} setACTIVETab={setModelId} aCTIVETab={modelId} loading={ListTabsResponse?.loading}/>
+      <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} setACTIVETab={setModelId} aCTIVETab={modelId} loading={ListTabsResponse?.loading} />
       {/* <div className="py-5">
         <Select onValueChange={(value: string)=>{setCurrentLayout(value)}} value={currentLayout}>
           <SelectTrigger className="w-[180px]">
@@ -140,7 +118,7 @@ useEffect(() => {
           <Card
             classNames={`col-span-${item.col} row-span-${item.row} bg-white`}
           >
-            <App jsxString={atob(item.component.code)} onClick={() => console.log("Clicked A button")}/>
+            <App jsxString={atob(item.component.code)} onClick={() => console.log("Clicked A button")} />
           </Card>
         ))}
       </div>

@@ -1,22 +1,4 @@
-import Link from "next/link";
-const data = [
-  {
-    title: "Overview",
-    link: "",
-  },
-  {
-    title: "Analytics",
-    link: "",
-  },
-  {
-    title: "Reports",
-    link: "",
-  },
-  {
-    title: "Notification",
-    link: "",
-  },
-];
+
 export interface LIST_TABSTYPES {
   label: string;
   id: string;
@@ -38,7 +20,6 @@ export function NavBar({
   tabsData?: LIST_TABSTYPES[];
   loading: boolean;
 }) {
-  console.log(aCTIVETab, "tabsprops");
   return (
     <div className="flex flex-row h-[70px]  items-center p-[20px] ">
       <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
@@ -59,7 +40,7 @@ export function NavBar({
                   return (
                     // <Link href={"#"} key={item.label}>
                     <h4
-                      className={`${aCTIVETab == item?.model?.id ? "text-black" : "text-gray-500"} text-[14px] hover:text-black dark:hover:text-white font-semibold ease-in-out duration-300`}
+                      className={`${aCTIVETab == item?.model?.id ? "text-black" : "text-gray-500"} text-[14px] hover:text-black cursor-pointer dark:hover:text-white font-semibold ease-in-out duration-300`}
                       onClick={() => setACTIVETab(item?.model?.id)}
                     >
                       {item?.label}
