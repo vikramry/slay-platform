@@ -16,12 +16,20 @@ export const ModeToggleButton = () => {
 
   return (
     <div
-      className={` w-[60px] rounded-[100px]  ${
+      className={` w-[40px]  rounded-[100px]  ${
         theme == "dark" || currentTheme ==  "dark" ? "bg-[black]" : "bg-[white] shadow-md "
       }`}
-    >
+      onClick={() => {
+        if (theme == "dark" || currentTheme ==  "dark") {
+          setTheme("light");
+          localStorage.setItem("theme", "light");
+        } else {
+          setTheme("dark");
+          localStorage.setItem("theme", "dark");
+        }
+      }}>
       <button
-        className={`w-8 h-8 rounded-full  ${theme == "dark" ? "bg-black" : "bg-black"} flex items-center transition duration-300 focus:outline-none shadow  ${
+        className={`w-6 h-6 rounded-full  ${theme == "dark" ? "bg-black" : "bg-black"} flex items-center transition duration-300 focus:outline-none shadow  ${
           theme == "dark" || currentTheme ==  "dark"
             ? "bg-gray-700 translate-x-full"
             : "bg-black border-[1px] border-gray-600 -translate-x-2"
@@ -38,7 +46,7 @@ export const ModeToggleButton = () => {
       >
         <div
           id="switch-toggle"
-          className={`w-8 h-8 relative rounded-full transition duration-500 transform p-1 text-white `}
+          className={`w-6 h-6 relative rounded-full transition duration-500 transform p-1 text-white `}
         >
           {theme == "dark" ? (
             <svg

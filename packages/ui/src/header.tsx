@@ -41,13 +41,13 @@ export function Header() {
       setIsOpen(!isOpen);
     };
   return (
-    <div className='flex flex-row h-[70px] bg-white justify-between items-center p-[20px] border-b-[1px] border-gray dark:border-gray-700 dark:bg-gray-700'>
+    <div className='flex flex-row h-[50px] bg-white justify-between items-center p-[15px] border-b-[1px] border-gray dark:border-gray-700 dark:bg-gray-700'>
     <h3 className='flex flex-row font-semibold text-[#817994] text-xl'>Mercury Platform</h3>
     <div className='flex flex-row gap-2 justify-between items-center'>
       <div>
         <ModeToggleButton />
       </div>
-      <div className='rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray md:block hidden' onClick={()=>setdropdown(!dropdown)}></div>
+      <div className='rounded-full w-[35px] h-[35px] border-gray border-[1px] mr-5 dark:border-gray md:block hidden' onClick={()=>setdropdown(!dropdown)}></div>
       {dropdown &&
       <div className="drop-down z-10 w-28 overflow-hidden bg-white dark:bg-black rounded-md shadow absolute top-12 right-3">
        <ul>
