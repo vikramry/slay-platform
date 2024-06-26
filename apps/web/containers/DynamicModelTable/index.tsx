@@ -56,7 +56,11 @@ const DynamicModelTable = () => {
             setColumns(columns);
         }
     }, [data, loading, error])
-
+if(loading){
+    return(
+        <h5 className="flex justify-center">Loading....</h5>
+    )
+}
     return (
         <div>
            {columns?.length > 0 && <DataTable

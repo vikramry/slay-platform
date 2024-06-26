@@ -113,7 +113,7 @@ const DynamicLayout = () => {
           </SelectContent>
         </Select>
       </div> */}
-      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-[#121212] bg-gray-100 p-2">
+      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 bg-white dark:bg-black bg-gray-100 p-2">
         {getCurrentLayoutStructuresResponse.data?.listLayoutStructures.docs.map((item: any) => (
           <Card
             classNames={`col-span-${item.col} row-span-${item.row} bg-white`}
