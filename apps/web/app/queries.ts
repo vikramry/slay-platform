@@ -374,6 +374,7 @@ export const getlistmodelfields = `
         label
         managed
         required
+        ref
         unique
         type
         model {
