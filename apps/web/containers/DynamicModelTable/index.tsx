@@ -8,156 +8,193 @@ import React, { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button, Checkbox, DataTable } from "@repo/ui";
 import { ChevronsUpDown } from "lucide-react";
+import Link from "next/link";
 
 const DynamicModelTable = () => {
-  const modelName = useParams()?.modelName;
-  const [getAllModelFields, { data, loading, error }] =
-    useLazyQuery(serverFetch);
-  const [columns, setColumns] = useState<any>();
-  const [query, setQuery] = useState<string>("");
+    const modelName = useParams()?.modelName;
+    const [getAllModelFields, { data, loading, error }] =
+        useLazyQuery(serverFetch);
+    const [listModelData, listModelDataResponse] = useLazyQuery(serverFetch);
+    const [columns, setColumns] = useState<any>();
+    const [query, setQuery] = useState<string>("");
 
-  useEffect(() => {
-    getAllModelFields(
-      getlistmodelfields,
-      {
-        where: {
-          modelName: {
-            is: modelName,
-          },
-        },
-      },
-      {
-        cache: "no-store",
-      }
-    );
-  }, []);
+    useEffect(() => {
+        getAllModelFields(
+            getlistmodelfields,
+            {
+                where: {
+                    modelName: {
+                        is: modelName,
+                    },
+                },
+            },
+            {
+                cache: "no-store",
+            }
+        );
+    }, []);
 
-  useEffect(() => {
-    if (data) {
-      console.log(data?.listModelFields?.docs);
+    useEffect(() => {
+        if (data) {
 
-      const columns: ColumnDef<any>[] = data?.listModelFields?.docs?.map(
-        (field: ModelFieldType) => {
-          switch (field.type) {
-            case "string" || "number" || "float" || "decimal128":
-              return {
-                accessorKey: field.fieldName,
+            const columns: ColumnDef<any>[] = data?.listModelFields?.docs?.map(
+                (field: ModelFieldType) => {
+                    switch (field.type) {
+                        case "string" || "number" || "float" || "decimal128":
+                            return {
+                                accessorKey: field.fieldName,
+                                header: ({ column }) => {
+                                    return (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() =>
+                                                column.toggleSorting(column.getIsSorted() === "asc")
+                                            }
+                                        >
+                                            {field.label}
+                                            <ChevronsUpDown className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    );
+                                },
+                                cell: ({ row }) => (
+                                    <div className="">{row.getValue(field.fieldName)}</div>
+                                ),
+                            };
+                        case "boolean":
+                            return {
+                                accessorKey: field.fieldName,
+                                header: field.label,
+                                cell: ({ row }) => (
+                                    <div className="">
+                                        <Checkbox
+                                            checked={row.getValue(field.fieldName)}
+                                            readonly
+                                            aria-label="Select all"
+                                        />
+                                    </div>
+                                ),
+                            };
+                        case "date":
+                            return {
+                                accessorKey: field.fieldName,
+                                header: ({ column }) => {
+                                    return (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() =>
+                                                column.toggleSorting(column.getIsSorted() === "asc")
+                                            }
+                                        >
+                                            {field.label}
+                                            <ChevronsUpDown className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    );
+                                },
+                                cell: ({ row }) => (
+                                    <div className="">
+                                        {new Date(row.getValue(field.fieldName)).getTime()}
+                                    </div>
+                                ),
+                            };
+                        default:
+                            return {
+                                accessorKey: field.fieldName,
+                                header: ({ column }) => {
+                                    return (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() =>
+                                                column.toggleSorting(column.getIsSorted() === "asc")
+                                            }
+                                        >
+                                            {field.label}
+                                            <ChevronsUpDown className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    );
+                                },
+                                cell: ({ row }) => (
+                                    <div className="">{row.getValue(field.fieldName)}</div>
+                                ),
+                            };
+                    }
+                }
+            );
+
+            columns.push({
+                accessorKey: "action",
                 header: ({ column }) => {
-                  return (
-                    <Button
-                      variant="ghost"
-                      onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                      }
-                    >
-                      {field.label}
-                      <ChevronsUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                  );
+                    return (
+                        <Button
+                            variant="ghost"
+
+                        >
+                            Action
+                            <ChevronsUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    );
                 },
                 cell: ({ row }) => (
-                  <div className="">{row.getValue(field.fieldName)}</div>
+                    <div className=""><Link href={`/o/${modelName}/r/${row.original?.id}`}>Open</Link></div>
                 ),
-              };
-            case "boolean":
-              return {
-                accessorKey: field.fieldName,
-                header: field.label,
-                cell: ({ row }) => (
-                  <div className="">
-                    <Checkbox
-                      checked={row.getValue(field.fieldName)}
-                      readonly
-                      aria-label="Select all"
-                    />
-                  </div>
-                ),
-              };
-            case "date":
-              return {
-                accessorKey: field.fieldName,
-                header: ({ column }) => {
-                  return (
-                    <Button
-                      variant="ghost"
-                      onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                      }
-                    >
-                      {field.label}
-                      <ChevronsUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                  );
-                },
-                cell: ({ row }) => (
-                  <div className="">
-                    {new Date(row.getValue(field.fieldName)).getTime()}
-                  </div>
-                ),
-              };
-            default:
-              return {
-                accessorKey: field.fieldName,
-                header: ({ column }) => {
-                  return (
-                    <Button
-                      variant="ghost"
-                      onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                      }
-                    >
-                      {field.label}
-                      <ChevronsUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                  );
-                },
-                cell: ({ row }) => (
-                  <div className="">{row.getValue(field.fieldName)}</div>
-                ),
-              };
-          }
-        }
-      );
+            })
 
-      setColumns(columns);
-      let str = `query ListModels($sort: sortModelInput) {
+            setColumns(columns);
+            let str = `query ListModels($sort: sortModelInput) {
                     list${modelName!.toString().charAt(0).toUpperCase() + modelName!.toString().substring(1)}s(sort: $sort) {
                         docs {
                             id`;
-      data?.listModelFields?.docs?.forEach((item: ModelFieldType) => {
-        if(item.type === "virtual" || item.type === "relationship"){
-            str += `
+            data?.listModelFields?.docs?.forEach((item: ModelFieldType) => {
+                if (item.type === "virtual" || item.type === "relationship") {
+                    str += `
                             ${item.fieldName} {
                                 id
                             }`;
-            return;
-        }
-        str += `
+                    return;
+                }
+                str += `
                             ${item.fieldName}`;
-      });
-      str += `
+            });
+            str += `
                             }
                         }
                     }`;
-      setQuery(str);
-      console.log(str);
-    }
-  }, [data, loading, error]);
+            setQuery(str);
+            console.log(str);
 
-  return (
-    <div>
-      {columns?.length > 0 && (
-        <DataTable
-          columns={columns || []}
-          loading={loading}
-          data={[]}
-          filterBy="fieldName"
-          text="Create Layout"
-          url="layouts/add"
-        />
-      )}
-    </div>
-  );
+            listModelData(
+                str,
+                {},
+                {
+                    cache: "no-store"
+                }
+            )
+        }
+    }, [data, loading, error]);
+
+    useEffect(() => {
+        if (listModelDataResponse.data) {
+            console.log(listModelDataResponse.data);
+        }
+
+        if (listModelDataResponse.error) {
+            console.log(listModelDataResponse.error);
+        }
+    }, [listModelDataResponse.data, listModelDataResponse.error, listModelDataResponse.loading]);
+
+    return (
+        <div>
+            {columns?.length > 0 && (
+                <DataTable
+                    columns={columns || []}
+                    loading={loading}
+                    data={[]}
+                    filterBy="fieldName"
+                    text="Create Layout"
+                    url="layouts/add"
+                />
+            )}
+        </div>
+    );
 };
 
 export default DynamicModelTable;
