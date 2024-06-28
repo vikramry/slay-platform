@@ -1,5 +1,5 @@
 
-import { useRouter } from "next/navigation";
+import { useRouter,useParams } from "next/navigation";
 export interface LIST_TABSTYPES {
   label: string;
   id: string;
@@ -22,7 +22,9 @@ export function NavBar({
   loading: boolean;
 }) {
   const router = useRouter();
-  return (
+  const { modelName } = useParams();
+  console.log(modelName,"mdelName")
+    return (
     <div className="flex flex-row h-[70px]  items-center  ">
       {/* <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
       <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
@@ -42,7 +44,7 @@ export function NavBar({
                   return (
                     // <Link href={"#"} key={item.label}>
                     <h4
-                      className={`${aCTIVETab == item?.model?.id ? "text-black dark:text-white font-bold" : "text-[#7B7B7D]"} text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white font-semibold ease-in-out duration-300`}
+                      className={`${modelName == item?.model?.name ? "text-black dark:text-white font-bold" : "text-[#7B7B7D]"} text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white font-semibold ease-in-out duration-300`}
                       onClick={() => router.push(`/dashboard/o/${item.model.name}/list`)}
                     >
                       {item?.label}
