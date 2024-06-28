@@ -1,5 +1,5 @@
 
-import { useRouter,useParams } from "next/navigation";
+import { useRouter,useParams,usePathname } from "next/navigation";
 export interface LIST_TABSTYPES {
   label: string;
   id: string;
@@ -23,13 +23,15 @@ export function NavBar({
 }) {
   const router = useRouter();
   const { modelName } = useParams();
+  const pathName = usePathname();
+
   console.log(modelName,"mdelName")
     return (
-    <div className="flex flex-row h-[70px]  items-center  ">
+    <div className={`flex flex-row h-[70px]  items-center  ${pathName === "/dashboard" || pathName.includes('/dashboard/o/') ? "block" : "hidden"}`}>
       {/* <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
       <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
       <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div> */}
-      <div className="rounded-full w-[calc(100vw-45px)] h-[36px] border-gray border-[1px] dark:border-gray-500 flex flex-row justify-center items-center align-middle overflow-x-auto px-4">
+      <div className="rounded-full w-[calc(100vw-38px)] h-[36px] border-gray border-[1px] dark:border-gray-500 flex flex-row justify-center items-center align-middle overflow-x-auto px-4">
         <div className="md:block hidden">
           <div className="flex flex-row justify-center gap-8 ">
             {loading ? (
