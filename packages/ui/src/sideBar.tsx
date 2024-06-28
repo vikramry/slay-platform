@@ -83,7 +83,7 @@ export interface SideBarProps {
 export function SideBar() {
   const router = usePathname();
   // const currentPath = router.pathname;
-  console.log(router,"currentpath")
+  console.log(router, "currentpath")
   const data: Record<string, SideBarProps[]> = {
     default: [
       {
@@ -139,14 +139,14 @@ export function SideBar() {
   const sidebarData =
     data[
 
-    /\/layouts\/.+/.test(usePathname()) && !usePathname().includes("layouts/add") ? "layout" : 
+    /\/layouts\/.+/.test(usePathname()) && !usePathname().includes("layouts/add") ? "layout" :
       /\/model\/.+/.test(usePathname()) &&
         !usePathname().includes("model/createModel")
         ? "model"
         : "default"
     ];
   return (
-    <div className={`  ${router === "/dashboard" ? "hidden": "md:block hidden"}`}>
+    <div className={`  ${router === "/dashboard" || router.includes('/dashboard/o/') ? "hidden" : "md:block hidden"}`}>
       <div className="flex flex-col gap-2 ">
         {sidebarData?.map((item: SideBarProps) => {
           const link = `/${item?.link}`;

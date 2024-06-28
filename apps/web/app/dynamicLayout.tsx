@@ -97,7 +97,6 @@ const DynamicLayout = () => {
   }, [getCurrentLayoutStructuresResponse.data, getCurrentLayoutStructuresResponse.error, getCurrentLayoutStructuresResponse.loading])
   return (
     <div>
-      <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} setACTIVETab={setModelId} aCTIVETab={modelId} loading={ListTabsResponse?.loading} />
       {/* <div className="py-5">
         <Select onValueChange={(value: string)=>{setCurrentLayout(value)}} value={currentLayout}>
           <SelectTrigger className="w-[180px]">
