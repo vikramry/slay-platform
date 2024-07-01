@@ -158,6 +158,7 @@ else if(DynamicGetQuaryResponse?.error){
               <App
                 jsxString={atob(item.component.code)}
                 onClick={() => console.log("Clicked A button")}
+                metaData={{data : DynamicGetQuaryResponse?.data?.[`get${modelName}`]}}
               />
             </Card>
           )

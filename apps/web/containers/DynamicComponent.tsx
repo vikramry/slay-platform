@@ -4,6 +4,7 @@ import * as Babel from "@babel/standalone";
 
 type DyComProps = {
   onClick: () => void;
+  metaData?: any
 };
 
 function createComponentFromJSX({
@@ -55,7 +56,7 @@ async function loadModules(jsxString: string) {
   // Note: This uses 'new Function' which can have security implications
 }
 
-function App({ onClick, jsxString }: { onClick: () => void, jsxString: string }) {
+function App({ onClick, jsxString ,metaData}: { onClick: () => void, jsxString: string ,metaData?:any}) {
   // const [componentUrl, setComponentUrl] = useState<string | null>(null);
   const [nodeModules, setNodeModules] = useState<{
     jsxString: string;
@@ -82,7 +83,7 @@ function App({ onClick, jsxString }: { onClick: () => void, jsxString: string })
   return (
     <div className="App">
       <header className="App-header" style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
-        {MyComponent && <MyComponent onClick={onClick} />}
+        {MyComponent && <MyComponent onClick={onClick} metaData={metaData} />}
       </header>
     </div>
   );

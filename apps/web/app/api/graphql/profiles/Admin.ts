@@ -117,7 +117,17 @@ const rules = [
       update: true,
       delete: true,
     },
+    
   },
+  {
+    modelName: "student",
+    access: {
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+    },
+},
 ];
 
 export const AdminProfile = mercury.access.createProfile("Admin", rules);

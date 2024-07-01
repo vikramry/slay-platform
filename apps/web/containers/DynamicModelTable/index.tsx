@@ -195,7 +195,7 @@ const DynamicModelTable = () => {
           loading={loading}
           data={ listModelDataResponse.data?.[`list${modelName}s`]?.docs ||[]}
           filterBy="fieldName"
-          text="Create Layout"
+        //   text="Create Layout"
           url="layouts/add"
         />
       )}

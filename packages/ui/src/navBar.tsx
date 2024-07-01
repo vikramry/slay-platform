@@ -46,7 +46,7 @@ export function NavBar({
                   return (
                     // <Link href={"#"} key={item.label}>
                     <h4
-                      className={`${modelName == item?.model?.name ? "text-black dark:text-white font-bold" : "text-[#7B7B7D]"} text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white font-semibold ease-in-out duration-300`}
+                      className={`${modelName == item?.model?.name ? "text-black dark:text-white font-bold" : "text-[#7B7B7D] font-[500px]"} text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white  ease-in-out duration-300`}
                       onClick={() => router.push(`/dashboard/o/${item.model.name}/list`)}
                     >
                       {item?.label}

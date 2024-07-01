@@ -82,7 +82,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     useLazyQuery(serverFetch);
   const { id, fieldId } = useParams();
   const { toast } = useToast();
-
+const router =useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -352,6 +352,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: "Model Field Created",
       });
+      router.back()
     } else if (error) {
       toast({
         variant: "destructive",
@@ -365,6 +366,8 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: "Model Field Updated",
       });
+      router.back()
+
     } else if (updateModelFieldResponse.error) {
       toast({
         variant: "destructive",
