@@ -104,9 +104,9 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (getLayoutsResponse?.data) {
-      form.reset({
-        layout: getLayoutsResponse.data.getLayout.label,
-      });
+      form.setValue("layout",
+        getLayoutsResponse.data.getLayout.label,
+      );
     } else if (getLayoutsResponse?.error) {
       toast({
         variant: "destructive",
@@ -122,7 +122,6 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
   //
   useEffect(() => {
     if (ListComponentsResponse?.data) {
-      console.log(ListComponentsResponse?.data?.listComponents?.docs, "data");
     } else if (getLayoutsResponse?.error) {
       toast({
         variant: "destructive",
@@ -138,12 +137,12 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (getStructureResponse.data) {
-      console.log(getStructureResponse.data.getLayoutStructure.component?.id,"asdfghjkytrewasdfg");
+      console.log(getStructureResponse.data.getLayoutStructure.component?.id, "asdfghjkytrewasdfg");
       form.reset({
         row: +getStructureResponse.data.getLayoutStructure.row,
         col: +getStructureResponse.data.getLayoutStructure.col,
         order: +getStructureResponse.data.getLayoutStructure.order,
-        component:getStructureResponse.data.getLayoutStructure.component?.id,
+        component: getStructureResponse.data.getLayoutStructure.component?.id,
         layout: getStructureResponse.data.getLayoutStructure.layout.label,
       });
     } else if (getStructureResponse.error) {
@@ -160,7 +159,11 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
   ]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      col: 0,
+      row: 0,
+      order: 0,
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -292,7 +295,7 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
               <FormItem>
                 <FormLabel>Layout</FormLabel>
                 <FormControl>
-                  <Input placeholder="Layout" {...field} disabled/>
+                  <Input placeholder="Layout" {...field} disabled />
                 </FormControl>
                 <FormMessage />
               </FormItem>
