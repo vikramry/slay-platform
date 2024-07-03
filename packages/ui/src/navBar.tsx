@@ -31,7 +31,7 @@ export function NavBar({
       {/* <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
       <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div>
       <div className="rounded-full w-[50px] h-[50px] border-gray border-[1px] mr-5 dark:border-gray-500"></div> */}
-      <div className="rounded-full w-[calc(100vw-38px)] h-[36px] border-gray border-[1px] dark:border-gray-500 flex flex-row justify-center items-center align-middle overflow-x-auto px-4">
+      <div className="rounded-full w-[calc(100vw-20px)] h-[36px] border-gray border-[1px] dark:border-gray-500 flex flex-row justify-center items-center align-middle overflow-x-auto px-4">
         <div className="md:block hidden">
           <div className="flex flex-row justify-center gap-8 ">
             {loading ? (
