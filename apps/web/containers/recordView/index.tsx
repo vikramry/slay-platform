@@ -185,7 +185,7 @@ function RecordView() {
             {getCurrentLayoutStructuresResponse.data?.listLayoutStructures.docs.map(
               (item: any) => (
                 <Card
-                  classNames={`col-span-${item.col} bg-white`}
+                  classNames={`col-span-${item.col} row-span-${item.row} bg-white`}
                   rows={item.row}
                 >
                   <App
