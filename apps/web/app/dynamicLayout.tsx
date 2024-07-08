@@ -112,7 +112,7 @@ const DynamicLayout = () => {
           </SelectContent>
         </Select>
       </div> */}
-      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1  dark:bg-black bg-gray-100 p-2">
+      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1  dark:bg-black bg-white p-2">
         {getCurrentLayoutStructuresResponse.loading || ListLayoutsResponse?.loading || loading ?
           // Skeleton Loader
           <>
