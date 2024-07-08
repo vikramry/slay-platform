@@ -32,6 +32,7 @@ const ListComponent = () => {
         columns={componentsColumns}
         filterBy={"name"}
         data={data?.listComponents?.docs || []}
+        loading={loading}
         text="Create component"
         url="/dashboard/components/createComponent"
       />

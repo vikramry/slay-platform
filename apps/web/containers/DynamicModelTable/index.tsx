@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button, Checkbox, DataTable } from "@repo/ui";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 const DynamicModelTable = () => {
@@ -125,13 +125,12 @@ const DynamicModelTable = () => {
           return (
             <Button variant="ghost">
               Action
-              <ChevronsUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => (
           <div className="">
-            <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}>Open</Link>
+            <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}><ExternalLink className="ml-2 h-4 w-4" /></Link>
           </div>
         ),
       });
@@ -192,10 +191,10 @@ const DynamicModelTable = () => {
       {columns?.length > 0 && (
         <DataTable
           columns={columns || []}
-          loading={loading}
-          data={ listModelDataResponse.data?.[`list${modelName}s`]?.docs ||[]}
+          loading={listModelDataResponse.loading || loading}
+          data={listModelDataResponse.data?.[`list${modelName}s`]?.docs || []}
           filterBy="fieldName"
-        //   text="Create Layout"
+          //   text="Create Layout"
           url="layouts/add"
         />
       )}
