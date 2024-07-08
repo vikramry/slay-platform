@@ -149,7 +149,7 @@ function RecordView() {
   }, [DynamicGetQuaryResponse?.data, DynamicGetQuaryResponse?.loading, DynamicGetQuaryResponse?.error])
   return (
     <div>
-      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-gray-100 p-2">
+      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
         {getCurrentLayoutStructuresResponse.loading || loading ?
           <>
             {[1, 2, 3, 4, 5].map((_, index) => (
