@@ -876,7 +876,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
               <DropdownMenuItem>View Tab</DropdownMenuItem>
             </Link> */}
             <Link
-              href={`/dashboard/tabs/edit?id=${row.original.id}`}
+              href={`/dashboard/tabs/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Edit Tab</DropdownMenuItem>

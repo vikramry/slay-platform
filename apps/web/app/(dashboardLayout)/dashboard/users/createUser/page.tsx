@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import CreateUser from '../../../../../containers/createUser'
 
 function page() {
   return (
-    <div>
-        <CreateUser/>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+
+      <div><CreateUser /></div>
+    </Suspense>
   )
 }
 

@@ -133,7 +133,7 @@ export default function Page(): JSX.Element {
 
       <div className={styles.grid}>
         {LINKS.map(({ title, href, description }) => (
-          <Card classNames={styles.card} key={title} >
+          <Card classNames={styles.card} key={title} rows={2} >
             {description}
           </Card>
         ))}
