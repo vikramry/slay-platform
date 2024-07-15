@@ -59,6 +59,27 @@ const DynamicModelTable = () => {
                   <div className="">{row.getValue(field.fieldName)}</div>
                 ),
               };
+
+            case "relationship" || "virtual":
+              return {
+                accessorKey: `${field.fieldName}.id`,
+                header: ({ column }) => {
+                  return (
+                    <Button
+                      variant="ghost"
+                      onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                      }
+                    >
+                      {field.label}({field.ref})
+                      <ChevronsUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                  );
+                },
+                cell: ({ row }) => (
+                  <Link href={`${row.original[field.fieldName]?.id ? `/dashboard/o/${field.ref}/r/${row.original[field.fieldName]?.id}` : "#"}`} className="hover:underline">{row.original[field.fieldName]?.id || "-"}</Link>
+                ),
+              };
             case "boolean":
               return {
                 accessorKey: field.fieldName,
