@@ -17,6 +17,7 @@
     "@mercury-js/core": "^2.0.0-beta.21",
     "@monaco-editor/react": "^4.6.0",
     "@repo/ui": "*",
+    "cookies-next": "^4.2.1",
     "graphql": "^16.8.1",
     "graphql-middleware": "^6.1.35",
     "lodash": "^4.17.21",

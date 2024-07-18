@@ -12,6 +12,7 @@ import Card from "@repo/ui/card";
 import { useParams, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import App from "../DynamicComponent";
+import { getCookie } from "cookies-next";
 
 function RecordView() {
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
@@ -77,14 +78,22 @@ function RecordView() {
 
   useEffect(() => {
     if (ListLayoutsResponse?.data) {
+      let layoutId = ListLayoutsResponse?.data?.listLayouts?.docs.find(
+        (item: Layout) => item.profiles && item.profiles.find(profile => profile.name === getCookie("profile") as string)?.id
+      )?.id
+
+      if (!layoutId) {
+
+        layoutId = ListLayoutsResponse?.data?.listLayouts?.docs.find(
+          (item: Layout) => item.profiles && item.profiles.length === 0
+        )?.id
+      }
       getCurrentLayoutStructures(
         LIST_LAYOUT_STRUCTURES,
         {
           where: {
             layout: {
-              is: ListLayoutsResponse?.data?.listLayouts?.docs.find(
-                (item: Layout) => item.profiles && item.profiles.length === 0
-              )?.id,
+              is: layoutId,
             },
           },
           sort: {
