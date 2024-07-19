@@ -160,6 +160,7 @@ const LayoutFormcontainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: " Layout Updated",
       });
+      router.back();
     } else if (updateLayoutresponse.error) {
       toast({
         variant: "destructive",

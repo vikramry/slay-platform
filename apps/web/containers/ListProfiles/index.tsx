@@ -39,6 +39,7 @@ const ListProfile = () => {
         text="Create Profile"
         url="/dashboard/profiles/add"
         filterBy={"name"}
+        loading={loading}
       />
     </div>
   );

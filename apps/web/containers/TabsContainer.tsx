@@ -1,19 +1,29 @@
 "use client";
 import { serverFetch } from '@/app/action';
 import { useLazyQuery } from '@/app/hook';
-import { LIST_ALL_LAYOUTS_LABELS, listtabs } from '@/app/queries';
+import { LIST_TABS } from '@/app/queries';
 import { NavBar } from '@repo/ui/navBar';
+import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react'
 
 const TabsContainer = () => {
     const [ListTabs, ListTabsResponse] = useLazyQuery(serverFetch);
+    const pathName = usePathname();
 
     useEffect(() => {
-        ListTabs(
-            listtabs, {}, {
-            cache: 'no-store'
+        if (
+            pathName === "/dashboard" || pathName.includes("/dashboard/o/")
+        ) {
+            ListTabs(
+                LIST_TABS, {
+                "sort": {
+                    "order": "asc"
+                }
+            }, {
+                cache: 'no-store'
+            }
+            )
         }
-        )
     }, [])
 
     useEffect(() => {
@@ -28,7 +38,10 @@ const TabsContainer = () => {
     }, [ListTabsResponse?.data, ListTabsResponse?.error, ListTabsResponse?.loading])
 
     return (
-        <div className=''>
+        <div className={`${pathName === "/dashboard" || pathName.includes("/dashboard/o/")
+            ? "block"
+            : "hidden"
+            }`}>
             <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} loading={ListTabsResponse?.loading} />
 
         </div>

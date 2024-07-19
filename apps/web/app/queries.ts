@@ -1058,13 +1058,13 @@ export const LIST_LAYOUT_STRUCTURES = `query Docs($sort: sortLayoutStructureInpu
   }
 }`
 
-export const DELETE_STRUCTURE =`
+export const DELETE_STRUCTURE = `
 mutation DeleteLayoutStructure($deleteLayoutStructureId: ID!) {
   deleteLayoutStructure(id: $deleteLayoutStructureId)
 }`
-export const LIST_TABS =`
-query Docs {
-  listTabs {
+export const LIST_TABS = `
+query Docs($sort: sortTabInput) {
+  listTabs(sort: $sort) {
     docs {
       label
       id
@@ -1077,7 +1077,7 @@ query Docs {
   }
 }`
 
-export const GET_LAYOUT_BY_MODEL =`
+export const GET_LAYOUT_BY_MODEL = `
 query GetLayout($where: whereLayoutInput!) {
   getLayout(where: $where) {
     model {

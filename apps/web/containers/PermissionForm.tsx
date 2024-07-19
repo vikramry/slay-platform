@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { PulseLoader } from "react-spinners"
 import { z } from "zod";
 import {
   useToast,
@@ -52,6 +53,7 @@ const PermissionForm = ({
     delete: z.boolean(),
     update: z.boolean(),
     read: z.boolean(),
+    all: z.boolean(),
     fieldLevelAccess: z.boolean(),
     profile: z.string().optional(),
   });
@@ -62,6 +64,7 @@ const PermissionForm = ({
       delete: false,
       update: false,
       read: false,
+      all: false,
       fieldLevelAccess: false,
     },
   });
@@ -176,8 +179,14 @@ const PermissionForm = ({
         form.setValue("modelName", data?.listPermissions.docs[0].model?.label); // for user experience showing label
         form.setValue("read", data?.listPermissions.docs[0].read);
         form.setValue("update", data?.listPermissions.docs[0].update);
+        if (data?.listPermissions.docs[0].create && data?.listPermissions.docs[0].update && data?.listPermissions.docs[0].delete && data?.listPermissions.docs[0].read) {
+          form.setValue("all", true);
+        }
+        else {
+          form.setValue("all", false);
+        }
       }
-      else{
+      else {
         form.setValue("create", false);
         form.setValue("delete", false);
         form.setValue(
@@ -197,7 +206,7 @@ const PermissionForm = ({
       });
     }
   }, [data, error, loading]);
-  //////////////
+
   useEffect(() => {
     if (updatePermissionResponse?.data) {
       toast({
@@ -283,6 +292,21 @@ const PermissionForm = ({
       );
     }
   }
+
+  useEffect(() => {
+    if (form.watch("all")) {
+      form.setValue("create", true);
+      form.setValue("delete", true);
+      form.setValue("update", true);
+      form.setValue("read", true);
+    }
+    else {
+      form.setValue("create", false);
+      form.setValue("delete", false);
+      form.setValue("update", false);
+      form.setValue("read", false);
+    }
+  }, [form.watch("all")])
   return (
     <div>
       <Toaster />
@@ -305,13 +329,18 @@ const PermissionForm = ({
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Profiles</SelectLabel>
-                          {getAllProfilesResponse?.data?.listProfiles.docs.map(
-                            (profile: any) => (
-                              <SelectItem value={profile.id}>
-                                {profile.label}
-                              </SelectItem>
-                            )
-                          )}
+                          {getAllProfilesResponse?.loading ?
+                            <SelectItem value="#">
+                              <PulseLoader color="#817994" />
+                            </SelectItem>
+                            :
+                            getAllProfilesResponse?.data?.listProfiles.docs.map(
+                              (profile: any) => (
+                                <SelectItem value={profile.id}>
+                                  {profile.label}
+                                </SelectItem>
+                              )
+                            )}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -341,6 +370,23 @@ const PermissionForm = ({
                 />
                 <FormField
                   control={form.control}
+                  name="all"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 col-span-2 justify-center">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Toggle ALL CRUD Access</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="create"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
@@ -356,6 +402,7 @@ const PermissionForm = ({
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="read"
