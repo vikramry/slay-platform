@@ -104,8 +104,10 @@ const DynamicModelTable = () => {
                 accessorKey: field.fieldName,
                 header: field.label,
                 cell: ({ row }) => {
+                  console.log(field.many, row.getValue(field.fieldName));
+                  
                   if (field.many) {
-                    <div className="flex justify-center items-center gap-3 flex-wrap">
+                    return <div className="flex justify-center items-center gap-3 flex-wrap">
                       {row.getValue(field.fieldName)?.map((item: any) => (
                         <div className="">
                           <Checkbox

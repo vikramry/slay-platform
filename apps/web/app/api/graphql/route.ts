@@ -15,6 +15,7 @@ import "./profiles";
 // import "./hooks";
 import typeDefs from "./schema";
 import resolvers from './Search.Resolvers'
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
@@ -58,7 +59,15 @@ const schema = applyMiddleware(
 
 let server = new ApolloServer({
   schema,
-  // cors: corsOptions
+  introspection: true,
+  plugins: [
+    // ApolloServerPluginLandingPageGraphQLPlayground({
+    //   settings: {
+    //     'request.credentials': 'same-origin'
+    //   }
+    // })
+    ApolloServerPluginLandingPageLocalDefault({ footer: false })
+  ],
 });
 
 mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
