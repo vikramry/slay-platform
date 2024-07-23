@@ -1,6 +1,7 @@
 const typeDefs = `
   type Query {
-    hello: String
+    hello: String,
+    redisAvailability: String
   }
 `;
 export default typeDefs;

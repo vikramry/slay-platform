@@ -38,8 +38,9 @@ const DynamicModelTable = () => {
     if (data) {
       const columns: ColumnDef<any>[] = data?.listModelFields?.docs?.map(
         (field: ModelFieldType) => {
+
           switch (field.type) {
-            case "string" || "number" || "float" || "decimal128":
+            case "string" || "number" || "float":
               return {
                 accessorKey: field.fieldName,
                 header: ({ column }) => {
@@ -56,7 +57,7 @@ const DynamicModelTable = () => {
                   );
                 },
                 cell: ({ row }) => (
-                  <div className="">{row.getValue(field.fieldName)}</div>
+                  <div className="">{field.many ? row.getValue(field.fieldName)?.join(', ') : row.getValue(field.fieldName)}</div>
                 ),
               };
 
@@ -76,23 +77,57 @@ const DynamicModelTable = () => {
                     </Button>
                   );
                 },
-                cell: ({ row }) => (
-                  <Link href={`${row.original[field.fieldName]?.id ? `/dashboard/o/${field.ref}/r/${row.original[field.fieldName]?.id}` : "#"}`} className="hover:underline">{row.original[field.fieldName]?.id || "-"}</Link>
-                ),
+                cell: ({ row }) => {
+                  if (field.many) {
+                    return row.original[field.fieldName]?.map((item: any) => (
+                      <Link href={`${item?.id ?
+                        `/dashboard/o/${field.ref}/r/${item?.id}`
+                        :
+                        "#"}`
+                      } className="hover:underline">{item?.id || "-"}
+                      </Link>
+                    ))
+
+                  }
+                  else {
+                    return <Link href={`${row.original[field.fieldName]?.id ?
+                      `/dashboard/o/${field.ref}/r/${row.original[field.fieldName]?.id}`
+                      :
+                      "#"}`
+                    } className="hover:underline">{row.original[field.fieldName]?.id || "-"}
+                    </Link>
+                  }
+                }
               };
             case "boolean":
               return {
                 accessorKey: field.fieldName,
                 header: field.label,
-                cell: ({ row }) => (
-                  <div className="">
-                    <Checkbox
-                      checked={row.getValue(field.fieldName)}
-                      readonly
-                      aria-label="Select all"
-                    />
-                  </div>
-                ),
+                cell: ({ row }) => {
+                  if (field.many) {
+                    <div className="flex justify-center items-center gap-3 flex-wrap">
+                      {row.getValue(field.fieldName)?.map((item: any) => (
+                        <div className="">
+                          <Checkbox
+                            checked={item}
+                            readonly
+                            aria-label="Select all"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  }
+                  else {
+                    return <div className="">
+                      <Checkbox
+                        checked={row.getValue(field.fieldName)}
+                        readonly
+                        aria-label="Select all"
+                      />
+                    </div>
+                  }
+
+                }
               };
             case "date":
               return {
@@ -112,7 +147,7 @@ const DynamicModelTable = () => {
                 },
                 cell: ({ row }) => (
                   <div className="">
-                    {new Date(row.getValue(field.fieldName)).getTime()}
+                    {field.many ? row.getValue(field.fieldName)?.map((item: string) => new Date(item).getTime())?.join(', ') : new Date(row.getValue(field.fieldName)).getTime()}
                   </div>
                 ),
               };
@@ -133,7 +168,7 @@ const DynamicModelTable = () => {
                   );
                 },
                 cell: ({ row }) => (
-                  <div className="">{row.getValue(field.fieldName)}</div>
+                  <div className="">{field.many ? row.getValue(field.fieldName)?.join(', ') : row.getValue(field.fieldName)}</div>
                 ),
               };
           }

@@ -25,6 +25,8 @@ mercury.package([redisCache(), platform()]);
 //   resolvers
 // );
 
+
+
 const composePopulateQuery = (fields: any, deep: number, max: number): any => {
   deep++;
   console.log("deep", deep);
@@ -46,8 +48,8 @@ const composePopulateQuery = (fields: any, deep: number, max: number): any => {
 
 const schema = applyMiddleware(
   makeExecutableSchema({
-    typeDefs: mercury.typeDefs,
-    resolvers: mercury.resolvers as unknown as IResolvers<
+    typeDefs: [mercury.typeDefs, typeDefs],
+    resolvers: [mercury.resolvers, resolvers] as unknown as IResolvers<
       any,
       GraphQLResolveInfo
     >[],
@@ -76,7 +78,7 @@ mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
 });
 
 const handler = startServerAndCreateNextHandler(server, {
-  context: async (req:any, res) => {
+  context: async (req: any, res) => {
     return {
       ...req,
       user: {

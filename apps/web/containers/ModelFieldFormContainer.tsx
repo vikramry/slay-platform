@@ -54,7 +54,6 @@ const formSchema = z.object({
     "enum",
     "relationship",
     "float",
-    "decimal128",
     "virtual",
   ]),
   managed: z.boolean(),
@@ -435,7 +434,6 @@ const router =useRouter()
                         </SelectItem>
                         <SelectItem value="virtual">Virtual</SelectItem>
                         <SelectItem value="float">Float</SelectItem>
-                        <SelectItem value="decimal128">Decimal128</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -444,7 +442,7 @@ const router =useRouter()
               </FormItem>
             )}
           />
-          {["number", "string", "float", "decimal128", "enum"].includes(
+          {["number", "string", "float", "enum"].includes(
             form.watch("type")
           ) && (
             <FormField

@@ -32,7 +32,8 @@ export interface ModelFieldType {
   foreignField: string
   enumType: string
   enumValues: string[]
-  managed: boolean
+  managed: boolean,
+  many: boolean
 }
 
 

@@ -375,6 +375,7 @@ export const getlistmodelfields = `
         managed
         required
         ref
+        many
         unique
         type
         model {
