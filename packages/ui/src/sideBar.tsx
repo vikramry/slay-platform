@@ -73,6 +73,7 @@
 // // className="md:block hidden"
 
 "use client";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 export interface SideBarProps {
@@ -136,18 +137,21 @@ export function SideBar() {
       },
     ]
   };
+  const key = /\/layouts\/.+/.test(usePathname()) && !usePathname().includes("layouts/add") ? "layout" :
+    /\/model\/.+/.test(usePathname()) &&
+      !usePathname().includes("model/createModel")
+      ? "model"
+      : "default"
   const sidebarData =
-    data[
-
-    /\/layouts\/.+/.test(usePathname()) && !usePathname().includes("layouts/add") ? "layout" :
-      /\/model\/.+/.test(usePathname()) &&
-        !usePathname().includes("model/createModel")
-        ? "model"
-        : "default"
-    ];
+    data[key];
   return (
     <div className={`  ${router === "/dashboard" || router.includes('/dashboard/o/') ? "hidden" : "md:block hidden"}`}>
       <div className="flex flex-col gap-2 ">
+        {key != "default" &&
+          <Link className="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-500 transition-all hover:bg-gray-500/10 active:bg-gray-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+           href={`${key === "model" ? "/dashboard/model" : `/dashboard/model/${useParams().id}/layouts`}`}>
+           <ChevronLeft />{key}</Link>
+        }
         {sidebarData?.map((item: SideBarProps) => {
           const link = `/${item?.link}`;
           const regex = new RegExp(`^${link}(\/|$)`);
