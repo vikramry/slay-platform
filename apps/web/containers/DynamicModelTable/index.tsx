@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button, Checkbox, DataTable } from "@repo/ui";
-import { ChevronsUpDown, ExternalLink } from "lucide-react";
+import { ChevronsUpDown, Copy, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 const DynamicModelTable = () => {
@@ -104,8 +104,6 @@ const DynamicModelTable = () => {
                 accessorKey: field.fieldName,
                 header: field.label,
                 cell: ({ row }) => {
-                  console.log(field.many, row.getValue(field.fieldName));
-                  
                   if (field.many) {
                     return <div className="flex justify-center items-center gap-3 flex-wrap">
                       {row.getValue(field.fieldName)?.map((item: any) => (
@@ -187,8 +185,9 @@ const DynamicModelTable = () => {
           );
         },
         cell: ({ row }) => (
-          <div className="">
+          <div className="flex justify-start items-center gap-2">
             <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}><ExternalLink className="ml-2 h-4 w-4" /></Link>
+            <div title="Copy Record ID" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(row.original?.id)}><Copy className="ml-2 h-4 w-4" /></div>
           </div>
         ),
       });
@@ -251,9 +250,7 @@ const DynamicModelTable = () => {
           columns={columns || []}
           loading={listModelDataResponse.loading || loading}
           data={listModelDataResponse.data?.[`list${modelName}s`]?.docs || []}
-          filterBy="fieldName"
-          //   text="Create Layout"
-          url="layouts/add"
+          filterBy="id"
         />
       )}
     </div>
