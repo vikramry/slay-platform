@@ -179,12 +179,7 @@ const PermissionForm = ({
         form.setValue("modelName", data?.listPermissions.docs[0].model?.label); // for user experience showing label
         form.setValue("read", data?.listPermissions.docs[0].read);
         form.setValue("update", data?.listPermissions.docs[0].update);
-        if (data?.listPermissions.docs[0].create && data?.listPermissions.docs[0].update && data?.listPermissions.docs[0].delete && data?.listPermissions.docs[0].read) {
-          form.setValue("all", true);
-        }
-        else {
-          form.setValue("all", false);
-        }
+        
       }
       else {
         form.setValue("create", false);
@@ -196,6 +191,12 @@ const PermissionForm = ({
         form.setValue("read", false);
         form.setValue("update", false);
         setFieldLevelAccessFlag(false)
+      }
+      if (data?.listPermissions.docs[0]?.create && data?.listPermissions.docs[0]?.update && data?.listPermissions.docs[0]?.delete && data?.listPermissions.docs[0]?.read) {
+        form.setValue("all", true);
+      }
+      else {
+        form.setValue("all", false);
       }
     }
     if (error) {
