@@ -3,21 +3,27 @@ import mercury from "@mercury-js/core";
 export const User = mercury.createModel(
   "User",
   {
-    name: {
+    firstName: {
+      type: "string",
+      required: true
+    },
+    lastName: {
       type: "string",
     },
     email: {
       type: "string",
+      required: true,
+      unique: true
     },
     password: {
       type: "string",
       bcrypt: true,
+      required: true
     },
-    role: {
-      type: "enum",
-      enum: ["Admin", "ANONYMOUS"],
-      enumType: "string",
-    },
+    profile: {
+      type: "relationship",
+      ref: "Profile"
+    }
   },
   {}
 );

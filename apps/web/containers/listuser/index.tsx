@@ -27,7 +27,7 @@ const ListUsers = () => {
 
     return (
         <div>
-            <DataTable columns={userColumns} data={usersData} loading={loading} text="Create user" url="/dashboard/users/createUser" />
+            <DataTable columns={userColumns} data={usersData} loading={loading} filterBy={"email"} text="Create user" url="/dashboard/users/createUser" />
 
         </div>
     )

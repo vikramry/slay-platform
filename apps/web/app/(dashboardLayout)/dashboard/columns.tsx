@@ -50,6 +50,7 @@ import {
 import { title } from "process";
 import { usePathname, useRouter } from "next/navigation";
 import { FieldActionContext } from "@/containers/ListPermissionsContainer";
+import AssingnProfileUser from "@/containers/AssingnProfileUser";
 
 export type Payment = {
   id: string;
@@ -1418,6 +1419,21 @@ export const userColumns: ColumnDef<User>[] = [
     cell: ({ row }) => <div className="">{row.getValue("email")}</div>,
   },
   {
+    accessorKey: "profile",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Profile
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("profile") || "-"}</div>,
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -1482,6 +1498,18 @@ export const userColumns: ColumnDef<User>[] = [
             >
               <DropdownMenuItem>Edit User</DropdownMenuItem>
             </Link>
+            <DropdownMenuItem>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="w-full h-full flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    Assign Profile
+                  </div>
+                </AlertDialogTrigger>
+
+                <AssingnProfileUser />
+
+              </AlertDialog>
+            </DropdownMenuItem>
             <DropdownMenuLabel>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -1957,23 +1985,25 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
     },
     cell: ({ row }) => (
       <div className="">{row.original.layout?.label || "-"}</div>
-    ),  },
-    {
-      accessorKey: "component.label",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Component
-            <ChevronsUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="">{row.original.component.label || "-"}</div>
-      ),  },
+    ),
+  },
+  {
+    accessorKey: "component.label",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Component
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="">{row.original.component.label || "-"}</div>
+    ),
+  },
   {
     id: "actions",
     enableHiding: false,
@@ -2054,7 +2084,7 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
                 />
               </AlertDialog>
             </DropdownMenuLabel>
-            
+
           </DropdownMenuContent>
 
         </DropdownMenu>

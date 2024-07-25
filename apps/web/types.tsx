@@ -1,9 +1,10 @@
 export interface User {
-  id: number,
+  id: string,
   firtName: string,
-  lastName: string,
-  email?: string,
-  password?:string,
+  lastName?: string,
+  email: string,
+  password:string,
+  profile?: ProfileType
 }
 export interface Model {
   id: string,
