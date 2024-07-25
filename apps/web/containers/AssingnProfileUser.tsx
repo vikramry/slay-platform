@@ -45,13 +45,18 @@ const AssingnProfileUser = ({ userId }: { userId: string }) => {
 
         }
     }, [getAllProfiesResponse.data, getAllProfiesResponse.error, getAllProfiesResponse.loading])
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
+    const handleSubmit = () => {
+
         updateUserProfile(
             UPDATE_USER,
             {
-                id: userId,
-                profile: profileValue
+                "input": {
+                    id: userId,
+                    profile: profileValue
+                }
+            },
+            {
+                cache: "no-store"
             }
         )
     }
@@ -66,35 +71,32 @@ const AssingnProfileUser = ({ userId }: { userId: string }) => {
         }
     }, [updateUserProfileResponse.data, updateUserProfileResponse.error, updateUserProfileResponse.loading])
     return (
-
-        <form onSubmit={handleSubmit} className='flex w-full flex-col justify-center items-center'>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Assign Profile to User</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        <Select onValueChange={(e: string) => setProfileValue(e)} value={profileValue} disabled={loading || getAllProfiesResponse.loading}>
-                            <SelectTrigger className="w-[200px]">
-                                <SelectValue placeholder="Select a profile" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Profiles</SelectLabel>
-                                    {
-                                        getAllProfiesResponse.data?.listProfiles?.docs.map((profile: ProfileType) => {
-                                            <SelectItem value={profile.id}>{profile.label}</SelectItem>
-                                        })
-                                    }
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Button type="submit" disabled={loading || getAllProfiesResponse.loading}>Save</Button>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </form>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Assign Profile to User</AlertDialogTitle>
+                <AlertDialogDescription>
+                    <Select onValueChange={(e: string) => setProfileValue(e)} value={profileValue} disabled={loading || getAllProfiesResponse.loading}>
+                        <SelectTrigger className="w-[250px]">
+                            <SelectValue placeholder="Select a profile" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Profiles</SelectLabel>
+                                {
+                                    getAllProfiesResponse.data?.listProfiles?.docs.map((profile: ProfileType) => {
+                                        return <SelectItem value={profile.id}>{profile.label}</SelectItem>
+                                    })
+                                }
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button type="submit" onClick={handleSubmit} disabled={loading || getAllProfiesResponse.loading}>Save</Button>
+            </AlertDialogFooter>
+        </AlertDialogContent>
     )
 }
 

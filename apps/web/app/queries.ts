@@ -30,7 +30,7 @@ export const CreateModelQuary = `
       managed
       createdBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -38,7 +38,7 @@ export const CreateModelQuary = `
       }
       updatedBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -88,7 +88,7 @@ export const CreateTabQuary = `
       order
       createdBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -96,7 +96,7 @@ export const CreateTabQuary = `
       }
       updatedBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -117,7 +117,7 @@ export const CreateModelFieldQuary = `
       modelName
       createdBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -125,7 +125,7 @@ export const CreateModelFieldQuary = `
       }
       updatedBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -181,7 +181,7 @@ export const CreateModelOptionsQuary = `
       type
       createdBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -189,7 +189,7 @@ export const CreateModelOptionsQuary = `
       }
       updatedBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -246,7 +246,7 @@ export const GetTabQuary = `
       order
       createdBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -254,7 +254,7 @@ export const GetTabQuary = `
       }
       updatedBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -303,7 +303,7 @@ export const getModelOptionQuary = `
       type
       createdBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -311,7 +311,7 @@ export const getModelOptionQuary = `
       }
       updatedBy {
         id
-        name
+        firstName
         email
         role
         createdOn
@@ -329,7 +329,7 @@ query ListModels {
     docs {
       id
       createdBy {
-        name
+        firstName
         id
       }
       label
@@ -338,7 +338,7 @@ query ListModels {
       prefix
       id
       updatedBy {
-        name
+        firstName
         id
       }
     }
@@ -350,7 +350,8 @@ export const getlistmodeloptions = `
       docs {
         id
         createdBy {
-          name
+          firstName
+          id
         }
         managed
         model {
@@ -358,7 +359,7 @@ export const getlistmodeloptions = `
           name
         }
         updatedBy {
-          name
+          firstName
           id
         }
         value
@@ -378,7 +379,7 @@ export const getlistmodelfields = `
         fieldName
         createdBy {
           id
-          name
+          firstName
           role
         }
         label
@@ -396,7 +397,7 @@ export const getlistmodelfields = `
         }
         updatedBy {
           id
-          name
+          firstName
           role
         }
       }
@@ -414,12 +415,12 @@ export const GET_MODEL = `query GetModel($where: whereModelInput!) {
       managed
       createdBy {
         id
-        name
+        firstName
         email
       }
       updatedBy {
         id
-        name
+        firstName
         email
       }
       createdOn
@@ -450,11 +451,11 @@ query GetModelField($where: whereModelFieldInput!) {
     modelName
     createdBy {
       id
-      name
+      firstName
     }
     updatedBy {
       id
-      name
+      firstName
     }
     fieldName
     label
@@ -589,11 +590,11 @@ export const listtabs = `
         }
         updatedBy {
           id
-          name
+          firstName
         }
         createdBy {
           id
-          name
+          firstName
         }
         order
         id
@@ -632,12 +633,12 @@ export const listcomponents = `
         id
         createdBy {
           id
-          name
+          firstName
           role
         }
         updatedBy {
           id
-          name
+          firstName
           role
         }
       }
@@ -712,11 +713,11 @@ export const LIST_ALL_PROFILES = `query Docs($limit: Int!) {
       label
       createdBy {
         id
-        name
+        firstName
       }
       updatedBy {
         id
-        name
+        firstName
       }
       createdOn
       updatedOn
@@ -906,11 +907,11 @@ query GetComponent($where: whereComponentInput!) {
     modules
     createdBy {
       id
-      name
+      firstName
     }
     updatedBy {
       id
-      name
+      firstName
     }
     createdOn
     updatedOn

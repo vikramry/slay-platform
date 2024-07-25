@@ -1431,7 +1431,7 @@ export const userColumns: ColumnDef<User>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("profile") || "-"}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("profile")?.label || "-"}</div>,
   },
   {
     id: "actions",
@@ -1498,10 +1498,10 @@ export const userColumns: ColumnDef<User>[] = [
             >
               <DropdownMenuItem>Edit User</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>
+            <DropdownMenuLabel>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <div className="w-full h-full flex justify-center items-center gap-2 cursor-pointer text-xs">
+                  <div className="w-full h-full flex justify-start items-center gap-2 cursor-pointer text-sm font-normal">
                     Assign Profile
                   </div>
                 </AlertDialogTrigger>
@@ -1509,11 +1509,11 @@ export const userColumns: ColumnDef<User>[] = [
                 <AssingnProfileUser userId={row.original.id}/>
 
               </AlertDialog>
-            </DropdownMenuItem>
+            </DropdownMenuLabel>
             <DropdownMenuLabel>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <div className="w-full h-full text-red-500 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                  <div className="w-full h-full text-red-500 flex justify-start items-center gap-2 cursor-pointer text-xs">
                     <Trash2 size={13} /> Delete User
                   </div>
                 </AlertDialogTrigger>
