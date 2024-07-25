@@ -2,7 +2,7 @@ import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
 import { LIST_FIELD_OPTIONS } from "@/app/queries";
 import React, { useEffect, useState } from "react";
-import { DataTable } from "@repo/ui";
+import { DataTable, Toaster, useToast } from "@repo/ui";
 import { useParams } from "next/navigation";
 import { fieldOptionsColumns, modelFieldColumns } from "@/app/(dashboardLayout)/dashboard/columns";
 
@@ -26,6 +26,7 @@ const ListFieldOptions = () => {
       }
     );
   }, []);
+  const { toast } = useToast();
   useEffect(() => {
     if (data) {
       console.log(data, "ListFieldOptionsData");
@@ -46,6 +47,7 @@ const ListFieldOptions = () => {
 
   return (
     <div>
+      <Toaster />
       <DataTable
         columns={fieldOptionsColumns}
         loading={loading}
@@ -59,6 +61,3 @@ const ListFieldOptions = () => {
 };
 
 export default ListFieldOptions;
-function toast(arg0: { variant: string; title: string; description: any }) {
-  throw new Error("Function not implemented.");
-}
