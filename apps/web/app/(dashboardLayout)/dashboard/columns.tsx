@@ -212,7 +212,7 @@ export const modelColumns: ColumnDef<Model>[] = [
     ),
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -225,11 +225,11 @@ export const modelColumns: ColumnDef<Model>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
+      return <div className=""> {row.original.createdBy?.firstName || "-"}</div>;
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -242,7 +242,7 @@ export const modelColumns: ColumnDef<Model>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">{row.original.updatedBy?.name || "-"}</div>
+      <div className="">{row.original.updatedBy?.firtName || "-"}</div>
     ),
   },
   {
@@ -403,7 +403,7 @@ export const LayoutColumns: ColumnDef<Layout>[] = [
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -416,11 +416,11 @@ export const LayoutColumns: ColumnDef<Layout>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
+      return <div className=""> {row.original.createdBy?.firstName || "-"}</div>;
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -433,7 +433,7 @@ export const LayoutColumns: ColumnDef<Layout>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">{row.original.updatedBy?.name || "-"}</div>
+      <div className="">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
@@ -613,7 +613,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
     ),
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -627,12 +627,12 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+        <div className="lowercase"> {row.original.createdBy?.firstName || "-"}</div>
       );
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -645,7 +645,7 @@ export const modelFieldColumns: ColumnDef<ModelFieldType>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+      <div className="lowercase">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
@@ -785,7 +785,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
     ),
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -799,12 +799,12 @@ export const tabsColumns: ColumnDef<TabType>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+        <div className="lowercase"> {row.original.createdBy?.firstName || "-"}</div>
       );
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -817,7 +817,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+      <div className="lowercase">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
@@ -967,7 +967,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
     ),
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -981,12 +981,12 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+        <div className="lowercase"> {row.original.createdBy?.firstName || "-"}</div>
       );
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -999,7 +999,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+      <div className="lowercase">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
@@ -1262,7 +1262,7 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -1276,12 +1276,12 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="lowercase"> {row.original.createdBy?.name || "-"}</div>
+        <div className="lowercase"> {row.original.createdBy?.firstName || "-"}</div>
       );
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -1294,7 +1294,7 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.original.updatedBy?.name || "-"}</div>
+      <div className="lowercase">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
@@ -1563,7 +1563,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -1576,11 +1576,11 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
+      return <div className=""> {row.original.createdBy?.firstName || "-"}</div>;
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -1593,7 +1593,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">{row.original.updatedBy?.name || "-"}</div>
+      <div className="">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
@@ -1831,7 +1831,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
     },
   },
   {
-    accessorKey: "createdBy.name",
+    accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -1844,11 +1844,11 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className=""> {row.original.createdBy?.name || "-"}</div>;
+      return <div className=""> {row.original.createdBy?.firstName || "-"}</div>;
     },
   },
   {
-    accessorKey: "updatedBy.name",
+    accessorKey: "updatedBy.firstName",
     header: ({ column }) => {
       return (
         <Button
@@ -1861,7 +1861,7 @@ export const permissionColumns: ColumnDef<PermissionType>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">{row.original.updatedBy?.name || "-"}</div>
+      <div className="">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
