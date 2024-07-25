@@ -1506,7 +1506,7 @@ export const userColumns: ColumnDef<User>[] = [
                   </div>
                 </AlertDialogTrigger>
 
-                <AssingnProfileUser />
+                <AssingnProfileUser userId={row.original.id}/>
 
               </AlertDialog>
             </DropdownMenuItem>

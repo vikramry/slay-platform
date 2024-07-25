@@ -1104,3 +1104,25 @@ query GetLayout($where: whereLayoutInput!) {
   }
 }`
 
+export const GET_USER_BY_ID = `query GetUser($where: whereUserInput!) {
+  getUser(where: $where) {
+    id
+    firstName
+    lastName
+    email
+    profile {
+      id
+      label
+      name
+    }
+    createdOn
+    updatedOn
+  }
+}`
+
+
+export const UPDATE_USER=`mutation UpdateUser($input: updateUserInput!) {
+  updateUser(input: $input) {
+    id
+  }
+}`
