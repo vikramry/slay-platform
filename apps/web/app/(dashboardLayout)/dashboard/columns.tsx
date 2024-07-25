@@ -1518,7 +1518,7 @@ export const userColumns: ColumnDef<User>[] = [
                   </div>
                 </AlertDialogTrigger>
                 <DeletePopupComp
-                  inputText={row.original.name}
+                  inputText={row.original.firstName}
                   onclick={handleuserDelete}
                   type="USER"
                 />

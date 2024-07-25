@@ -71,10 +71,11 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
 
   }, [])
   useEffect(() => {
+    console.log(getUserResponse,"getUserResponse")
     if (getUserResponse.data) {
       form.reset({
-        firstName: getUserResponse.data.getUser.name,
-        lastName: getUserResponse.data.getUser.name,
+        firstName: getUserResponse.data.getUser.firstName,
+        lastName: getUserResponse.data.getUser.lastName,
         email: getUserResponse.data.getUser.email,
         // role: getUserResponse.data.getUser.role
         // password:getUserResponse.data.getUser.password
@@ -100,13 +101,12 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
       createUser(
         CreateUserQuary,
         {
-          input: {
-            email: values?.email,
-            firstName: values?.firstName,
-            lastName: values?.lastName,
-            password: values?.password,
-            // role: values?.role,
-          },
+          "input": {
+            "email": values?.email,
+            "firstName": values?.firstName,
+            "lastName": values?.lastName,
+            "password": values?.password,
+          }
         },
         {
           cache: "no-store",
@@ -118,12 +118,12 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
       updateUser(
         UpdateUserQuary,
         {
-          input: {
-            email: values?.email,
-            firstName: values?.firstName,
-            lastName: values?.lastName,
-            id: UserId
-          },
+          "input": {
+            "email": values?.email,
+            "firstName": values?.firstName,
+            "id": UserId,
+            "lastName": values?.lastName,
+          }
         },
         {
           cache: "no-store",

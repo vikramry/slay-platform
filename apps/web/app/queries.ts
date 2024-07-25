@@ -5,15 +5,20 @@ query exampleQuery {
 
 export const CreateUserQuary = `
 mutation CreateUser($input: UserInput!) {
-    createUser(input: $input) {
+  createUser(input: $input) {
+    id
+    firstName
+    lastName
+    email
+    profile {
       id
+      label
       name
-      email
-      role
-      createdOn
-      updatedOn
     }
-  }`;
+    createdOn
+    updatedOn
+  }
+}`;
 
 export const CreateModelQuary = `
   mutation CreateModel($input: ModelInput!) {
@@ -211,15 +216,20 @@ export const CreateFieldOptionQuary = `
   }`;
 export const GetUserQuary = `
   query GetUser($where: whereUserInput!) {
-    getUser(where: $where) {
+  getUser(where: $where) {
+    id
+    firstName
+    lastName
+    email
+    profile {
       id
+      label
       name
-      email
-      role
-      createdOn
-      updatedOn
     }
-  }`;
+    createdOn
+    updatedOn
+  }
+}`;
 
 export const GetTabQuary = `
   query GetTab($where: whereTabInput!) {
@@ -529,10 +539,17 @@ export const UpdateTabQuary = `
 export const UpdateUserQuary = `
 mutation UpdateUser($input: updateUserInput!) {
   updateUser(input: $input) {
-    email
     id
-    name
-    role
+    firstName
+    lastName
+    email
+    profile {
+      id
+      label
+      name
+    }
+    createdOn
+    updatedOn
   }
 }
   `;
@@ -585,16 +602,26 @@ export const listtabs = `
   }
   `;
 export const listusers = `
-  query Docs {
-   
-    listUsers {
-      docs {
-        name
+query ListUsers {
+  listUsers {
+    docs {
+      id
+      firstName
+      lastName
+      email
+      profile {
         id
-        email
+        label
+        name
       }
-    },
+      createdOn
+      updatedOn
+    }
+    offset
+    limit
+    totalDocs
   }
+}
   `;
 export const listcomponents = `
   query ListComponents($where: whereComponentInput) {
