@@ -1,7 +1,9 @@
 export interface User {
   id: number,
-  name: string,
+  firtName: string,
+  lastName: string,
   email?: string,
+  password?:string,
 }
 export interface Model {
   id: string,

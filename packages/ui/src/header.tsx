@@ -49,10 +49,18 @@ export function Header() {
       </div>
       <div className='rounded-full w-[35px] h-[35px] border-gray border-[1px] mr-5 dark:border-gray md:block hidden' onClick={()=>setdropdown(!dropdown)}></div>
       {dropdown &&
-      <div className="drop-down z-10 w-28 overflow-hidden bg-white dark:bg-black rounded-md shadow absolute top-12 right-3">
+      <div className="drop-down z-10 w-40 overflow-hidden bg-white dark:bg-black rounded-md shadow absolute top-12 right-3">
        <ul>
          <li className="p-2 text-sm font-medium flex items-center space-x-2 hover:bg-gray-100 dark:text:white dark:hover:bg-black cursor-pointer" onClick={() => { setdropdown(false) }}>
            <span> Logout </span>
+         </li>
+         <Link href="/dashboard/model">
+         <li className="p-2 text-sm font-medium flex items-center space-x-2 hover:bg-gray-100 dark:text:white dark:hover:bg-black cursor-pointer" onClick={() => { setdropdown(false) }}>
+           <span> SetUp </span>
+         </li>
+         </Link>
+         <li className="p-2 text-sm font-medium flex items-center space-x-2 hover:bg-gray-100 dark:text:white dark:hover:bg-black cursor-pointer" onClick={() => { setdropdown(false) }}>
+           <span> Reset Password </span>
          </li>
      
        </ul>

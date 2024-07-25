@@ -40,16 +40,19 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
   console.log(params.get("id"), "fjyfjhvjgyg");
   const UserId = params.get("id")
   const formSchema = z.object({
-    name: z.string({
+    firstName: z.string({
+      required_error: "Name is required",
+    }),
+    lastName: z.string({
       required_error: "Name is required",
     }),
     email: z.string({
       required_error: "Email is required",
     }),
     password: edit ? z.string().optional() : z.string({ required_error: "Password is required" }),
-    role: z.string({
-      required_error: "role is required",
-    }),
+    // role: z.string({
+    //   required_error: "role is required",
+    // }),
   });
   useEffect(() => {
     if (edit) {
@@ -70,9 +73,10 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
   useEffect(() => {
     if (getUserResponse.data) {
       form.reset({
-        name: getUserResponse.data.getUser.name,
+        firstName: getUserResponse.data.getUser.name,
+        lastName: getUserResponse.data.getUser.name,
         email: getUserResponse.data.getUser.email,
-        role: getUserResponse.data.getUser.role
+        // role: getUserResponse.data.getUser.role
         // password:getUserResponse.data.getUser.password
       })
     }
@@ -98,9 +102,10 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         {
           input: {
             email: values?.email,
-            name: values?.name,
+            firstName: values?.firstName,
+            lastName: values?.lastName,
             password: values?.password,
-            role: values?.role,
+            // role: values?.role,
           },
         },
         {
@@ -115,8 +120,8 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         {
           input: {
             email: values?.email,
-            name: values?.name,
-            role: values?.role,
+            firstName: values?.firstName,
+            lastName: values?.lastName,
             id: UserId
           },
         },
@@ -174,12 +179,25 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
           <FormField
             control={form.control}
-            name="name"
+            name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Name" {...field} />
+                  <Input placeholder="Enter first name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter last name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,7 +231,7 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
                 </FormItem>
               )}
             />}
-          <FormField
+          {/* <FormField
             control={form.control}
             name="role"
             render={({ field }) => (
@@ -234,7 +252,7 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
         <div className="flex justify-center items-center">
           <Button

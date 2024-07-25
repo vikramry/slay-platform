@@ -1373,19 +1373,34 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
 
 export const userColumns: ColumnDef<User>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "firstName",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          First Name
           <ChevronsUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("firstName")}</div>,
+  },
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("lastName")}</div>,
   },
   {
     accessorKey: "email",
