@@ -32,7 +32,7 @@ export const CreateModelQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -40,7 +40,7 @@ export const CreateModelQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -90,7 +90,7 @@ export const CreateTabQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -98,7 +98,7 @@ export const CreateTabQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -119,7 +119,7 @@ export const CreateModelFieldQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -127,7 +127,7 @@ export const CreateModelFieldQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -183,7 +183,7 @@ export const CreateModelOptionsQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -191,7 +191,7 @@ export const CreateModelOptionsQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -248,7 +248,7 @@ export const GetTabQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -256,7 +256,7 @@ export const GetTabQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -305,7 +305,7 @@ export const getModelOptionQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -313,7 +313,7 @@ export const getModelOptionQuary = `
         id
         firstName
         email
-        role
+        
         createdOn
         updatedOn
       }
@@ -380,7 +380,7 @@ export const getlistmodelfields = `
         createdBy {
           id
           firstName
-          role
+          
         }
         label
         managed
@@ -398,7 +398,7 @@ export const getlistmodelfields = `
         updatedBy {
           id
           firstName
-          role
+          
         }
       }
       limit
@@ -634,12 +634,12 @@ export const listcomponents = `
         createdBy {
           id
           firstName
-          role
+          
         }
         updatedBy {
           id
           firstName
-          role
+          
         }
       }
     }
@@ -1149,7 +1149,7 @@ export const GET_USER_BY_ID = `query GetUser($where: whereUserInput!) {
 }`
 
 
-export const UPDATE_USER=`mutation UpdateUser($input: updateUserInput!) {
+export const UPDATE_USER = `mutation UpdateUser($input: updateUserInput!) {
   updateUser(input: $input) {
     id
   }

@@ -1,5 +1,6 @@
 "use client"
 import TabsContainer from "@/containers/TabsContainer";
+import { Toaster } from "@repo/ui";
 import { Header } from "@repo/ui/header";
 import { SideBar } from "@repo/ui/sideBar";
 import { usePathname } from "next/navigation";
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <>
       <div className="flex flex-col w-full">
+        <Toaster/>
         <Header />
         <div className="ml-[10px] mr-[10px]">
         <TabsContainer />
