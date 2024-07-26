@@ -242,7 +242,7 @@ export const modelColumns: ColumnDef<Model>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="">{row.original.updatedBy?.firtName || "-"}</div>
+      <div className="">{row.original.updatedBy?.firstName || "-"}</div>
     ),
   },
   {
