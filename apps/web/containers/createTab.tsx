@@ -239,7 +239,7 @@ const CreatTab = ({ edit = false }: { edit?: boolean }) => {
                         disabled={loading}
                         className="flex justify-center items-center w-fit"
                     >
-                        {loading ? "loading..." : "Submit"}
+                        {loading || updateTabResponse.loading ? "loading..." : "Submit"}
                     </Button>
                 </div>      </form>
         </Form>

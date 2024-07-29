@@ -68,12 +68,16 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (getModelResponse.data) {
-      form.reset({
+      const Data:any = {
         name: getModelResponse.data.getModel.name,
         label: getModelResponse.data.getModel.label,
         managed: getModelResponse.data.getModel.managed,
-        prefix: getModelResponse.data.getModel.prefix,
-      });
+      };
+    
+      if (getModelResponse.data.getModel.prefix != null) {
+        Data.prefix = getModelResponse.data.getModel.prefix;
+      }
+      form.reset(Data);
     }
     if (getModelResponse.error) {
       toast({
@@ -222,7 +226,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
             disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            {loading?"loading...":"Submit"}
+            {loading || updateModelResponse?.loading?"loading...":"Submit"}
            
           </Button>
         </div>{" "}

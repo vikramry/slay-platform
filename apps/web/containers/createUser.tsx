@@ -260,7 +260,7 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
             disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-           {loading?"loading...":"Submit"} 
+           {loading || updateUserResponse.loading ?"loading...":"Submit"} 
           </Button>
         </div>{" "}
       </form>
