@@ -6,7 +6,7 @@ import Client, { useFetchUserData, useLazyFetchUserData } from "@repo/client";
 import { useEffect } from "react";
 import { Button } from "@repo/ui";
 import DynamicLayout from "./dynamicLayout";
-import Login from "./login";
+import Login from "../containers/Login";
 import FieldOptionsContainer from "../containers/FieldOptionsContainer";
 
 
