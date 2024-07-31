@@ -15,57 +15,57 @@ export function SideBar() {
     default: [
       {
         title: "Models",
-        link: "dashboard/model",
+        link: "dashboard/setup/models",
       },
       {
         title: "Profiles",
-        link: "dashboard/profiles",
+        link: "dashboard/setup/profiles",
       },
       {
         title: "Components",
-        link: "dashboard/components",
+        link: "dashboard/setup/components",
       },
       {
         title: "Users",
-        link: "dashboard/users",
+        link: "dashboard/setup/users",
       },
       {
         title: "Tabs",
-        link: "dashboard/tabs",
+        link: "dashboard/setup/tabs",
       },
     ],
     model: [
       {
         title: "Fields",
-        link: `dashboard/model/${useParams()?.id}`,
+        link: `dashboard/setup/models/${useParams()?.id}`,
       },
       {
         title: "Options",
-        link: `dashboard/model/${useParams()?.id}/options`,
+        link: `dashboard/setup/models/${useParams()?.id}/options`,
       },
       {
         title: "Permissions",
-        link: `dashboard/model/${useParams()?.id}/permissions`,
+        link: `dashboard/setup/models/${useParams()?.id}/permissions`,
       },
       {
         title: "Functions",
-        link: `dashboard/model/${useParams()?.id}/functions`,
+        link: `dashboard/setup/models/${useParams()?.id}/functions`,
       },
       {
         title: "Layouts",
-        link: `dashboard/model/${useParams()?.id}/layouts`,
+        link: `dashboard/setup/models/${useParams()?.id}/layouts`,
       },
     ],
     layout: [
       {
         title: "Structures",
-        link: `dashboard/model/${useParams()?.id}/layouts/${useParams()?.layoutId}/structures`,
+        link: `dashboard/setup/models/${useParams()?.id}/layouts/${useParams()?.layoutId}/structures`,
       },
     ]
   };
   const key = /\/layouts\/.+/.test(usePathname()) && !usePathname().includes("layouts/add") ? "layout" :
-    /\/model\/.+/.test(usePathname()) &&
-      !usePathname().includes("model/createModel")
+    /\/models\/.+/.test(usePathname()) &&
+      !usePathname().includes("models/createModel")
       ? "model"
       : "default"
   const sidebarData =
@@ -75,7 +75,7 @@ export function SideBar() {
       <div className="flex flex-col gap-2 ">
         {key != "default" &&
           <Link className="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-500 transition-all hover:bg-gray-500/10 active:bg-gray-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-           href={`${key === "model" ? "/dashboard/model" : `/dashboard/model/${useParams().id}/layouts`}`}>
+           href={`${key === "model" ? "/dashboard/setup/models" : `/dashboard/setup/models/${useParams().id}/layouts`}`}>
            <ChevronLeft />{key}</Link>
         }
         {sidebarData?.map((item: SideBarProps) => {

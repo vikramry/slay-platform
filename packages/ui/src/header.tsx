@@ -54,7 +54,7 @@ export function Header() {
          <li className="p-2 text-sm font-medium flex items-center space-x-2 hover:bg-gray-100 dark:text:white dark:hover:bg-black cursor-pointer" onClick={() => { setdropdown(false) }}>
            <span> Logout </span>
          </li>
-         <Link href="/dashboard/model">
+         <Link href="/dashboard/setup/models">
          <li className="p-2 text-sm font-medium flex items-center space-x-2 hover:bg-gray-100 dark:text:white dark:hover:bg-black cursor-pointer" onClick={() => { setdropdown(false) }}>
            <span> SetUp </span>
          </li>

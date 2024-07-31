@@ -1,5 +1,5 @@
+import { DynamicForm } from '@/app/dynamicForm'
 import React from 'react'
-import { DynamicForm } from '../../../../../../dynamicForm'
 
 const page = () => {
   return (

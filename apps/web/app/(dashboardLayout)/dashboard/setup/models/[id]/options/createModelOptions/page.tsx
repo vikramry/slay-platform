@@ -1,5 +1,5 @@
+import CreatModelOptions from '@/containers/createModelOptions'
 import React from 'react'
-import CreatModelOptions from '../../../../../../../containers/createModelOptions'
 
 function page() {
   return (

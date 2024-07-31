@@ -1,8 +1,8 @@
 "use client"
 import React from 'react'
 import { DataTable } from '@repo/ui';
-import { fieldOptionsColumns } from '../../../../../columns';
-import { FieldOptionsData } from '../../../../../../../../tempData';
+// import { fieldOptionsColumns } from '../../../../../columns';
+// import { FieldOptionsData } from '../../../../../../../../tempData';
 import ListFieldOptions from '@/containers/ListFieldOptions';
 
 const page = ({params}: {params: {fieldId: string}}) => {

@@ -92,10 +92,11 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
     useEffect(() => {
         if (updateModelOptionResponse.data) {
             toast({
-                title: "Successfully updated",
                 description: "Successful updated",
             })
-           router.back();
+            setTimeout(function() {
+                router.back();
+            }, 2000);
         }
         else if (updateModelOptionResponse?.error) {
             toast({
@@ -104,7 +105,7 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
                 description: updateModelOptionResponse?.error?.message,
             });
         }
-    }, [updateModelOptionResponse])
+    }, [updateModelOptionResponse?.data,updateModelOptionResponse?.loading,updateModelOptionResponse?.error])
 
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -126,7 +127,7 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
                         "modelName": getCurrentModelResponse.data?.getModel?.name,
                         "type": values?.type,
                         "updatedBy": null,
-                        "value": values?.value
+                        "value": values?.value.toString()
                     }
                 },
                 {
@@ -144,7 +145,7 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
                         "managed": values?.managed,
                         "type": values?.type,
                         "updatedBy": null,
-                        "value": values?.value,
+                        "value": values?.value.toString(),
                         "id": modelOptionId
                     }
                 },
@@ -157,7 +158,7 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
     useEffect(() => {
         if (data) {
         toast({
-            titile:"Model Option Created Successfully.",
+            title:"Model Option Created Successfully.",
         }),
         setTimeout(()=>{
             router.back();
@@ -277,7 +278,7 @@ const CreatModelOptions = ({ edit = false }: { edit?: boolean }) => {
                         disabled={loading}
                         className="flex justify-center items-center w-fit"
                     >
-                       {loading?"loading...":"Submit"}
+                       {loading || updateModelOptionResponse?.loading?"loading...":"Submit"}
                     </Button>
                 </div>      </form>
         </Form>

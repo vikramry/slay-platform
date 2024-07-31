@@ -779,12 +779,14 @@ const router =useRouter()
           />
         </div>
         <div className="flex justify-center items-center">
-          <Button
+        <Button
             type="submit"
             variant="default"
+            disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            Submit
+            {loading || updateModelFieldResponse?.loading?"loading...":"Submit"}
+           
           </Button>
         </div>
       </form>

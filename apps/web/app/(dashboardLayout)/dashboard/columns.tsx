@@ -302,14 +302,14 @@ export const modelColumns: ColumnDef<Model>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link
-              href={`/dashboard/model/${row.original.id}`}
+              href={`/dashboard/setup/models/${row.original.id}`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>View Model</DropdownMenuItem>
             </Link>
 
             <Link
-              href={`/dashboard/model/${row.original.id}/edit`}
+              href={`/dashboard/setup/models/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Model</DropdownMenuItem>
@@ -492,14 +492,14 @@ export const LayoutColumns: ColumnDef<Layout>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link
-              href={`/dashboard/model/${row.original.model.id}/layouts/${row.original.id}/structures`}
+              href={`/dashboard/setup/models/${row.original.model.id}/layouts/${row.original.id}/structures`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>View Layout</DropdownMenuItem>
             </Link>
 
             <Link
-              href={`/dashboard/model/${row.original.model.id}/layouts/${row.original.id}/edit`}
+              href={`/dashboard/setup/models/${row.original.model.id}/layouts/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Layout</DropdownMenuItem>
@@ -877,7 +877,7 @@ export const tabsColumns: ColumnDef<TabType>[] = [
               <DropdownMenuItem>View Tab</DropdownMenuItem>
             </Link> */}
             <Link
-              href={`/dashboard/tabs/${row.original.id}/edit`}
+              href={`/dashboard/setup/tabs/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Edit Tab</DropdownMenuItem>
@@ -1051,7 +1051,7 @@ export const modelOptionsColumns: ColumnDef<ModelOptionType>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link
-              href={`options/${row.original.id}`}
+              href={`options/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Model Option</DropdownMenuItem>
@@ -1206,8 +1206,14 @@ export const fieldOptionsColumns: ColumnDef<FieldOptionsType>[] = [
               Copy Tab ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <Link href={`/model/${row.original.id}`} className="cursor-pointer">
+            {/* <Link href={`/model/${row.original.id}`} className="cursor-pointer">
               <DropdownMenuItem>View Field Option</DropdownMenuItem>
+            </Link> */}
+            <Link
+              href={`options/${row.original.id}/edit`}
+              className="cursor-pointer"
+            >
+              <DropdownMenuItem>Update Field Option</DropdownMenuItem>
             </Link>
             <DropdownMenuLabel>
               <AlertDialog>
@@ -1346,7 +1352,7 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link
-              href={`/dashboard/components/${row.original.id}/edit`}
+              href={`/dashboard/setup/components/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Component</DropdownMenuItem>
@@ -1493,7 +1499,7 @@ export const userColumns: ColumnDef<User>[] = [
               <DropdownMenuItem>View User</DropdownMenuItem>
             </Link> */}
             <Link
-              href={`/dashboard/users/edit?id=${row.original.id}`}
+              href={`/dashboard/setup/users/edit?id=${row.original.id}`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Edit User</DropdownMenuItem>
@@ -1652,7 +1658,7 @@ export const profileColumns: ColumnDef<ProfileType>[] = [
             <DropdownMenuSeparator />
 
             <Link
-              href={`/dashboard/profiles/${row.original.id}/edit`}
+              href={`/dashboard/setup/profiles/${row.original.id}/edit`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>Update Profile</DropdownMenuItem>
@@ -2058,7 +2064,7 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
               Copy Structure ID
             </DropdownMenuItem>
             {/* <Link
-              href={`/dashboard/model/${row.original.id}`}
+              href={`/dashboard/setup/models/${row.original.id}`}
               className="cursor-pointer"
             >
               <DropdownMenuItem>View Structure</DropdownMenuItem>

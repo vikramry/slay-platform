@@ -138,7 +138,7 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         description: "Successful created",
       })
       setTimeout(function() {
-        router.push("/dashboard/users")
+        router.push("/dashboard/setup/users")
     }, 2000);
 
     } else if (error) {
@@ -156,7 +156,7 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
         description: "Successful updated",
       })
       setTimeout(function() {
-        router.push("/dashboard/users")
+        router.push("/dashboard/setup/users")
     }, 2000);
   
 

@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 // import { Button } from "@repo/ui/button";
 import { Button, DataTable } from '@repo/ui';
-import { Payment, columns, modelColumns } from "../columns"
-import { Modeldata } from "../../../../tempData";
+// import { Modeldata } from "../../../../tempData";
 import ListModels from "@/containers/listModel";
+import { Payment } from "../../columns";
 const page = () => {
   const [state, setState] = useState(false)
 

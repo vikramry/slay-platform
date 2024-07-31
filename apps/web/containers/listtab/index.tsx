@@ -36,7 +36,7 @@ const ListTabs = () => {
         columns={tabsColumns}
         loading={loading}
         data={tabsData}
-        url="/dashboard/tabs/createTab"
+        url="/dashboard/setup/tabs/createTab"
         text="Create tab"
       />
     </div>

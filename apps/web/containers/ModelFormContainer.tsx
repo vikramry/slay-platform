@@ -131,7 +131,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: "Model Created"
       });
-      router.push("/dashboard/model")
+      router.push("/dashboard/setup/models")
     } else if (error) {
       toast({
         variant: "destructive",
@@ -146,7 +146,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
       toast({
         title: "Model Updated"
       });
-      router.push("/dashboard/model")
+      router.push("/dashboard/setup/models")
     }
     if (updateModelResponse.error) {
 

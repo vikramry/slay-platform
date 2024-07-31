@@ -1,8 +1,8 @@
 "use client"
 import React from "react";
 import { DataTable } from '@repo/ui';
-import {  usersSampleData } from "../../../../tempData";
-import {  userColumns } from "../columns";
+// import {  usersSampleData } from "../../../../tempData";
+// import {  userColumns } from "../columns";
 import ListUsers from "@/containers/listuser";
 const page = () => {
   return (

@@ -1,8 +1,8 @@
 "use client"
 import React from "react";
 import { DataTable } from '@repo/ui';
-import { modelFieldColumns } from "../../columns";
-import { ModelFieldData } from "../../../../../tempData";
+// import { modelFieldColumns } from "../../columns";
+// import { ModelFieldData } from "../../../../../tempData";
 import ListModelfields from "@/containers/listmodelfields";
 const page = () => {
   return (

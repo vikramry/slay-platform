@@ -37,7 +37,7 @@ const ListProfile = () => {
         columns={profileColumns}
         data={data?.listProfiles?.docs || []}
         text="Create Profile"
-        url="/dashboard/profiles/add"
+        url="/dashboard/setup/profiles/add"
         filterBy={"name"}
         loading={loading}
       />

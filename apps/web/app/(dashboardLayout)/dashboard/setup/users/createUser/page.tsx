@@ -1,5 +1,5 @@
+import CreateUser from '@/containers/createUser'
 import React, { Suspense } from 'react'
-import CreateUser from '../../../../../containers/createUser'
 
 function page() {
   return (

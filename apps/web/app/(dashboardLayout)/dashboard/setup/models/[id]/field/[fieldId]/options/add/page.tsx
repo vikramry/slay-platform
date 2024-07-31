@@ -1,5 +1,5 @@
+import FieldOptionsContainer from '@/containers/FieldOptionsContainer'
 import React from 'react'
-import FieldOptionsContainer from '../../../../../../../../../containers/FieldOptionsContainer'
 
 const page = () => {
     return (

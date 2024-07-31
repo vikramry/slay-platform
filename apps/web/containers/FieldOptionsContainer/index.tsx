@@ -33,12 +33,13 @@ import {
   GetFieldOptionQuary,
   UpdateFieldOptionsQuary,
 } from "@/app/queries";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
-const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
+const FieldOptionsContainer = ({ edit = false }: { edit?: boolean }) => {
   const { id, fieldId, fieldOptionId } = useParams();
   const [createModelField, { data, loading, error }] =
     useLazyQuery(serverFetch);
+    const router = useRouter();
 
   const [getFieldOption, getFieldOptionResponse] = useLazyQuery(serverFetch);
   const [updateFieldOption, updateFieldOptionResponse] =
@@ -129,6 +130,10 @@ const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
         value: getFieldOptionResponse.data.getFieldOption.value,
         managed: getFieldOptionResponse.data.getFieldOption.managed,
         prefix: getFieldOptionResponse.data.getFieldOption.prefix,
+        modelName:getCurrentModelResponse.data?.getModel?.name,
+        model: getCurrentModelResponse.data?.getModel?.id,
+        fieldName:getCurrentModelFieldResponse.data?.getModelField?.fieldName,
+        modelField:getCurrentModelFieldResponse.data?.getModelField?.id
       });
     } else if (getFieldOptionResponse?.error) {
       toast({
@@ -218,6 +223,9 @@ const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
         title: "Success",
         description: "Successful created",
       });
+      setTimeout(function () {
+        router.back();
+      }, 2000);
     } else if (error) {
       toast({
         variant: "destructive",
@@ -232,6 +240,9 @@ const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
         title: "Success",
         description: "Successful updated",
       });
+      setTimeout(function () {
+        router.back();
+      }, 2000);
     } else if (updateFieldOptionResponse?.error) {
       toast({
         variant: "destructive",
@@ -298,6 +309,7 @@ const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
                       field.onChange(e);
                       form.setValue("value", "");
                     }}
+                    value={form.watch("type")}
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="">
@@ -393,13 +405,15 @@ const FieldOptionsContainer = ({ edit = false }: { edit: boolean }) => {
           />
         </div>
         <div className="flex justify-center items-center">
-          <Button
+        <Button
             type="submit"
             variant="default"
+            disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            Add Field Option
+            {loading ||updateFieldOptionResponse?.loading ? "loading..." : "Add Field Option"}
           </Button>
+
         </div>
       </form>
     </Form>

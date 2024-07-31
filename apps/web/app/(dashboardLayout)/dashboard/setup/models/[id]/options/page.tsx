@@ -1,8 +1,8 @@
 "use client"
 import React from "react";
 import { DataTable } from '@repo/ui';
-import { ModelOptionsData } from "../../../../../../tempData";
-import { modelOptionsColumns } from "../../../columns";
+// import { ModelOptionsData } from "../../../../../../tempData";
+// import { modelOptionsColumns } from "../../../columns";
 import ListModeloptions from "@/containers/listModeloptions";
 const page = () => {
   return (

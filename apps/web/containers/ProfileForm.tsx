@@ -184,13 +184,15 @@ const ProfileForm = ({ edit = false }: { edit?: boolean }) => {
 
                 </div>
                 <div className="flex justify-center items-center">
-                    <Button
-                        type="submit"
-                        variant="default"
-                        className="flex justify-center items-center w-fit"
-                    >
-                        Submit
-                    </Button>
+                <Button
+            type="submit"
+            variant="default"
+            disabled={loading}
+            className="flex justify-center items-center w-fit"
+          >
+            {loading || updateProfileResponse?.loading?"loading...":"Submit"}
+           
+          </Button>
                 </div>{" "}
             </form>
         </Form>

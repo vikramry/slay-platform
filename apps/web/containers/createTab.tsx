@@ -139,7 +139,7 @@ const CreatTab = ({ edit = false }: { edit?: boolean }) => {
                 title: "Success",
                 description: "Successful created",
             })
-            router.push("/dashboard/tabs")
+            router.push("/dashboard/setup/tabs")
 
         } else if (error) {
             toast({
@@ -157,7 +157,7 @@ const CreatTab = ({ edit = false }: { edit?: boolean }) => {
                 description: "Successful updated",
             })
             setTimeout(function () {
-                router.push("/dashboard/tabs")
+                router.push("/dashboard/setup/tabs")
             }, 2000)
 
         }

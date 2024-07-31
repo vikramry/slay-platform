@@ -341,7 +341,7 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
             disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            {loading ? "loading..." : "Submit"}
+            {loading ||updateStructureResponse?.loading ? "loading..." : "Submit"}
           </Button>
         </div>{" "}
       </form>

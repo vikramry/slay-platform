@@ -1,8 +1,12 @@
+import FieldOptionsContainer from '@/containers/FieldOptionsContainer'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>page</div>
+        <div>
+                        <FieldOptionsContainer edit={true} />
+
+        </div>
     )
 }
 
