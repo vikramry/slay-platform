@@ -1,52 +1,25 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { Button, Input, Checkbox, Select, Form, FormItem, FormLabel, FormControl, FormMessage, FormField } from "@repo/ui";
+import {
+  Button, Input, Checkbox, Form, FormItem, FormLabel, FormControl, FormMessage, FormField,
+} from "@repo/ui";
 import { ModelFieldType } from "@/types";
-import { useEffect, useState } from "react";
-
-const formSchema = z.object({
-  firstName: z.string().nonempty("First name is required"),
-  lastName: z.string().nonempty("Last name is required"),
-  age: z.coerce.number().min(1, "Age must be at least 1"),
-  email: z.string().email("Invalid email address"),
-  isAdmin: z.boolean(),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
 
 
-const DynamicForm = ({ handleSubmit, modelFields }: { handleSubmit: Function, modelFields: ModelFieldType[] }) => {
+const DynamicForm = ({ handleSubmit, modelFields, form }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any }) => {
 
-  const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      age: 0,
-      email: "",
-      isAdmin: false,
-    },
-  });
 
-  const onSubmit: SubmitHandler<FormSchema> = (values) => {
-    console.log(values);
-    // toast.success("Form submitted successfully!");
-  };
+
 
   return (
     <div>
-
       <Form {...form}>
         {/* <Toaster /> */}
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
             {modelFields.map((item) => {
               return (
                 <div>
-                  {item.type === "text" && (
+                  {item.type === "string" && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}
@@ -67,7 +40,7 @@ const DynamicForm = ({ handleSubmit, modelFields }: { handleSubmit: Function, mo
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{item.fieldName}</FormLabel>
+                          <FormLabel>{item.label}</FormLabel>
                           <FormControl>
                             <Input placeholder={item.fieldName} {...field} type="number" />
                           </FormControl>
@@ -77,7 +50,7 @@ const DynamicForm = ({ handleSubmit, modelFields }: { handleSubmit: Function, mo
                     />
                   )}
 
-                  {item.type === "checkbox" && (
+                  {item.type === "boolean" && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}
