@@ -7,19 +7,17 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { applyMiddleware } from "graphql-middleware";
 import { IResolvers } from "@graphql-tools/utils";
 import { GraphQLResolveInfo } from "graphql";
-// import graphqlFields from "graphql-fields";
+//@ts-ignore
 import { isEmpty } from "lodash";
-// import "./cache";
-import "./models";
-import "./profiles";
-// import "./hooks";
 import typeDefs from "./schema";
 import resolvers from './Search.Resolvers'
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+import logify from '@mercury-js/core/plugins/logify'
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
 mercury.package([redisCache(), platform()]);
+mercury.plugins([logify()])
 
 // mercury.addGraphqlSchema(
 //   typeDefs,
@@ -92,7 +90,7 @@ const handler = startServerAndCreateNextHandler(server, {
       ...req,
       user: {
         id: "1",
-        profile: req.headers.get("profile"),
+        profile: "SystemAdmin",
       },
     }
   }

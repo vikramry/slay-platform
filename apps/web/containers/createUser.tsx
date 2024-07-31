@@ -231,28 +231,6 @@ const CreateUser = ({ edit = false }: { edit?: boolean }) => {
                 </FormItem>
               )}
             />}
-          {/* <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Role</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a role" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Admin">Admin</SelectItem>
-                    <SelectItem value="ANONYMOUS">ANONYMOUS</SelectItem>
-
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
         </div>
         <div className="flex justify-center items-center">
           <Button
