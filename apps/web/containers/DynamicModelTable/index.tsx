@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button, Checkbox, DataTable } from "@repo/ui";
-import { ChevronsUpDown, Copy, ExternalLink } from "lucide-react";
+import { ChevronsUpDown, Copy, ExternalLink, Pencil } from "lucide-react";
 import Link from "next/link";
 
 const DynamicModelTable = () => {
@@ -188,6 +188,7 @@ const DynamicModelTable = () => {
           <div className="flex justify-start items-center gap-2">
             <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}><ExternalLink className="ml-2 h-4 w-4" /></Link>
             <div title="Copy Record ID" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(row.original?.id)}><Copy className="ml-2 h-4 w-4" /></div>
+            <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}/edit`}><Pencil className="ml-2 h-4 w-4" /></Link>
           </div>
         ),
       });
@@ -251,6 +252,8 @@ const DynamicModelTable = () => {
           loading={listModelDataResponse.loading || loading}
           data={listModelDataResponse.data?.[`list${modelName}s`]?.docs || []}
           filterBy="id"
+          text={"Create"}
+          url={`/dashboard/o/${modelName}/r/create`}
         />
       )}
     </div>
