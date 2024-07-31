@@ -34,7 +34,7 @@ const ListComponent = () => {
         data={data?.listComponents?.docs || []}
         loading={loading}
         text="Create component"
-        url="/dashboard/components/createComponent"
+        url="/dashboard/setup/components/createComponent"
       />
     </div>
   );

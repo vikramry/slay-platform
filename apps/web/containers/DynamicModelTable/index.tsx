@@ -4,10 +4,10 @@ import { useLazyQuery } from "@/app/hook";
 import { getlistmodelfields } from "@/app/queries";
 import { ModelFieldType } from "@/types";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button, Checkbox, DataTable } from "@repo/ui";
-import { ChevronsUpDown, Copy, ExternalLink, Pencil } from "lucide-react";
+import { Button, Checkbox, DataTable, toast, Toaster } from "@repo/ui";
+import { ChevronsUpDown, Copy, ExternalLink, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 
 const DynamicModelTable = () => {
@@ -15,6 +15,8 @@ const DynamicModelTable = () => {
   const [getAllModelFields, { data, loading, error }] =
     useLazyQuery(serverFetch);
   const [listModelData, listModelDataResponse] = useLazyQuery(serverFetch);
+  const [DeleteRecordd, DeleteRecorddResponse] = useLazyQuery(serverFetch);
+
   const [columns, setColumns] = useState<any>();
   const [query, setQuery] = useState<string>("");
 
@@ -33,7 +35,40 @@ const DynamicModelTable = () => {
       }
     );
   }, []);
-
+  const Delete_Query = useMemo(() => {
+    return `mutation Delete${modelName}($delete${modelName}Id: ID!) {
+  delete${modelName}(id: $delete${modelName}Id)
+}`
+}, [])
+function DeleteRecord (id:string){
+  console.log(id)
+  DeleteRecordd(
+    Delete_Query,{
+      [`delete${modelName}Id`]:id
+    },{
+      cache: "no-store",
+    }
+    
+  )
+}
+useEffect(() => {
+if(DeleteRecorddResponse?.data){
+  toast({
+    title: "Success",
+    description: "Successful deleted",
+  });
+  setTimeout(()=>{
+    window.location.reload()
+  },2000)
+}
+else if(DeleteRecorddResponse?.error){
+  toast({
+    variant: "destructive",
+    title: "Uh oh! Something went wrong.",
+    description: DeleteRecorddResponse?.error?.message,
+  });
+}
+}, [DeleteRecorddResponse?.data,DeleteRecorddResponse?.loading,DeleteRecorddResponse?.error])
   useEffect(() => {
     if (data) {
       const columns: ColumnDef<any>[] = data?.listModelFields?.docs?.map(
@@ -189,6 +224,8 @@ const DynamicModelTable = () => {
             <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}><ExternalLink className="ml-2 h-4 w-4" /></Link>
             <div title="Copy Record ID" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(row.original?.id)}><Copy className="ml-2 h-4 w-4" /></div>
             <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}/edit`}><Pencil className="ml-2 h-4 w-4" /></Link>
+            <Trash className="ml-2 h-4 w-4" color="#a11212" onClick={()=>DeleteRecord(row.original?.id)}/>
+
           </div>
         ),
       });
@@ -245,6 +282,8 @@ const DynamicModelTable = () => {
 
   return (
     <div>
+            <Toaster />
+
       {columns?.length > 0 && (
         <DataTable
           columns={columns || []}
