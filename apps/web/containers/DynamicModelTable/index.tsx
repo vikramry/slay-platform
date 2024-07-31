@@ -214,7 +214,6 @@ const DynamicModelTable = () => {
                         }
                     }`;
       setQuery(str);
-      console.log(str);
 
       listModelData(
         str,

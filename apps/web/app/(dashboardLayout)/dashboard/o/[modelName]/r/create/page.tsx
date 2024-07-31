@@ -1,8 +1,11 @@
+import CreateDynamicRecord from '@/containers/CreateDynamicRecord'
 import React from 'react'
 
 const page = () => {
     return (
-        <div>page</div>
+        <div>
+            <CreateDynamicRecord />
+        </div>
     )
 }
 
