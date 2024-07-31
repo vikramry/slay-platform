@@ -24,41 +24,39 @@ export function DynamicForm() {
         model: {
             type: 'relationship',
             ref: 'Model',
-            required: true,
+
         },
         name: {
             type: 'string',
-            required: true,
+
         },
         managed: {
             type: 'boolean',
-            required: true,
+
             default: true,
         },
         keyName: {
             type: 'number',
-            required: true,
+
         },
         value: {
             type: 'date',
-            required: true,
         },
         type: {
             type: 'enum',
             enum: ['number', 'string', 'boolean', 'date'], // Adding 'date' type
             enumType: 'string',
-            required: true,
         },
         createdBy: {
             type: 'relationship',
             ref: 'User',
             many: true,
-            // required: true,
+
         },
         updatedBy: {
             type: 'relationship',
             ref: 'User',
-            // required: true,
+
         },
     };
 
@@ -183,7 +181,7 @@ export function DynamicForm() {
                                 <FormLabel className="mb-2">{item.name}</FormLabel>
                                 <FormControl className="w-full">
                                     {item.type === 'select' ? (
-                                        <Select {...field} className="w-full">
+                                        <Select {...field} className="w-full" value={field.value}>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select" />
                                             </SelectTrigger>
