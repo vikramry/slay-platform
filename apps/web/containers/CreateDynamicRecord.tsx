@@ -4,11 +4,12 @@ import { useLazyQuery } from '@/app/hook';
 import { getlistmodelfields } from '@/app/queries';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useMemo } from 'react'
+import DynamicForm from './DynamicForm';
 
 const CreateDynamicRecord = () => {
     const modelName = useParams()?.modelName;
     const [getAllModelFields, { data, loading, error }] =
-    useLazyQuery(serverFetch);
+        useLazyQuery(serverFetch);
     const Create_Query = useMemo(() => {
         return `mutation Create${modelName}($input: ${modelName}Input!) {
             create${modelName}(input: $input) {
@@ -18,31 +19,31 @@ const CreateDynamicRecord = () => {
     }, [])
     useEffect(() => {
         getAllModelFields(
-          getlistmodelfields,
-          {
-            where: {
-              modelName: {
-                is: modelName,
-              },
+            getlistmodelfields,
+            {
+                where: {
+                    modelName: {
+                        is: modelName,
+                    },
+                },
             },
-          },
-          {
-            cache: "no-store",
-          }
+            {
+                cache: "no-store",
+            }
         );
-      }, []);
-      useEffect(()=>{
-if(data){
-    console.log(data,"data")
+    }, []);
+    useEffect(() => {
+        if (data) {
+            console.log(data, "data")
 
-}else if(error){
-    console.log(error,"error")
-}
-      },[data, loading, error ])
+        } else if (error) {
+            console.log(error, "error")
+        }
+    }, [data, loading, error])
     const [createRecord, createRecordResponse] = useLazyQuery(serverFetch);
-useEffect(() => {
+    useEffect(() => {
 
-}, [createRecordResponse?.data,createRecordResponse?.loading,createRecordResponse?.error])
+    }, [createRecordResponse?.data, createRecordResponse?.loading, createRecordResponse?.error])
     const handleSubmit = (values: any) => {
         createRecord(
             Create_Query,
@@ -55,7 +56,7 @@ useEffect(() => {
 
     return (
         <div>
-hjvv
+            <DynamicForm handleSubmit={handleSubmit} modelFields={data?.listModelFields?.docs || []} />
         </div>
     )
 }
