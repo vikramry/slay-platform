@@ -1,3 +1,5 @@
+import { ModelFieldType } from "@/types";
+
 export const HELLO_SAMPLE = `
 query exampleQuery {
     hello
@@ -1154,3 +1156,49 @@ export const UPDATE_USER = `mutation UpdateUser($input: updateUserInput!) {
     id
   }
 }`
+
+
+export const GET_DYNAMIC_MODEL_LIST = (modelName: string, modelFields: ModelFieldType[]) => {
+  let str = `query List${modelName}($sort: sort${modelName}Input) {
+    list${modelName}s(sort: $sort) {
+        docs {
+            id`;
+  modelFields?.forEach((item: ModelFieldType) => {
+    if (item.type === "virtual" || item.type === "relationship") {
+      str += `
+            ${item.fieldName} {
+                id
+            }`;
+      return;
+    }
+    str += `
+            ${item.fieldName}`;
+  });
+  str += `
+            }
+        }
+    }`;
+  return str;
+}
+
+
+export const GET_DYNAMIC_RECORD_DATA = (modelName: string, modelFields: ModelFieldType[]) => {
+  let str = `query Get${modelName}($where: where${modelName}Input!) {
+    get${modelName}(where: $where) {
+            id`;
+  modelFields?.forEach((item: ModelFieldType) => {
+    if (item.type === "virtual" || item.type === "relationship") {
+      str += `
+            ${item.fieldName} {
+                id
+            }`;
+      return;
+    }
+    str += `
+            ${item.fieldName}`;
+  });
+  str += `
+            }
+    }`;
+  return str;
+}

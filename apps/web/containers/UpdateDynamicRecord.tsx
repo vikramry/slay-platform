@@ -25,6 +25,9 @@ const generateSchema = (metadata: ModelFieldType[]) => {
             case "boolean":
                 schemaObj[field.fieldName] = z.boolean();
                 break;
+            case "relationship":
+                schemaObj[field.fieldName] = z.string().optional();
+                break;
             default:
                 break;
         }
@@ -34,7 +37,7 @@ const generateSchema = (metadata: ModelFieldType[]) => {
 };
 
 const UpdateDynamicRecord = () => {
-    const router=useRouter()
+    const router = useRouter()
 
     const modelName = useParams()?.modelName;
     const recordId = useParams()?.recordId;
@@ -117,9 +120,9 @@ const UpdateDynamicRecord = () => {
     useEffect(() => {
         if (updateRecordResponse?.data) {
             console.log(updateRecordResponse?.data);
-            setTimeout(()=>{
+            setTimeout(() => {
                 router.back()
-              },2000)
+            }, 2000)
         }
         if (updateRecordResponse?.error) {
             console.log(updateRecordResponse?.error);

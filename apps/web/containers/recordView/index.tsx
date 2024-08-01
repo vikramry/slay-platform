@@ -2,6 +2,7 @@
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
 import {
+  GET_DYNAMIC_RECORD_DATA,
   GET_MODEL,
   LIST_ALL_LAYOUTS,
   LIST_LAYOUT_STRUCTURES,
@@ -113,23 +114,7 @@ function RecordView() {
 
   useEffect(() => {
     if (data) {
-      let str = `query Get${modelName}($where: where${modelName}Input!) {
-            get${modelName}(where: $where) {
-                    id`;
-      data?.listModelFields?.docs?.forEach((item: ModelFieldType) => {
-        if (item.type === "virtual" || item.type === "relationship") {
-          str += `
-                    ${item.fieldName} {
-                        id
-                    }`;
-          return;
-        }
-        str += `
-                    ${item.fieldName}`;
-      });
-      str += `
-                    }
-            }`;
+      const str = GET_DYNAMIC_RECORD_DATA(modelName as string, data?.listModelFields?.docs);
       console.log(str)
       dynamicGetQuary(
         str,

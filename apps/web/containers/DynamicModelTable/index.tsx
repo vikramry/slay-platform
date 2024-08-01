@@ -1,7 +1,7 @@
 "use client";
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { getlistmodelfields } from "@/app/queries";
+import { GET_DYNAMIC_MODEL_LIST, getlistmodelfields } from "@/app/queries";
 import { ModelFieldType } from "@/types";
 import { useParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
@@ -39,36 +39,36 @@ const DynamicModelTable = () => {
     return `mutation Delete${modelName}($delete${modelName}Id: ID!) {
   delete${modelName}(id: $delete${modelName}Id)
 }`
-}, [])
-function DeleteRecord (id:string){
-  console.log(id)
-  DeleteRecordd(
-    Delete_Query,{
-      [`delete${modelName}Id`]:id
-    },{
+  }, [])
+  function DeleteRecord(id: string) {
+    console.log(id)
+    DeleteRecordd(
+      Delete_Query, {
+      [`delete${modelName}Id`]: id
+    }, {
       cache: "no-store",
     }
-    
-  )
-}
-useEffect(() => {
-if(DeleteRecorddResponse?.data){
-  toast({
-    title: "Success",
-    description: "Successful deleted",
-  });
-  setTimeout(()=>{
-    window.location.reload()
-  },2000)
-}
-else if(DeleteRecorddResponse?.error){
-  toast({
-    variant: "destructive",
-    title: "Uh oh! Something went wrong.",
-    description: DeleteRecorddResponse?.error?.message,
-  });
-}
-}, [DeleteRecorddResponse?.data,DeleteRecorddResponse?.loading,DeleteRecorddResponse?.error])
+
+    )
+  }
+  useEffect(() => {
+    if (DeleteRecorddResponse?.data) {
+      toast({
+        title: "Success",
+        description: "Successful deleted",
+      });
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
+    else if (DeleteRecorddResponse?.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: DeleteRecorddResponse?.error?.message,
+      });
+    }
+  }, [DeleteRecorddResponse?.data, DeleteRecorddResponse?.loading, DeleteRecorddResponse?.error])
   useEffect(() => {
     if (data) {
       const columns: ColumnDef<any>[] = data?.listModelFields?.docs?.map(
@@ -224,32 +224,14 @@ else if(DeleteRecorddResponse?.error){
             <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}><ExternalLink className="ml-2 h-4 w-4" /></Link>
             <div title="Copy Record ID" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(row.original?.id)}><Copy className="ml-2 h-4 w-4" /></div>
             <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}/edit`}><Pencil className="ml-2 h-4 w-4" /></Link>
-            <Trash className="ml-2 h-4 w-4" color="#a11212" onClick={()=>DeleteRecord(row.original?.id)}/>
+            <Trash className="ml-2 h-4 w-4" color="#a11212" onClick={() => DeleteRecord(row.original?.id)} />
 
           </div>
         ),
       });
 
       setColumns(columns);
-      let str = `query List${modelName}($sort: sort${modelName}Input) {
-                    list${modelName}s(sort: $sort) {
-                        docs {
-                            id`;
-      data?.listModelFields?.docs?.forEach((item: ModelFieldType) => {
-        if (item.type === "virtual" || item.type === "relationship") {
-          str += `
-                            ${item.fieldName} {
-                                id
-                            }`;
-          return;
-        }
-        str += `
-                            ${item.fieldName}`;
-      });
-      str += `
-                            }
-                        }
-                    }`;
+      const str = GET_DYNAMIC_MODEL_LIST(modelName as string, data?.listModelFields?.docs)
       setQuery(str);
 
       listModelData(
@@ -282,7 +264,7 @@ else if(DeleteRecorddResponse?.error){
 
   return (
     <div>
-            <Toaster />
+      <Toaster />
 
       {columns?.length > 0 && (
         <DataTable

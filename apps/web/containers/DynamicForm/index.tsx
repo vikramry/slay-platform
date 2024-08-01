@@ -1,14 +1,19 @@
 "use client";
 import {
   Button, Input, Checkbox, Form, FormItem, FormLabel, FormControl, FormMessage, FormField,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
 } from "@repo/ui";
 import { ModelFieldType } from "@/types";
+import GenerateRelationshipValues from "./generateRelationshipValues";
 
 
 const DynamicForm = ({ handleSubmit, modelFields, form }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any }) => {
-
-
-
 
   return (
     <div>
@@ -34,6 +39,31 @@ const DynamicForm = ({ handleSubmit, modelFields, form }: { handleSubmit: Functi
                       )}
                     />
                   )}
+
+                  {
+                    item.type == "relationship" && (
+                      <FormField
+                        control={form.control}
+                        name={item.fieldName}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{item.label}</FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="">
+                                  <SelectValue placeholder={`Select a ${item.ref}`} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <GenerateRelationshipValues fieldData={item}/>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )
+                  }
                   {item.type === "number" && (
                     <FormField
                       control={form.control}

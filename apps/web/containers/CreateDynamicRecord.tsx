@@ -25,6 +25,9 @@ const generateSchema = (metadata: ModelFieldType[]) => {
             case "boolean":
                 schemaObj[field.fieldName] = z.boolean();
                 break;
+            case "relationship":
+                schemaObj[field.fieldName] = z.string();
+                break;
             default:
                 break;
         }
