@@ -10,10 +10,10 @@ import {
   SelectItem,
 } from "@repo/ui";
 import { ModelFieldType } from "@/types";
-import GenerateRelationshipValues from "./generateRelationshipValues";
+import GenerateRelationshipValues from "./GenerateRelationshipValues";
 
 
-const DynamicForm = ({ handleSubmit, modelFields, form,loading }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any ,loading?:boolean}) => {
+const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any, loading?: boolean }) => {
 
   return (
     <div>
@@ -49,12 +49,15 @@ const DynamicForm = ({ handleSubmit, modelFields, form,loading }: { handleSubmit
                           <FormItem>
                             <FormLabel>{item.label}</FormLabel>
                             <FormControl>
-                              <Select onValueChange={field.onChange} value={field.value}>
+                              <Select onValueChange={(val) => {
+                                if (val)
+                                  field.onChange(val);
+                              }} value={field.value}>
                                 <SelectTrigger className="">
                                   <SelectValue placeholder={`Select a ${item.ref}`} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <GenerateRelationshipValues fieldData={item}/>
+                                  <GenerateRelationshipValues fieldData={item} form={form} />
                                 </SelectContent>
                               </Select>
                             </FormControl>
@@ -100,7 +103,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form,loading }: { handleSubmit
                     />
                   )}
                   {item.type === "enum" && (
-                      <FormField
+                    <FormField
                       control={form.control}
                       name={item.fieldName}
                       render={({ field }) => (
@@ -123,7 +126,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form,loading }: { handleSubmit
                                       );
                                     }
                                   )}
-                                   
+
                                 </SelectGroup>
                               </SelectContent>
                             </Select>
@@ -141,15 +144,15 @@ const DynamicForm = ({ handleSubmit, modelFields, form,loading }: { handleSubmit
             )}
           </div>
           <div className="flex justify-center items-center">
-          <Button
-            type="submit"
-            variant="default"
-            disabled={loading}
-            className="flex justify-center items-center w-fit"
-          >
-            {loading ? "loading..." : "Submit"}
-          </Button>
-        </div>{" "}
+            <Button
+              type="submit"
+              variant="default"
+              disabled={loading}
+              className="flex justify-center items-center w-fit"
+            >
+              {loading ? "loading..." : "Submit"}
+            </Button>
+          </div>{" "}
         </form>
       </Form>
     </div>

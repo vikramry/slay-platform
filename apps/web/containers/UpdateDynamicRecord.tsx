@@ -87,6 +87,7 @@ const UpdateDynamicRecord = () => {
             return acc;
         }, {} as Record<string, any>),
     });
+
     useEffect(() => {
         getAllModelFields(
             getlistmodelfields,
@@ -177,7 +178,14 @@ const UpdateDynamicRecord = () => {
     useEffect(() => {
         if (DynamicGetQuaryResponse?.data) {
             console.log(DynamicGetQuaryResponse?.data, "dynamic data")
-            data.listModelFields?.docs.forEach((item: ModelFieldType) => form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName]))
+            data.listModelFields?.docs.forEach((item: ModelFieldType) => {
+                if (item.type === "relationship") {
+                    form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName]?.id)
+                    return;
+                }
+                form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName])
+            })
+            
         }
         else if (DynamicGetQuaryResponse?.error) {
             console.log(DynamicGetQuaryResponse?.error)

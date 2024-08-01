@@ -6,7 +6,7 @@ import { SelectGroup, SelectItem, SelectLabel } from '@repo/ui'
 import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 
-const GenerateRelationshipValues = ({ fieldData }: { fieldData: ModelFieldType }) => {
+const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelFieldType, form: any }) => {
     const [listRecords, { data, loading, error }] = useLazyQuery(serverFetch);
     const [listModelFields, listModelFieldsResponse] = useLazyQuery(serverFetch);
 
@@ -45,6 +45,13 @@ const GenerateRelationshipValues = ({ fieldData }: { fieldData: ModelFieldType }
             )
         }
     }, [listModelFieldsResponse.data, listModelFieldsResponse.error, listModelFieldsResponse.loading])
+
+    useEffect(()=>{
+        if(data){
+            console.log(form.watch(fieldData.fieldName));
+            
+        }
+    },[data])
 
 
     return (
