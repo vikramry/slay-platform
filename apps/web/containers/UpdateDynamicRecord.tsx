@@ -15,35 +15,35 @@ const generateSchema = (metadata: ModelFieldType[]) => {
     const schemaObj: Record<string, any> = {};
 
     metadata?.forEach((field) => {
-        const { fieldName, type, required, enumType } = field;
+        const { fieldName, type, required, enumType ,label} = field;
 
         switch (type) {
             case "string":
                 schemaObj[fieldName] = required
-                    ? z.string({ required_error: `${fieldName} is required` })
+                    ? z.string({ required_error: `${label} is required` })
                     : z.string().optional();
                 break;
 
             case "number":
                 schemaObj[fieldName] = required
-                    ? z.coerce.number({ required_error: `${fieldName} is required` })
+                    ? z.coerce.number({ required_error: `${label} is required` })
                     : z.coerce.number().optional();
                 break;
 
             case "boolean":
                 schemaObj[fieldName] = required
-                    ? z.boolean({ required_error: `${fieldName} is required` })
+                    ? z.boolean({ required_error: `${label} is required` })
                     : z.boolean().optional();
                 break;
 
             case "enum":
                 if (enumType === "number") {
                     schemaObj[fieldName] = required
-                        ? z.coerce.number({ required_error: `${fieldName} is required` })
+                        ? z.coerce.number({ required_error: `${label} is required` })
                         : z.coerce.number().optional();
                 } else if (enumType === "string") {
                     schemaObj[fieldName] = required
-                        ? z.string({ required_error: `${fieldName} is required` })
+                        ? z.string({ required_error: `${label} is required` })
                         : z.string().optional();
                 }
                 break;
