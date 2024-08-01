@@ -9,6 +9,7 @@ import { ModelFieldType } from '@/types';
 import { record, z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from '@repo/ui';
 
 const generateSchema = (metadata: ModelFieldType[]) => {
     const schemaObj: Record<string, any> = {};
@@ -117,12 +118,21 @@ const UpdateDynamicRecord = () => {
     useEffect(() => {
         if (updateRecordResponse?.data) {
             console.log(updateRecordResponse?.data);
+            toast({
+                title: "Success",
+                description: "Successful updated",
+              })
             setTimeout(()=>{
                 router.back()
               },2000)
         }
         if (updateRecordResponse?.error) {
             console.log(updateRecordResponse?.error);
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: updateRecordResponse.error?.message,
+              });
         }
     }, [updateRecordResponse?.data, updateRecordResponse?.loading, updateRecordResponse?.error])
 
@@ -150,7 +160,8 @@ const UpdateDynamicRecord = () => {
 
     return (
         <div>
-            <DynamicForm handleSubmit={onSubmit} modelFields={data?.listModelFields?.docs || []} form={form} />
+            <DynamicForm handleSubmit={onSubmit} modelFields={data?.listModelFields?.docs || []} form={form}  loading={updateRecordResponse?.loading}
+            />
         </div>
     )
 }

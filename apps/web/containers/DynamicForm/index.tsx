@@ -1,11 +1,18 @@
 "use client";
 import {
   Button, Input, Checkbox, Form, FormItem, FormLabel, FormControl, FormMessage, FormField,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
 } from "@repo/ui";
 import { ModelFieldType } from "@/types";
 
 
-const DynamicForm = ({ handleSubmit, modelFields, form }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any }) => {
+const DynamicForm = ({ handleSubmit, modelFields, form,loading }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any ,loading?:boolean}) => {
 
 
 
@@ -69,6 +76,40 @@ const DynamicForm = ({ handleSubmit, modelFields, form }: { handleSubmit: Functi
                       )}
                     />
                   )}
+                  {item.type === "enum" && (
+                      <FormField
+                      control={form.control}
+                      name={item.fieldName}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Component</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <SelectTrigger className="">
+                                <SelectValue placeholder="Select a Component" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Select {item.label}</SelectLabel>
+                                  {item?.enumValues.map(
+                                    (enumValue: any) => {
+                                      return (
+                                        <SelectItem value={enumValue}>
+                                          {enumValue}
+                                        </SelectItem>
+                                      );
+                                    }
+                                  )}
+                                   
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </div>
 
               )
@@ -77,10 +118,15 @@ const DynamicForm = ({ handleSubmit, modelFields, form }: { handleSubmit: Functi
             )}
           </div>
           <div className="flex justify-center items-center">
-            <Button type="submit" variant="default" className="flex justify-center items-center w-fit">
-              Submit
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            variant="default"
+            disabled={loading}
+            className="flex justify-center items-center w-fit"
+          >
+            {loading ? "loading..." : "Submit"}
+          </Button>
+        </div>{" "}
         </form>
       </Form>
     </div>
