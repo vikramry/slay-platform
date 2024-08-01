@@ -9,25 +9,49 @@ import { ModelFieldType } from '@/types';
 import { record, z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from '@repo/ui';
 
 const generateSchema = (metadata: ModelFieldType[]) => {
     const schemaObj: Record<string, any> = {};
 
     metadata?.forEach((field) => {
-        switch (field.type) {
+        const { fieldName, type, required, enumType } = field;
+
+        switch (type) {
             case "string":
-                schemaObj[field.fieldName] = z.string().optional();
+                schemaObj[fieldName] = required
+                    ? z.string({ required_error: `${fieldName} is required` })
+                    : z.string().optional();
                 break;
+
             case "number":
-                schemaObj[field.fieldName] = z.coerce.number().optional();
+                schemaObj[fieldName] = required
+                    ? z.coerce.number({ required_error: `${fieldName} is required` })
+                    : z.coerce.number().optional();
                 break;
 
             case "boolean":
-                schemaObj[field.fieldName] = z.boolean();
+                schemaObj[fieldName] = required
+                    ? z.boolean({ required_error: `${fieldName} is required` })
+                    : z.boolean().optional();
                 break;
+
+            case "enum":
+                if (enumType === "number") {
+                    schemaObj[fieldName] = required
+                        ? z.coerce.number({ required_error: `${fieldName} is required` })
+                        : z.coerce.number().optional();
+                } else if (enumType === "string") {
+                    schemaObj[fieldName] = required
+                        ? z.string({ required_error: `${fieldName} is required` })
+                        : z.string().optional();
+                }
+                break;
+
             case "relationship":
-                schemaObj[field.fieldName] = z.string().optional();
+                schemaObj[fieldName] = z.string().optional();
                 break;
+
             default:
                 break;
         }
@@ -120,12 +144,21 @@ const UpdateDynamicRecord = () => {
     useEffect(() => {
         if (updateRecordResponse?.data) {
             console.log(updateRecordResponse?.data);
+            toast({
+                title: "Success",
+                description: "Successful updated",
+            })
             setTimeout(() => {
                 router.back()
             }, 2000)
         }
         if (updateRecordResponse?.error) {
             console.log(updateRecordResponse?.error);
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: updateRecordResponse.error?.message,
+            });
         }
     }, [updateRecordResponse?.data, updateRecordResponse?.loading, updateRecordResponse?.error])
 
@@ -153,7 +186,8 @@ const UpdateDynamicRecord = () => {
 
     return (
         <div>
-            <DynamicForm handleSubmit={onSubmit} modelFields={data?.listModelFields?.docs || []} form={form} />
+            <DynamicForm handleSubmit={onSubmit} modelFields={data?.listModelFields?.docs || []} form={form} loading={updateRecordResponse?.loading}
+            />
         </div>
     )
 }
