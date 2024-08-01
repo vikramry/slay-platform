@@ -2,7 +2,7 @@
 import { serverFetch } from '@/app/action';
 import { useLazyQuery } from '@/app/hook';
 import { getlistmodelfields } from '@/app/queries';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useMemo } from 'react'
 import DynamicForm from './DynamicForm';
 import { ModelFieldType } from '@/types';
@@ -34,6 +34,7 @@ const generateSchema = (metadata: ModelFieldType[]) => {
 };
 
 const CreateDynamicRecord = () => {
+    const router=useRouter()
     const modelName = useParams()?.modelName;
     const [getAllModelFields, { data, loading, error }] =
         useLazyQuery(serverFetch);
@@ -84,6 +85,9 @@ const CreateDynamicRecord = () => {
     useEffect(() => {
         if (createRecordResponse?.data) {
             console.log(createRecordResponse?.data);
+            setTimeout(()=>{
+                router.back()
+              },2000)
         }
         if (createRecordResponse?.error) {
             console.log(createRecordResponse?.error);
