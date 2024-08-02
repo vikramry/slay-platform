@@ -114,14 +114,16 @@ const DynamicModelTable = () => {
                 },
                 cell: ({ row }) => {
                   if (field.many) {
-                    return row.original[field.fieldName]?.map((item: any) => (
+                    return <div className="flex justify-center items-center flex-wrap gap-2">
+                     {row.original[field.fieldName]?.map((item: any) => (
                       <Link href={`${item?.id ?
                         `/dashboard/o/${field.ref}/r/${item?.id}`
                         :
                         "#"}`
                       } className="hover:underline">{item?.id || "-"}
                       </Link>
-                    ))
+                      ))}
+                    </div>
 
                   }
                   else {

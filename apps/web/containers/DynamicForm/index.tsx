@@ -8,9 +8,15 @@ import {
   SelectGroup,
   SelectLabel,
   SelectItem,
+  DateTimePicker,
+  MultiSelector,
+  MultiSelectorTrigger,
+  MultiSelectorInput,
+  MultiSelectorContent,
 } from "@repo/ui";
 import { ModelFieldType } from "@/types";
 import GenerateRelationshipValues from "./GenerateRelationshipSelectItems";
+import GenerateMultiRelationshipItems from "./GenerateMultiRelationshipItems";
 
 
 const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any, loading?: boolean }) => {
@@ -41,6 +47,28 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                   )}
 
                   {
+                    item.type == "date" &&
+                    <FormField
+                      control={form.control}
+                      name={item.fieldName}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{item.label}</FormLabel>
+                          <FormControl>
+                            <DateTimePicker
+                              granularity="second"
+                              hourCycle={12}
+                              jsDate={field.value}
+                              onJsDateChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  }
+
+                  {
                     ["string", "number", "boolean"].includes(item.type) && item.many &&
                     <FormField
                       control={form.control}
@@ -54,7 +82,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                               {...field}
                               type="text"
                               onChange={(event) => {
-                                
+
                                 const arrayValues = event.target.value
                                   .split(",")
                                   .map((value: string) => {
@@ -75,7 +103,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                                     }
                                     return true;
                                   });
-                                  
+
                                 field.onChange(arrayValues);
                               }}
                             />
@@ -88,7 +116,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
 
 
                   {
-                    item.type == "relationship" && (
+                    item.type == "relationship" && !item.many && (
                       <FormField
                         control={form.control}
                         name={item.fieldName}
@@ -113,6 +141,33 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                         )}
                       />
                     )
+                  }
+
+                  {
+                    item.type == "relationship" && item.many &&
+
+                    <FormField
+                      control={form.control}
+                      name={item.fieldName}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{item.label}</FormLabel>
+                          <FormControl>
+                            <MultiSelector values={form.watch(item.fieldName) || []} onValuesChange={(values) => {
+                              form.setValue(item.fieldName, values)
+                            }} loop>
+                              <MultiSelectorTrigger>
+                                <MultiSelectorInput placeholder={`select ${item.ref}s`} />
+                              </MultiSelectorTrigger>
+                              <MultiSelectorContent>
+                                <GenerateMultiRelationshipItems fieldData={item} form={form} />
+                              </MultiSelectorContent>
+                            </MultiSelector>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   }
                   {item.type === "number" && !item.many && (
                     <FormField
