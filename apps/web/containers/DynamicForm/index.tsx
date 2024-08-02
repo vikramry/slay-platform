@@ -10,7 +10,7 @@ import {
   SelectItem,
 } from "@repo/ui";
 import { ModelFieldType } from "@/types";
-import GenerateRelationshipValues from "./GenerateRelationshipValues";
+import GenerateRelationshipValues from "./GenerateRelationshipSelectItems";
 
 
 const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any, loading?: boolean }) => {
@@ -24,7 +24,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
             {modelFields.map((item) => {
               return (
                 <div>
-                  {item.type === "string" && (
+                  {item.type === "string" && !item.many && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}
@@ -39,6 +39,53 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       )}
                     />
                   )}
+
+                  {
+                    ["string", "number", "boolean"].includes(item.type) && item.many &&
+                    <FormField
+                      control={form.control}
+                      name={item.fieldName}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>[{item.label}]</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={`Enter values separated by comma`}
+                              {...field}
+                              type="text"
+                              onChange={(event) => {
+                                
+                                const arrayValues = event.target.value
+                                  .split(",")
+                                  .map((value: string) => {
+                                    const trimmedValue = value.trim();
+                                    if (item.type === "number") {
+                                      return isNaN(Number(trimmedValue)) ? null : trimmedValue;
+                                    } else if (item.type === "boolean") {
+                                      return ['t', 'T', 'true', true].includes(trimmedValue) ? true : ['f', 'F', 'false', false].includes(trimmedValue) ? false : '';
+                                    } else {
+                                      return trimmedValue;
+                                    }
+                                  })
+                                  .filter((value: any) => {
+                                    if (item.type === "number") {
+                                      return value !== null;
+                                    } else if (item.type === "boolean") {
+                                      return value !== null;
+                                    }
+                                    return true;
+                                  });
+                                  
+                                field.onChange(arrayValues);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  }
+
 
                   {
                     item.type == "relationship" && (
@@ -67,7 +114,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       />
                     )
                   }
-                  {item.type === "number" && (
+                  {item.type === "number" && !item.many && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}
@@ -83,7 +130,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                     />
                   )}
 
-                  {item.type === "boolean" && (
+                  {item.type === "boolean" && !item.many && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}

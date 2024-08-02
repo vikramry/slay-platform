@@ -21,7 +21,7 @@ const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelField
                 },
             },
             {
-                cache: "no-store",
+                
             }
         )
     }, [])
@@ -40,7 +40,7 @@ const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelField
                     },
                 },
                 {
-                    cache: "no-store"
+                    
                 }
             )
         }
