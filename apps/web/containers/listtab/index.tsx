@@ -12,7 +12,10 @@ const ListTabs = () => {
   useEffect(() => {
     listtabdata(
       listtabs,
-      {},
+      {
+        "offset": 0,
+        "limit": 100
+      },
       {
         cache: "no-store",
       }

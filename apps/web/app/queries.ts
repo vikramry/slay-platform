@@ -326,8 +326,8 @@ export const getModelOptionQuary = `
   `;
 
 export const getlistmodels = `
-query ListModels {
-  listModels {
+query ListModels($offset: Int!, $limit: Int!) {
+  listModels(offset: $offset, limit: $limit) {
     docs {
       id
       createdBy {
@@ -344,6 +344,8 @@ query ListModels {
         id
       }
     }
+    limit
+    offset
   }
 }`;
 export const getlistmodeloptions = `
@@ -581,8 +583,8 @@ query ListModels($where: whereModelInput, $limit: Int!) {
   }
 }`;
 export const listtabs = `
-  query Docs {
-    listTabs {
+  query Docs($offset: Int!, $limit: Int!) {
+    listTabs(offset: $offset, limit: $limit) {
       docs {
         label
         id
@@ -601,6 +603,8 @@ export const listtabs = `
         order
         id
       }
+      offset
+      limit
     }
   }
   `;
