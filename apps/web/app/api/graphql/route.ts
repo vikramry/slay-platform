@@ -17,7 +17,7 @@ import logify from '@mercury-js/core/plugins/logify'
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
-mercury.package([redisCache(), platform({ plugins: [ecommerce()]})]);
+await mercury.package([redisCache(), platform({ plugins: [ecommerce()]})]);
 // mercury.plugins([logify()])
 
 // mercury.addGraphqlSchema(
