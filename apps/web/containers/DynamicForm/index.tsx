@@ -169,7 +169,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       )}
                     />
                   }
-                  { ["number", "float"].includes(item.type) && !item.many && (
+                  {["number", "float"].includes(item.type) && !item.many && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}
@@ -205,16 +205,17 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                     />
                   )}
                   {item.type === "enum" && (
+
                     <FormField
                       control={form.control}
                       name={item.fieldName}
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Component</FormLabel>
+                        <FormItem className="">
+                          <FormLabel>{item.label}</FormLabel>
                           <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value}>
+                            <Select onValueChange={(val)=>field.onChange(val)} value={field.value}>
                               <SelectTrigger className="">
-                                <SelectValue placeholder="Select a Component" />
+                                <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectGroup>
@@ -228,15 +229,14 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                                       );
                                     }
                                   )}
-
                                 </SelectGroup>
                               </SelectContent>
                             </Select>
                           </FormControl>
-                          <FormMessage />
                         </FormItem>
                       )}
                     />
+
                   )}
                 </div>
 

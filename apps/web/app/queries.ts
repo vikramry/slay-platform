@@ -381,6 +381,7 @@ export const getlistmodelfields = `
       docs {
         id
         fieldName
+        enumValues
         createdBy {
           id
           firstName
