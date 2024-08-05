@@ -75,7 +75,9 @@ const DynamicModelTable = () => {
         (field: ModelFieldType) => {
 
           switch (field.type) {
-            case "string" || "number" || "float":
+            case "string":
+            case "number":
+            case "float":
               return {
                 accessorKey: field.fieldName,
                 header: ({ column }) => {
@@ -96,7 +98,9 @@ const DynamicModelTable = () => {
                 ),
               };
 
-            case "relationship" || "virtual":
+            case "relationship":
+            case "virtual":
+
               return {
                 accessorKey: `${field.fieldName}.id`,
                 header: ({ column }) => {
@@ -115,13 +119,13 @@ const DynamicModelTable = () => {
                 cell: ({ row }) => {
                   if (field.many) {
                     return <div className="flex justify-center items-center flex-wrap gap-2">
-                     {row.original[field.fieldName]?.map((item: any) => (
-                      <Link href={`${item?.id ?
-                        `/dashboard/o/${field.ref}/r/${item?.id}`
-                        :
-                        "#"}`
-                      } className="hover:underline">{item?.id || "-"}
-                      </Link>
+                      {row.original[field.fieldName]?.map((item: any) => (
+                        <Link href={`${item?.id ?
+                          `/dashboard/o/${field.ref}/r/${item?.id}`
+                          :
+                          "#"}`
+                        } className="hover:underline">{item?.id || "-"}
+                        </Link>
                       ))}
                     </div>
 
