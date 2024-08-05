@@ -169,7 +169,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       )}
                     />
                   }
-                  {item.type === "number" && !item.many && (
+                  { ["number", "float"].includes(item.type) && !item.many && (
                     <FormField
                       control={form.control}
                       name={item.fieldName}
