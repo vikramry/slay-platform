@@ -2,6 +2,7 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import mercury from "@mercury-js/core";
 import redisCache from "@mercury-js/core/packages/redisCache";
 import platform from "@mercury-js/core/packages/platform";
+import ecommerce from "@mercury-js/core/packages/ecommerce";
 import { ApolloServer } from "@apollo/server";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { applyMiddleware } from "graphql-middleware";
@@ -16,8 +17,8 @@ import logify from '@mercury-js/core/plugins/logify'
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
-mercury.package([redisCache(), platform()]);
-mercury.plugins([logify()])
+mercury.package([redisCache(), platform({ plugins: [ecommerce()]})]);
+// mercury.plugins([logify()])
 
 // mercury.addGraphqlSchema(
 //   typeDefs,
