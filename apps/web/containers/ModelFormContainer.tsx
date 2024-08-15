@@ -13,15 +13,23 @@ import {
   FormMessage,
   Input,
   useToast,
-  Toaster
+  Toaster,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem
 } from "@repo/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { CreateModelQuary, GET_MODEL, UPDATE_MODEL } from "@/app/queries";
+import { CreateModelQuary, GET_MODEL, LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL, UPDATE_MODEL } from "@/app/queries";
 import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { ModelFieldType } from "@/types";
 
 const formSchema = z.object({
   name: z.string({
@@ -30,6 +38,7 @@ const formSchema = z.object({
   label: z.string({
     required_error: "Label is required"
   }),
+  key: z.string(),
   managed: z.boolean(),
   prefix: z.string().optional(),
 });
@@ -39,6 +48,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
   const { id } = useParams();
   const [createModel, { data, loading, error }] = useLazyQuery(serverFetch);
   const [updateModel, updateModelResponse] = useLazyQuery(serverFetch);
+  const [getAllModelFields, getAllModelFieldsResponse] = useLazyQuery(serverFetch);
   const [getModel, getModelResponse] = useLazyQuery(serverFetch);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,6 +60,17 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (edit) {
+      getAllModelFields(
+        LIST_ALL_MODEL_FIELDS_ID_NAME_LABEL,
+        {
+          limit: 10,
+          where: {
+            "model": {
+              "is": id
+            }
+          }
+        }
+      )
       getModel(
         GET_MODEL,
         {
@@ -68,12 +89,13 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
 
   useEffect(() => {
     if (getModelResponse.data) {
-      const Data:any = {
+      const Data: any = {
         name: getModelResponse.data.getModel.name,
         label: getModelResponse.data.getModel.label,
         managed: getModelResponse.data.getModel.managed,
+        key: getModelResponse.data.getModel.key
       };
-    
+
       if (getModelResponse.data.getModel.prefix != null) {
         Data.prefix = getModelResponse.data.getModel.prefix;
       }
@@ -87,6 +109,16 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
       });
     }
   }, [getModelResponse.data, getModelResponse.error, getModelResponse.loading]);
+
+  useEffect(()=>{
+    if(getAllModelFieldsResponse.error){
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: getAllModelFieldsResponse.error?.message,
+      });
+    }
+  }, [getAllModelFieldsResponse.data, getAllModelFieldsResponse.error, getAllModelFields.loading])
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
 
@@ -99,6 +131,7 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
             "managed": values?.managed,
             "name": values?.name,
             "prefix": values?.prefix,
+            "key": values?.key,
             "updatedBy": null
           }
         },
@@ -201,6 +234,34 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
               </FormItem>
             )}
           />
+          {edit && <FormField
+            control={form.control}
+            name="key"
+            render={({ field }) => (
+
+              <FormItem>
+                <FormLabel>Key</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Model Fields</SelectLabel>
+                        {
+                          getAllModelFieldsResponse?.data?.listModelFields?.docs.map((item: ModelFieldType) => {
+                            return <SelectItem value={item.fieldName}>{item.label}</SelectItem>
+                          })
+                        }
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />}
           <FormField
             control={form.control}
             name="managed"
@@ -226,8 +287,8 @@ const ModelFormContainer = ({ edit = false }: { edit?: boolean }) => {
             disabled={loading}
             className="flex justify-center items-center w-fit"
           >
-            {loading || updateModelResponse?.loading?"loading...":"Submit"}
-           
+            {loading || updateModelResponse?.loading ? "loading..." : "Submit"}
+
           </Button>
         </div>{" "}
       </form>

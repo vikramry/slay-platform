@@ -32,7 +32,7 @@ import {
   Toaster,
   useToast,
 } from "@repo/ui";
-import { useParams,useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,7 +81,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
     useLazyQuery(serverFetch);
   const { id, fieldId } = useParams();
   const { toast } = useToast();
-const router =useRouter()
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -143,22 +143,20 @@ const router =useRouter()
     if (getModelFieldResponse.data) {
       const data = getModelFieldResponse.data.getModelField;
 
-      form.reset({
-        default: getDefaultValue(data?.default, data?.type),
-        enumType: data?.enumType,
-        enumValues: data?.enumValues,
-        fieldName: data?.fieldName,
-        foreignField: data?.foreignField,
-        label: data?.label,
-        localField: data?.localField,
-        managed: data?.managed || false,
-        ref: data?.ref,
-        required: data?.required || false,
-        rounds: data?.rounds,
-        type: data?.type,
-        unique: data?.unique || false,
-        many: data?.many || false,
-      });
+      form.setValue("default", getDefaultValue(data?.default, data?.type));
+      form.setValue("enumType", data?.enumType);
+      form.setValue("enumValues", data?.enumValues);
+      form.setValue("fieldName", data?.fieldName);
+      form.setValue("foreignField", data?.foreignField);
+      form.setValue("label", data?.label);
+      form.setValue("localField", data?.localField);
+      form.setValue("managed", data?.managed || false);
+      form.setValue("ref", data?.ref);
+      form.setValue("required", data?.required || false);
+      form.setValue("rounds", data?.rounds);
+      form.setValue("type", data?.type);
+      form.setValue("unique", data?.unique || false);
+      form.setValue("many", data?.many || false);
     }
 
     if (getModelFieldResponse.error) {
@@ -445,24 +443,24 @@ const router =useRouter()
           {["number", "string", "float", "enum"].includes(
             form.watch("type")
           ) && (
-            <FormField
-              control={form.control}
-              name="default"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Default Value</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter default value"
-                      {...field}
-                      type={form.watch("type") === "string" ? "text" : "number"}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+              <FormField
+                control={form.control}
+                name="default"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Default Value</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter default value"
+                        {...field}
+                        type={form.watch("type") === "string" ? "text" : "number"}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
           <FormField
             control={form.control}
@@ -523,35 +521,35 @@ const router =useRouter()
           {["relationship", "virtual"].includes(
             form.watch("type", "string")
           ) && (
-            <FormField
-              control={form.control}
-              name="ref"
-              render={({ field }) => (
-                <FormItem className="">
-                  <FormLabel>Reference Model</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="">
-                        <SelectValue placeholder="Select a Model" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Models</SelectLabel>
-                          {getModelsResponse.data?.listModels?.docs.map(
-                            (item: any) => (
-                              <SelectItem key={item.id} value={item.name}>
-                                {item.label}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          )}
+              <FormField
+                control={form.control}
+                name="ref"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Reference Model</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger className="">
+                          <SelectValue placeholder="Select a Model" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Models</SelectLabel>
+                            {getModelsResponse.data?.listModels?.docs.map(
+                              (item: any) => (
+                                <SelectItem key={item.id} value={item.name}>
+                                  {item.label}
+                                </SelectItem>
+                              )
+                            )}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
 
           {["virtual"].includes(form.watch("type", "string")) && (
             <>
@@ -779,14 +777,15 @@ const router =useRouter()
           />
         </div>
         <div className="flex justify-center items-center">
-        <Button
+          <Button
             type="submit"
             variant="default"
-            disabled={loading}
+            // disabled={loading}
+            onClick={()=>console.log(form.formState)}
             className="flex justify-center items-center w-fit"
           >
-            {loading || updateModelFieldResponse?.loading?"loading...":"Submit"}
-           
+            {loading || updateModelFieldResponse?.loading ? "loading..." : "Submit"}
+
           </Button>
         </div>
       </form>

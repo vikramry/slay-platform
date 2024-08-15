@@ -16,6 +16,7 @@ const TabsContainer = () => {
         ) {
             ListTabs(
                 LIST_TABS, {
+                "limit": 100,
                 "sort": {
                     "order": "asc"
                 }

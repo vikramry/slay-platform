@@ -1,4 +1,5 @@
 import { ModelFieldType } from "@/types";
+import { serverFetch } from "./action";
 
 export const HELLO_SAMPLE = `
 query exampleQuery {
@@ -335,6 +336,7 @@ query ListModels($offset: Int!, $limit: Int!) {
         id
       }
       label
+      key
       managed
       name
       prefix
@@ -398,6 +400,7 @@ export const getlistmodelfields = `
           id
           name
           label
+          key
           prefix
         }
         updatedBy {
@@ -418,6 +421,7 @@ export const GET_MODEL = `query GetModel($where: whereModelInput!) {
       label
       prefix
       managed
+      key
       createdBy {
         id
         firstName
@@ -1099,8 +1103,8 @@ mutation DeleteLayoutStructure($deleteLayoutStructureId: ID!) {
   deleteLayoutStructure(id: $deleteLayoutStructureId)
 }`
 export const LIST_TABS = `
-query Docs($sort: sortTabInput) {
-  listTabs(sort: $sort) {
+query Docs($sort: sortTabInput, $limit: Int!) {
+  listTabs(sort: $sort, limit: $limit) {
     docs {
       label
       id
@@ -1162,28 +1166,39 @@ export const UPDATE_USER = `mutation UpdateUser($input: updateUserInput!) {
   }
 }`
 
-
-export const GET_DYNAMIC_MODEL_LIST = (modelName: string, modelFields: ModelFieldType[]) => {
+export const GET_DYNAMIC_MODEL_LIST = async (modelName: string, modelFields: ModelFieldType[]) => {
   let str = `query List${modelName}($sort: sort${modelName}Input) {
     list${modelName}s(sort: $sort) {
         docs {
             id`;
-  modelFields?.forEach((item: ModelFieldType) => {
+
+  const fieldPromises = modelFields.map(async (item: ModelFieldType) => {
     if (item.type === "virtual" || item.type === "relationship") {
-      str += `
+      const refModelKey = await getModelFieldRefModelKey(item.ref);
+      return `
             ${item.fieldName} {
                 id
+                ${refModelKey}
             }`;
-      return;
     }
-    str += `
+    return `
             ${item.fieldName}`;
   });
+
+  const fieldStrings = await Promise.all(fieldPromises);
+  str += fieldStrings.join('');
+
   str += `
             }
         }
     }`;
+
   return str;
+}
+
+const getModelFieldRefModelKey = async (modelName: string) => {
+  const data = await serverFetch(GET_MODEL, { where: { name: { is: modelName } } }, { cache: "no-store" });
+  return data?.getModel?.key || "";
 }
 
 

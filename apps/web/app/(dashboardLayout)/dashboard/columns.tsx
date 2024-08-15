@@ -199,6 +199,21 @@ export const modelColumns: ColumnDef<Model>[] = [
     cell: ({ row }) => <div className="">{row.getValue("prefix") || "-"}</div>,
   },
   {
+    accessorKey: "key",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Key
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("key") || "-"}</div>,
+  },
+  {
     accessorKey: "managed",
     header: "Managed",
     cell: ({ row }) => (
@@ -2104,4 +2119,4 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
 // component:ComponentsType
 // order:number
 // row:number
-// col:number
+// col:numbers

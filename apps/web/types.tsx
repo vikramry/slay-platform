@@ -3,13 +3,14 @@ export interface User {
   firstName: string,
   lastName?: string,
   email: string,
-  password:string,
+  password: string,
   profile?: ProfileType
 }
 export interface Model {
   id: string,
   name: string
   label: string,
+  key?: string,
   prefix?: string,
   managed: boolean,
   createdBy?: User,
@@ -108,20 +109,20 @@ export interface PermissionType {
   updatedBy: User
 }
 
-export interface Layout{
-  id:string
-  model:Model
-  profiles?:ProfileType[]
-  name:string
-  label:string
+export interface Layout {
+  id: string
+  model: Model
+  profiles?: ProfileType[]
+  name: string
+  label: string
   createdBy: User
   updatedBy: User
 }
-export interface LayoutStructure{
-  id:string
-  layout:Layout
-  component:ComponentsType
-  order:number
-  row:number
-  col:number
+export interface LayoutStructure {
+  id: string
+  layout: Layout
+  component: ComponentsType
+  order: number
+  row: number
+  col: number
 }
