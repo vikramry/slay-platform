@@ -14,18 +14,11 @@ import typeDefs from "./schema";
 import resolvers from './Search.Resolvers'
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import logify from '@mercury-js/core/plugins/logify'
+import razorPay from '@mercury-js/core/plugins/razorpay'
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
-await mercury.package([redisCache(), platform({ plugins: [ecommerce()]})]);
-// mercury.plugins([logify()])
-
-// mercury.addGraphqlSchema(
-//   typeDefs,
-//   resolvers
-// );
-
-
+await mercury.package([redisCache(), platform({ plugins: [ecommerce({ plugins: [razorPay({ RAZOR_PAY_API_KEY: process.env.RAZOR_PAY_API_KEY!, RAZOR_PAY_SECRET_KEY: process.env.RAZOR_PAY_SECRET_KEY! })] })] })]);
 
 const composePopulateQuery = (fields: any, deep: number, max: number): any => {
   deep++;
@@ -45,11 +38,14 @@ const composePopulateQuery = (fields: any, deep: number, max: number): any => {
     })
     .filter((item) => item != null);
 };
-
+mercury.addGraphqlSchema(
+  typeDefs,
+  resolvers
+)
 const schema = applyMiddleware(
   makeExecutableSchema({
-    typeDefs: [mercury.typeDefs, typeDefs],
-    resolvers: [mercury.resolvers, resolvers] as unknown as IResolvers<
+    typeDefs: mercury.typeDefs,
+    resolvers: mercury.resolvers as unknown as IResolvers<
       any,
       GraphQLResolveInfo
     >[],
