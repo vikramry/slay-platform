@@ -1196,7 +1196,7 @@ export const GET_DYNAMIC_MODEL_LIST = async (modelName: string, modelFields: Mod
   return str;
 }
 
-const getModelFieldRefModelKey = async (modelName: string) => {
+export const getModelFieldRefModelKey = async (modelName: string) => {
   const data = await serverFetch(GET_MODEL, { where: { name: { is: modelName } } }, { cache: "no-store" });
   return data?.getModel?.key || "";
 }

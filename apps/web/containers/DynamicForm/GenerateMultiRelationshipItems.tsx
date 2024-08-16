@@ -1,15 +1,21 @@
 import { serverFetch } from '@/app/action'
 import { useLazyQuery } from '@/app/hook'
-import { GET_DYNAMIC_MODEL_LIST, getlistmodelfields } from '@/app/queries'
+import { GET_DYNAMIC_MODEL_LIST, getlistmodelfields, getModelFieldRefModelKey } from '@/app/queries'
 import { ModelFieldType } from '@/types'
 import { MultiSelectorItem, MultiSelectorList, SelectGroup, SelectItem, SelectLabel } from '@repo/ui'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const GenerateMultiRelationshipItems = ({ fieldData, form }: { fieldData: ModelFieldType, form: any }) => {
     const [listRecords, { data, loading, error }] = useLazyQuery(serverFetch);
     const [listModelFields, listModelFieldsResponse] = useLazyQuery(serverFetch);
+    const [refKey, setRefKey] = useState("");
+
 
     useEffect(() => {
+        (async () => {
+            const key = await getModelFieldRefModelKey(fieldData.ref);
+            setRefKey(key);
+        })()
         listModelFields(
             getlistmodelfields,
             {
@@ -57,7 +63,7 @@ const GenerateMultiRelationshipItems = ({ fieldData, form }: { fieldData: ModelF
             {
                 data?.[`list${fieldData.ref}s`]?.docs.map((item: any) => {
 
-                    return <MultiSelectorItem value={item.id} title={JSON.stringify(item, null, 4)}>{fieldData?.model?.key ? item[fieldData?.model?.key] : item.id}</MultiSelectorItem>
+                    return <MultiSelectorItem value={item.id} title={JSON.stringify(item, null, 4)}>{refKey ? item[refKey] : item.id}</MultiSelectorItem>
                 })
             }
         </MultiSelectorList>
