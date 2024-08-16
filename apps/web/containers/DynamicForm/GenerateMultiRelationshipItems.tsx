@@ -26,7 +26,7 @@ const GenerateMultiRelationshipItems = ({ fieldData, form }: { fieldData: ModelF
     }, [])
     useEffect(() => {
         if (listModelFieldsResponse.data) {
-             GET_DYNAMIC_MODEL_LIST(fieldData.ref, listModelFieldsResponse?.data?.listModelFields?.docs).then(data =>{
+            GET_DYNAMIC_MODEL_LIST(fieldData.ref, listModelFieldsResponse?.data?.listModelFields?.docs).then(data => {
                 listRecords(
                     data,
                     {
@@ -35,11 +35,11 @@ const GenerateMultiRelationshipItems = ({ fieldData, form }: { fieldData: ModelF
                         },
                     },
                     {
-    
+
                     }
                 )
             })
-            
+
         }
     }, [listModelFieldsResponse.data, listModelFieldsResponse.error, listModelFieldsResponse.loading])
 
@@ -57,7 +57,7 @@ const GenerateMultiRelationshipItems = ({ fieldData, form }: { fieldData: ModelF
             {
                 data?.[`list${fieldData.ref}s`]?.docs.map((item: any) => {
 
-                    return <MultiSelectorItem value={item.id} title={JSON.stringify(item, null, 4)}>{item.id}</MultiSelectorItem>
+                    return <MultiSelectorItem value={item.id} title={JSON.stringify(item, null, 4)}>{fieldData?.model?.key ? item[fieldData?.model?.key] : item.id}</MultiSelectorItem>
                 })
             }
         </MultiSelectorList>

@@ -60,7 +60,7 @@ const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelField
             {
                 data?.[`list${fieldData.ref}s`]?.docs.map((item: any) => {
 
-                    return <SelectItem value={item.id} title={JSON.stringify(item, null, 4)}>{item.id}</SelectItem>
+                    return <SelectItem value={item.id} title={JSON.stringify(item, null, 4)}>{fieldData?.model?.key ? item[fieldData?.model?.key] : item.id}</SelectItem>
                 })
             }
         </SelectGroup>

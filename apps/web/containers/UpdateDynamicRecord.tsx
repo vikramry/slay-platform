@@ -129,7 +129,6 @@ const UpdateDynamicRecord = () => {
 
     useEffect(() => {
         if (DynamicGetQuaryResponse?.data) {
-            console.log(DynamicGetQuaryResponse?.data, "dynamic data")
             data.listModelFields?.docs.forEach((item: ModelFieldType) => {
                 if (item.type === "relationship") {
                     if (item.many == true) {
