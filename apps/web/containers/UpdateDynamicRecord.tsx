@@ -132,12 +132,16 @@ const UpdateDynamicRecord = () => {
             console.log(DynamicGetQuaryResponse?.data, "dynamic data")
             data.listModelFields?.docs.forEach((item: ModelFieldType) => {
                 if (item.type === "relationship") {
-                    form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName]?.id)
+                    if (item.many == true) {
+                        form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName]?.map((item: any) => item?.id))
+                    }
+                    else
+                        form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName]?.id)
                     return;
                 }
                 form.setValue(item.fieldName, DynamicGetQuaryResponse?.data?.[`get${modelName}`]?.[item.fieldName])
             })
-            
+
         }
         else if (DynamicGetQuaryResponse?.error) {
             console.log(DynamicGetQuaryResponse?.error)
