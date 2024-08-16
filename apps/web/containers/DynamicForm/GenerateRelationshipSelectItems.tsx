@@ -21,7 +21,7 @@ const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelField
                 },
             },
             {
-                
+
             }
         )
     }, [])
@@ -29,29 +29,29 @@ const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelField
         if (listModelFieldsResponse.data) {
             console.log(listModelFieldsResponse.data);
 
-            const str = GET_DYNAMIC_MODEL_LIST(fieldData.ref, listModelFieldsResponse?.data?.listModelFields?.docs);
-            console.log(str);
-
-            listRecords(
-                str,
-                {
-                    sort: {
-                        createdOn: "desc",
+            GET_DYNAMIC_MODEL_LIST(fieldData.ref, listModelFieldsResponse?.data?.listModelFields?.docs).then((str) => {
+                listRecords(
+                    str,
+                    {
+                        sort: {
+                            createdOn: "desc",
+                        },
                     },
-                },
-                {
-                    
-                }
-            )
+                    {
+
+                    }
+                )
+            })
+
         }
     }, [listModelFieldsResponse.data, listModelFieldsResponse.error, listModelFieldsResponse.loading])
 
-    useEffect(()=>{
-        if(data){
+    useEffect(() => {
+        if (data) {
             console.log(form.watch(fieldData.fieldName));
-            
+
         }
-    },[data])
+    }, [data])
 
 
     return (
