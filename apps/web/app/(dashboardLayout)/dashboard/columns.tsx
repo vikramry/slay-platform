@@ -2113,10 +2113,3 @@ export const StructureColumns: ColumnDef<LayoutStructure>[] = [
     },
   },
 ];
-
-// id:string
-// layout:Layout
-// component:ComponentsType
-// order:number
-// row:number
-// col:numbers

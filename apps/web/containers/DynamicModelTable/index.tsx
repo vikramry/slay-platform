@@ -1,7 +1,7 @@
 "use client";
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { GET_DYNAMIC_MODEL_LIST, getlistmodelfields } from "@/app/queries";
+import { GET_DYNAMIC_MODEL_LIST, getlistmodelfields, getModelFieldRefModelKey } from "@/app/queries";
 import { ModelFieldType } from "@/types";
 import { useParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button, Checkbox, DataTable, toast, Toaster } from "@repo/ui";
 import { ChevronsUpDown, Copy, ExternalLink, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
+import { PulseLoader } from "react-spinners"
 
 const DynamicModelTable = () => {
   const modelName = useParams()?.modelName;
@@ -18,7 +19,6 @@ const DynamicModelTable = () => {
   const [DeleteRecordd, DeleteRecorddResponse] = useLazyQuery(serverFetch);
 
   const [columns, setColumns] = useState<any>();
-  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     getAllModelFields(
@@ -71,8 +71,16 @@ const DynamicModelTable = () => {
   }, [DeleteRecorddResponse?.data, DeleteRecorddResponse?.loading, DeleteRecorddResponse?.error])
   useEffect(() => {
     if (data) {
-
       (async () => {
+        const refKeyMap: Record<string, string> = {};
+
+        for (const field of data?.listModelFields?.docs || []) {
+          if (field.type === 'relationship' || field.type === 'virtual') {
+            refKeyMap[field.fieldName] = await getModelFieldRefModelKey(field.ref);
+          }
+        }
+        
+        
         const columns: ColumnDef<any>[] = data?.listModelFields?.docs?.map(
           (field: ModelFieldType) => {
 
@@ -126,7 +134,7 @@ const DynamicModelTable = () => {
                             `/dashboard/o/${field.ref}/r/${item?.id}`
                             :
                             "#"}`
-                          } className="hover:underline">{(field.model?.key && item?.[`${field.model?.key}`]) || item?.id || "-"}
+                          } className="hover:underline">{(refKeyMap[field.fieldName] && item?.[`${refKeyMap[field.fieldName]}`]) || item?.id || "-"}
                           </Link>
                         ))}
                       </div>
@@ -137,7 +145,7 @@ const DynamicModelTable = () => {
                         `/dashboard/o/${field.ref}/r/${row.original[field.fieldName]?.id}`
                         :
                         "#"}`
-                      } className="hover:underline">{(field.model?.key && row.original[field.fieldName]?.[`${field.model?.key}`]) || row.original[field.fieldName]?.id || "-"}
+                      } className="hover:underline">{(refKeyMap[field.fieldName] && row.original[field.fieldName]?.[`${refKeyMap[field.fieldName]}`]) || row.original[field.fieldName]?.id || "-"}
                       </Link>
                     }
                   }
@@ -241,9 +249,6 @@ const DynamicModelTable = () => {
         setColumns(columns);
         const str = await GET_DYNAMIC_MODEL_LIST(modelName as string, data?.listModelFields?.docs)
         console.log(str);
-        
-        setQuery(str);
-
         listModelData(
           str,
           {
@@ -277,7 +282,7 @@ const DynamicModelTable = () => {
     <div>
       <Toaster />
 
-      {columns?.length > 0 && (
+      {columns?.length > 0 ? (
         <DataTable
           columns={columns || []}
           loading={listModelDataResponse.loading || loading}
@@ -286,7 +291,10 @@ const DynamicModelTable = () => {
           text={"Create"}
           url={`/dashboard/o/${modelName}/r/create`}
         />
-      )}
+      ) : <div>
+
+        <PulseLoader color="#817994" />
+      </div>}
     </div>
   );
 };
