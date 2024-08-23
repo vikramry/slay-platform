@@ -11,10 +11,10 @@ import { GraphQLResolveInfo } from "graphql";
 //@ts-ignore
 import { isEmpty } from "lodash";
 import typeDefs from "./schema";
-import resolvers from './Search.Resolvers'
+import resolvers from "./Search.Resolvers";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import logify from '@mercury-js/core/plugins/logify'
-import razorPay from '@mercury-js/core/plugins/razorpay'
+import logify from "@mercury-js/core/plugins/logify";
+import razorPay from "@mercury-js/core/plugins/razorpay";
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
@@ -58,10 +58,7 @@ const composePopulateQuery = (fields: any, deep: number, max: number): any => {
     })
     .filter((item) => item != null);
 };
-mercury.addGraphqlSchema(
-  typeDefs,
-  resolvers
-)
+mercury.addGraphqlSchema(typeDefs, resolvers);
 const schema = applyMiddleware(
   makeExecutableSchema({
     typeDefs: mercury.typeDefs,
@@ -81,7 +78,7 @@ let server = new ApolloServer({
     //     'request.credentials': 'same-origin'
     //   }
     // })
-    ApolloServerPluginLandingPageLocalDefault({ footer: false })
+    ApolloServerPluginLandingPageLocalDefault({ footer: false }),
   ],
 });
 
@@ -94,10 +91,10 @@ mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
         GraphQLResolveInfo
       >[],
     })
-  )
+  );
   // @ts-ignore
   await server.setSchema({
-    schema: newSchema
+    schema: newSchema,
   });
 });
 
@@ -109,8 +106,8 @@ const handler = startServerAndCreateNextHandler(server, {
         id: "1",
         profile: "SystemAdmin",
       },
-    }
-  }
+    };
+  },
 });
 
 // export const mercuryInstance = mercury;
