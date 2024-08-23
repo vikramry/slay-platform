@@ -18,8 +18,28 @@ import razorPay from '@mercury-js/core/plugins/razorpay'
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
-await mercury.package([redisCache(), platform({ plugins: [ecommerce({ plugins: [razorPay({ RAZOR_PAY_API_KEY: process.env.RAZOR_PAY_API_KEY!, RAZOR_PAY_SECRET_KEY: process.env.RAZOR_PAY_SECRET_KEY! })] })] })]);
-
+await mercury.package([
+  redisCache(),
+  platform({
+    plugins: [
+      ecommerce({
+        options: {
+          CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+          CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+          CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+          NODEMAILER_EMAIL: process.env.NODEMAILER_EMAIL,
+          NODEMAILER_PASSWORD: process.env.NODEMAILER_PASSWORD,
+        },
+        plugins: [
+          razorPay({
+            RAZOR_PAY_API_KEY: process.env.RAZOR_PAY_API_KEY!,
+            RAZOR_PAY_SECRET_KEY: process.env.RAZOR_PAY_SECRET_KEY!,
+          }),
+        ],
+      }),
+    ],
+  }),
+]);
 const composePopulateQuery = (fields: any, deep: number, max: number): any => {
   deep++;
   console.log("deep", deep);
