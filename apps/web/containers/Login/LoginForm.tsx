@@ -1,30 +1,68 @@
 import React from "react";
 
 import { InputField } from "@repo/ui/inputField";
-import { CustomButton } from "@repo/ui";
+import { Button, CustomButton, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Toaster } from "@repo/ui";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+const formSchema = z.object({
+  email: z.string({
+    required_error: "Email is required"
+  }),
+  password: z.string({
+    required_error: "Password is required"
+  })
+});
 const LoginForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+  }
   return (
     <div className="flex justify-center flex-col items-center w-full p-5 h-full">
-      <div className="w-full flex justify-end ">
-        <Link href={"/login"} className="font-bold">
-          Login
-        </Link>
-      </div>
-      <form className="flex-1 flex flex-col gap-3 justify-center items-center md:min-w-[390px] min-w-full">
-        <h1 className="font-bold text-3xl">Create Account</h1>
-        <h5 className="text-gray-500 md:text-base text-sm dark:text-gray-300">
-          Enter your email below to Create your account
-        </h5>
+      <div className="flex-1 flex flex-col gap-4 justify-center items-center md:min-w-[390px] min-w-full">
 
-        <InputField
-          placeholder="Enter your email"
-          type="email"
-          size="md"
-          classNames="border-gray-300"
-        />
-        <CustomButton buttonText="Continue" variant="primary" size="lg" />
+        <Form {...form}>
+          <Toaster />
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex flex-col gap-4 justify-center items-center">
+            <h1 className="font-bold text-3xl">Sign In</h1>
+            <h5 className="text-gray-500 md:text-base text-sm dark:text-gray-300">
+              Enter your email and password below to login
+            </h5>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input placeholder="Enter your Email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input placeholder="Enter your Password" type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <CustomButton buttonText="Continue" variant="primary" size="lg" type="submit" />
+          </form>
+        </Form>
 
         <div className="relative w-full mt-6 flex justify-center items-center">
           <div className="absolute h-0.5 w-full bg-gray-100 dark:bg-gray-800"></div>
@@ -37,7 +75,7 @@ const LoginForm = () => {
           buttonText="GitHub"
           variant="secondary"
           iconPosition="left"
-          icon={<FaGithub size={22}/>}
+          icon={<FaGithub size={22} />}
           size="lg"
           classnames="font-bold mt-3"
         />
@@ -54,8 +92,8 @@ const LoginForm = () => {
             </Link>
           </p>
         </div>
-      </form>
-    </div>
+      </div>
+    </div >
   );
 };
 
