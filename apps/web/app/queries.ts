@@ -1202,21 +1202,25 @@ export const getModelFieldRefModelKey = async (modelName: string) => {
 }
 
 
-export const GET_DYNAMIC_RECORD_DATA = (modelName: string, modelFields: ModelFieldType[]) => {
+export const GET_DYNAMIC_RECORD_DATA = async (modelName: string, modelFields: ModelFieldType[]) => {
   let str = `query Get${modelName}($where: where${modelName}Input!) {
     get${modelName}(where: $where) {
             id`;
-  modelFields?.forEach((item: ModelFieldType) => {
+  const fieldPromises = modelFields.map(async (item: ModelFieldType) => {
     if (item.type === "virtual" || item.type === "relationship") {
-      str += `
-            ${item.fieldName} {
-                id
-            }`;
-      return;
+      const refModelKey = await getModelFieldRefModelKey(item.ref);
+      return `
+                      ${item.fieldName} {
+                          id
+                          ${refModelKey}
+                      }`;
     }
-    str += `
-            ${item.fieldName}`;
+    return `
+                      ${item.fieldName}`;
   });
+
+  const fieldStrings = await Promise.all(fieldPromises);
+  str += fieldStrings.join('');
   str += `
             }
     }`;

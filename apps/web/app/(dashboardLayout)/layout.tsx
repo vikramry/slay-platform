@@ -3,6 +3,7 @@ import TabsContainer from "@/containers/TabsContainer";
 import { Toaster } from "@repo/ui";
 import { Header } from "@repo/ui/header";
 import { SideBar } from "@repo/ui/sideBar";
+import { deleteCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 
 
@@ -17,7 +18,10 @@ export default function RootLayout({
     <>
       <div className="flex flex-col w-full">
         <Toaster/>
-        <Header />
+        <Header handleLogout={() => {
+          deleteCookie("session");
+          window.location.reload();
+        }}/>
         <div className="ml-[10px] mr-[10px]">
         <TabsContainer />
         </div>

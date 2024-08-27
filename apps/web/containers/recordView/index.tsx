@@ -114,20 +114,22 @@ function RecordView() {
 
   useEffect(() => {
     if (data) {
-      const str = GET_DYNAMIC_RECORD_DATA(modelName as string, data?.listModelFields?.docs);
-      console.log(str)
-      dynamicGetQuary(
-        str,
-        {
-          "where": {
-            "id": {
-              "is": recordId
+      (async () => {
+        const str = await GET_DYNAMIC_RECORD_DATA(modelName as string, data?.listModelFields?.docs);
+        console.log(str)
+        dynamicGetQuary(
+          str,
+          {
+            "where": {
+              "id": {
+                "is": recordId
+              }
             }
-          }
-        }, {
-        cache: "no-store",
-      }
-      )
+          }, {
+          cache: "no-store",
+        }
+        )
+      })()
 
     }
 
@@ -171,9 +173,6 @@ function RecordView() {
                 <span className="sr-only">Loading...</span>
               </div>))}
           </>
-
-
-
           :
           <>
             {getCurrentLayoutStructuresResponse.data?.listLayoutStructures.docs.map(
@@ -185,7 +184,7 @@ function RecordView() {
                   <App
                     jsxString={atob(item.component.code)}
                     onClick={() => console.log("Clicked A button")}
-                    metaData={{ data: DynamicGetQuaryResponse?.data?.[`get${modelName}`] }}
+                    metaData={{ recordData: DynamicGetQuaryResponse?.data?.[`get${modelName}`], model: GetModelResponse?.data?.getModel, modelFields: data?.listModelFields?.docs }}
                   />
                 </Card>
               )

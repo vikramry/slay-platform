@@ -46,8 +46,10 @@ const LoginForm = () => {
       toast({
         title: "Sign In Success!!"
       });
-      setCookie("session", data?.SignIn?.session);
-      setCookie("profile", data?.SignIn?.profile);
+
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 2);
+      setCookie("session", data?.SignIn?.session, { expires: expiryDate });
       router.replace('/dashboard');
     }
     if (error) {

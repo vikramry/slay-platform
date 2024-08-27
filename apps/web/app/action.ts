@@ -1,3 +1,4 @@
+import { getCookie } from "cookies-next";
 
 export async function serverFetch(query:string, variables:any, options:any) {
   try {
@@ -7,8 +8,8 @@ export async function serverFetch(query:string, variables:any, options:any) {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          "profile": "SystemAdmin"
-          // "Authorization": cookies().get("authToken") ? `Bearer ${cookies().get("authToken").value}` : undefined
+          "profile": "SystemAdmin",
+          "Authorization": getCookie("session") || undefined
         },
         body: JSON.stringify({
           query,
