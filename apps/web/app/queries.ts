@@ -1196,7 +1196,7 @@ export const GET_DYNAMIC_MODEL_LIST = async (modelName: string, modelFields: Mod
   return str;
 }
 
-export const getModelFieldRefModelKey = async (modelName: string) => {  
+export const getModelFieldRefModelKey = async (modelName: string) => {
   const data = await serverFetch(GET_MODEL, { where: { name: { is: modelName } } }, { cache: "no-store" });
   return data?.getModel?.key || "";
 }
@@ -1222,3 +1222,12 @@ export const GET_DYNAMIC_RECORD_DATA = (modelName: string, modelFields: ModelFie
     }`;
   return str;
 }
+
+
+export const SIGNIN_PLATFORM = `mutation SignIn($email: String, $password: String) {
+  SignIn(email: $email, password: $password) {
+    id
+    profile
+    session
+  }
+}`

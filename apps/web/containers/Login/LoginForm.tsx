@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { InputField } from "@repo/ui/inputField";
-import { Button, CustomButton, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Toaster } from "@repo/ui";
+import { Button, CustomButton, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Toaster, useToast } from "@repo/ui";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useLazyQuery } from "@/app/hook";
+import { SIGNIN_PLATFORM } from "@/app/queries";
+import { serverFetch } from "@/app/action";
+import { useRouter } from "next/navigation";
+import { setCookie } from "cookies-next";
 const formSchema = z.object({
   email: z.string({
     required_error: "Email is required"
@@ -21,10 +26,38 @@ const LoginForm = () => {
     defaultValues: {
     },
   });
+  const [login, { data, error, loading }] = useLazyQuery(serverFetch);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    login(
+      SIGNIN_PLATFORM,
+      {
+        "email": values.email,
+        "password": values.password
+      }
+    )
   }
+  const { toast } = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (data) {
+      toast({
+        title: "Sign In Success!!"
+      });
+      setCookie("session", data?.SignIn?.session);
+      setCookie("profile", data?.SignIn?.profile);
+      router.replace('/dashboard');
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message,
+      });
+    }
+  }, [data, loading, error])
   return (
     <div className="flex justify-center flex-col items-center w-full p-5 h-full">
       <div className="flex-1 flex flex-col gap-4 justify-center items-center md:min-w-[390px] min-w-full">
