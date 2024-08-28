@@ -39,6 +39,7 @@ const GenerateMultiRelationshipItems = ({ fieldData, form }: { fieldData: ModelF
                         sort: {
                             createdOn: "desc",
                         },
+                        limit: 1000
                     },
                     {
 
