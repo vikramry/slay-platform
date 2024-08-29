@@ -38,7 +38,7 @@ const formSchema = z.object({
   label: z.string({
     required_error: "Label is required"
   }),
-  key: z.string(),
+  key: z.string().optional(),
   managed: z.boolean(),
   prefix: z.string().optional(),
 });
