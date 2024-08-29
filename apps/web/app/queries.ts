@@ -1167,8 +1167,8 @@ export const UPDATE_USER = `mutation UpdateUser($input: updateUserInput!) {
 }`
 
 export const GET_DYNAMIC_MODEL_LIST = async (modelName: string, modelFields: ModelFieldType[]) => {
-  let str = `query List${modelName}($sort: sort${modelName}Input) {
-    list${modelName}s(sort: $sort) {
+  let str = `query List${modelName}($sort: sort${modelName}Input, $limit: Int!) {
+    list${modelName}s(sort: $sort, limit: $limit) {
         docs {
             id`;
 

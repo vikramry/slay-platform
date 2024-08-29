@@ -104,7 +104,7 @@ const DynamicModelTable = () => {
                     );
                   },
                   cell: ({ row }) => (
-                    <div className="">{field.many ? row.getValue(field.fieldName)?.join(', ') : row.getValue(field.fieldName)}</div>
+                    <div className="text-wrap break-words max-w-40 line-clamp-6">{field.many ? row.getValue(field.fieldName)?.join(', ') : row.getValue(field.fieldName)}</div>
                   ),
                 };
 
@@ -255,6 +255,7 @@ const DynamicModelTable = () => {
             sort: {
               createdOn: "desc",
             },
+            limit: 1000
           },
           {
             cache: "no-store",

@@ -19,8 +19,8 @@ import razorPay from "@mercury-js/core/plugins/razorpay";
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
 await mercury.package([
-  redisCache(),
-  // redisCache({ client: { socket: { tls: true }, url: process.env.REDIS_URL }, }),
+  // redisCache(),
+  redisCache({ client: { socket: { tls: true }, url: process.env.REDIS_URL } }),
   platform({
     plugins: [
       logify({ JWT_EXPRIES_IN: process.env.NEXT_PUBLIC_JWT_EXPRIES_IN!, JWT_SECRET: process.env.NEXT_PUBLIC_JWT_SECRET!}),

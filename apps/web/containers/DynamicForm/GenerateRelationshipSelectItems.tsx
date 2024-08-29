@@ -41,6 +41,7 @@ const GenerateRelationshipValues = ({ fieldData, form }: { fieldData: ModelField
                         sort: {
                             createdOn: "desc",
                         },
+                        limit: 1000
                     },
                     {
 
