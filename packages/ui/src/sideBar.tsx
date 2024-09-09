@@ -44,6 +44,10 @@ export function SideBar() {
         link: `dashboard/setup/models/${useParams()?.id}/options`,
       },
       {
+        title: "Hook",
+        link: `dashboard/setup/models/${useParams()?.id}/hook`,
+      },
+      {
         title: "Permissions",
         link: `dashboard/setup/models/${useParams()?.id}/permissions`,
       },
