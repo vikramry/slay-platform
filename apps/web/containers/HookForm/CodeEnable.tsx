@@ -40,7 +40,7 @@ const CodeEnable = ({
                 <div className="space-y-1 leading-none">
                   <FormLabel>
                     Enable {convertToTitleCase(event)}{" "}
-                    {convertToTitleCase(method)}
+                    {convertToTitleCase(method)}{" "}
                     Hook
                   </FormLabel>
                 </div>

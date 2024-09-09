@@ -88,7 +88,7 @@ export function SideBar() {
 
           let isActive = regex.test(usePathname());
           if (item.title === "Fields")
-            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`, `${useParams()?.id}/layouts`].some((item) =>
+            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`, `${useParams()?.id}/layouts`, `${useParams()?.id}/hook`].some((item) =>
               usePathname().includes(item)
             )
               ? false
