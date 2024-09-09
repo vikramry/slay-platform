@@ -93,7 +93,7 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
         CREATE_COMPONENT,
         {
           input: {
-            code: btoa(values.code),
+            code: btoa((unescape(encodeURIComponent(values.code)))),
             description: values.description,
             createdBy: null,
             label: values.label,
@@ -112,7 +112,7 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
         {
           input: {
             id: componentId,
-            code: btoa(values.code),
+            code: btoa((unescape(encodeURIComponent(values.code)))),
             description: values.description,
             createdBy: null,
             label: values.label,
@@ -133,7 +133,7 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
       console.log(getComponentResponse.data?.getComponent);
 
       form.reset({
-        code: atob(getComponentResponse.data?.getComponent.code),
+        code: decodeURIComponent(escape(atob(getComponentResponse.data?.getComponent.code))),
         description: getComponentResponse.data?.getComponent.description,
         label: getComponentResponse.data?.getComponent.label,
         modules: getComponentResponse.data?.getComponent.modules,

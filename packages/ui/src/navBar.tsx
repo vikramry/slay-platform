@@ -27,10 +27,9 @@ export function NavBar({
   return (
     <div className="flex flex-row h-[70px] items-center">
       <div className="w-full h-[36px] border-gray border-[1px] dark:border-gray-500 px-2 sm:px-4 rounded-full">
-        <div className="block">
-          <div className="flex justify-center">
+        <div className="block h-full">
+          <div className="flex justify-center items-center h-full gap-2">
             {loading ? (
-              // Skeleton Loader
               <>
                 {[1, 2, 3, 4, 5].map((_, index) => (
                   <div
