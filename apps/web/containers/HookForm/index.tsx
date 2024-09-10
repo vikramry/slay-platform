@@ -104,7 +104,6 @@ const HookForm = () => {
   }, [])
   useEffect(() => {
     if(data){
-      console.log(data?.listHookMs?.docs.length>0,"hookmData")
       const fetchedData = data.listHookMs.docs[0]; 
       form.reset({
         enableBeforeCreate: fetchedData?.enableBeforeCreate || false,
@@ -177,8 +176,7 @@ const HookForm = () => {
           "enableBeforeGet": values?.enableBeforeGet,
           "enableBeforeList": values?.enableBeforeList,
           "enableBeforeUpdate": values?.enableBeforeUpdate,
-          "id": data?.listHookMs?.docs[0].id,
-          "model": id,
+          "id": data?.listHookMs?.docs[0].id
         }
       },{
         cache: "no-store",
