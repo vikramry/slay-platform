@@ -1235,3 +1235,106 @@ export const SIGNIN_PLATFORM = `mutation SignIn($email: String, $password: Strin
     session
   }
 }`
+
+
+export const LIST_HOOKM =`
+query ListHookMs($where: whereHookMInput) {
+  listHookMs(where: $where) {
+    docs {
+      id
+      model {
+        id
+      }
+      modelName
+      enableBeforeCreate
+      beforeCreate
+      enableAfterCreate
+      afterCreate
+      enableBeforeUpdate
+      beforeUpdate
+      enableAfterUpdate
+      afterUpdate
+      enableBeforeDelete
+      beforeDelete
+      enableAfterDelete
+      afterDelete
+      enableBeforeGet
+      beforeGet
+      enableAfterGet
+      afterGet
+      enableBeforeList
+      beforeList
+      enableAfterList
+      afterList
+
+      createdOn
+      updatedOn
+    }
+  }
+}` 
+
+export const CREATE_HOOKM =`
+mutation CreateHookM($input: HookMInput!) {
+  createHookM(input: $input) {
+    id
+    model {
+      id
+    }
+    modelName
+    enableBeforeCreate
+    beforeCreate
+    enableAfterCreate
+    afterCreate
+    enableBeforeUpdate
+    beforeUpdate
+    enableAfterUpdate
+    afterUpdate
+    enableBeforeDelete
+    beforeDelete
+    enableAfterDelete
+    afterDelete
+    enableBeforeGet
+    beforeGet
+    enableAfterGet
+    afterGet
+    enableBeforeList
+    beforeList
+    enableAfterList
+    afterList
+
+    createdOn
+    updatedOn
+  }
+}`
+
+
+export const UPDATE_HOOKM =`
+mutation UpdateHookM($input: updateHookMInput!) {
+  updateHookM(input: $input) {
+    afterCreate
+    afterDelete
+    afterGet
+    afterList
+    afterUpdate
+    beforeCreate
+    beforeDelete
+    beforeGet
+    beforeList
+    beforeUpdate
+    enableAfterCreate
+    enableAfterDelete
+    enableAfterGet
+    enableAfterList
+    enableAfterUpdate
+    enableBeforeCreate
+    enableBeforeDelete
+    enableBeforeGet
+    enableBeforeList
+    enableBeforeUpdate
+    id
+    modelName
+    model {
+      id
+    }
+  }
+}`

@@ -24,6 +24,10 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import CodeEnable from "./CodeEnable";
+import { useLazyQuery } from "@/app/hook";
+import { serverFetch } from "@/app/action";
+import { CREATE_HOOKM, LIST_HOOKM, UPDATE_HOOKM } from "@/app/queries";
+import { useParams } from "next/navigation";
 
 const formSchema = z.object({
   event: z.string({
@@ -56,6 +60,11 @@ const formSchema = z.object({
 });
 const HookForm = () => {
   const { toast } = useToast();
+  const {id}=useParams()
+  const [getHookm,{data,loading,error}]=useLazyQuery(serverFetch)
+  const [createHookm,createHookmResponse]=useLazyQuery(serverFetch)
+  const [updateHookm,updateHookmResponse]=useLazyQuery(serverFetch)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -81,8 +90,128 @@ const HookForm = () => {
       afterUpdate: "",
     },
   });
+
+  useEffect(() => {
+    getHookm(LIST_HOOKM,{
+      "where": {
+        "model": {
+          "is": id
+        }
+      }
+    }, {
+      cache: "no-store",
+    })
+  }, [])
+  useEffect(() => {
+    if(data){
+      console.log(data?.listHookMs?.docs.length>0,"hookmData")
+      const fetchedData = data.listHookMs.docs[0]; 
+      form.reset({
+        enableBeforeCreate: fetchedData?.enableBeforeCreate || false,
+        enableBeforeUpdate: fetchedData?.enableBeforeUpdate || false,
+        enableBeforeDelete: fetchedData?.enableBeforeDelete || false,
+        enableAfterCreate: fetchedData?.enableAfterCreate || false,
+        enableAfterUpdate: fetchedData?.enableAfterUpdate || false,
+        enableAfterDelete: fetchedData?.enableAfterDelete || false,
+        enableBeforeGet: fetchedData?.enableBeforeGet || false,
+        enableAfterGet: fetchedData?.enableAfterGet || false,
+        enableBeforeList: fetchedData?.enableBeforeList || false,
+        enableAfterList: fetchedData?.enableAfterList || false,
+        afterCreate: btoa((unescape(encodeURIComponent(fetchedData?.afterCreate ))))|| "",
+        beforeCreate: btoa((unescape(encodeURIComponent(fetchedData?.beforeCreate)))) || "",
+        beforeUpdate: btoa((unescape(encodeURIComponent(fetchedData?.beforeUpdate)))) || "",
+        beforeDelete: btoa((unescape(encodeURIComponent(fetchedData?.beforeDelete)))) || "",
+        beforeGet: btoa((unescape(encodeURIComponent(fetchedData?.beforeGet)))) || "",
+        afterGet: btoa((unescape(encodeURIComponent(fetchedData?.afterGet))))|| "",
+        beforeList: btoa((unescape(encodeURIComponent(fetchedData?.beforeList)))) || "",
+        afterList: btoa((unescape(encodeURIComponent(fetchedData?.afterList)))) || "",
+        afterDelete: btoa((unescape(encodeURIComponent(fetchedData?.afterDelete)))) || "",
+        afterUpdate: btoa((unescape(encodeURIComponent(fetchedData?.afterUpdate)))) || "",
+      });
+    }
+    else if(error){
+      console.log(error,"hookmError")
+    }
+  
+  }, [data,loading,error])
+  useEffect(() => {
+    if(createHookmResponse?.data){
+      console.log(createHookmResponse?.data,"createHookmResponseData")
+    }
+    else if(createHookmResponse?.error){
+      console.log(createHookmResponse?.error,"createHookmResponseError")
+    }
+  
+  }, [createHookmResponse?.data,createHookmResponse?.loading,createHookmResponse?.error]) 
+  useEffect(() => {
+    if(updateHookmResponse?.data){
+      console.log(updateHookmResponse?.data,"updateHookmResponseData")
+    }
+    else if(updateHookmResponse?.error){
+      console.log(updateHookmResponse?.error,"updateHookmResponseError")
+    }
+  
+  }, [updateHookmResponse?.data,updateHookmResponse?.loading,updateHookmResponse?.error])
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    if(data?.listHookMs?.docs.length>0){
+      updateHookm(UPDATE_HOOKM,{
+        "input": {
+          "afterCreate": decodeURIComponent(escape(atob(values?.afterCreate || ""))) ,
+          "afterDelete": decodeURIComponent(escape(atob(values?.afterDelete || ""))) ,
+          "afterGet": decodeURIComponent(escape(atob(values?.afterGet || ""))) ,
+          "afterList": decodeURIComponent(escape(atob(values?.afterList || ""))) ,
+          "afterUpdate": decodeURIComponent(escape(atob(values?.afterUpdate || ""))) ,
+          "beforeCreate": decodeURIComponent(escape(atob(values?.beforeCreate || ""))) ,
+          "beforeDelete": decodeURIComponent(escape(atob(values?.beforeDelete || ""))) ,
+          "beforeGet": decodeURIComponent(escape(atob(values?.beforeGet || ""))) ,
+          "beforeList": decodeURIComponent(escape(atob(values?.beforeList || ""))) ,
+          "beforeUpdate": decodeURIComponent(escape(atob(values?.beforeUpdate || ""))) ,
+          "enableAfterCreate": values?.enableAfterCreate,
+          "enableAfterDelete": values?.enableAfterDelete,
+          "enableAfterGet": values?.enableAfterGet,
+          "enableAfterList": values?.enableAfterList,
+          "enableAfterUpdate": values?.enableAfterUpdate,
+          "enableBeforeCreate": values?.enableBeforeCreate,
+          "enableBeforeDelete": values?.enableBeforeDelete,
+          "enableBeforeGet": values?.enableBeforeGet,
+          "enableBeforeList": values?.enableBeforeList,
+          "enableBeforeUpdate": values?.enableBeforeUpdate,
+          "id": data?.listHookMs?.docs[0].id,
+          "model": id,
+        }
+      },{
+        cache: "no-store",
+      })
+    }else{
+      createHookm(CREATE_HOOKM,{
+        "input": {
+          "afterCreate": decodeURIComponent(escape(atob(values?.afterCreate || ""))) ,
+          "afterDelete": decodeURIComponent(escape(atob(values?.afterDelete || ""))) ,
+          "afterGet": decodeURIComponent(escape(atob(values?.afterGet || ""))) ,
+          "afterList": decodeURIComponent(escape(atob(values?.afterList || ""))) ,
+          "afterUpdate": decodeURIComponent(escape(atob(values?.afterUpdate || ""))) ,
+          "beforeCreate": decodeURIComponent(escape(atob(values?.beforeCreate || ""))) ,
+          "beforeDelete": decodeURIComponent(escape(atob(values?.beforeDelete || ""))) ,
+          "beforeGet": decodeURIComponent(escape(atob(values?.beforeGet || ""))) ,
+          "beforeList": decodeURIComponent(escape(atob(values?.beforeList || ""))) ,
+          "beforeUpdate": decodeURIComponent(escape(atob(values?.beforeUpdate || ""))) ,
+          "enableAfterCreate": values?.enableAfterCreate,
+          "enableAfterDelete": values?.enableAfterDelete,
+          "enableAfterGet": values?.enableAfterGet,
+          "enableAfterList": values?.enableAfterList,
+          "enableAfterUpdate": values?.enableAfterUpdate,
+          "enableBeforeCreate": values?.enableBeforeCreate,
+          "enableBeforeDelete": values?.enableBeforeDelete,
+          "enableBeforeGet": values?.enableBeforeGet,
+          "enableBeforeList": values?.enableBeforeList,
+          "enableBeforeUpdate": values?.enableBeforeUpdate,
+          "model": id,
+        }
+      },{
+        cache: "no-store",
+      })
+    }
   }
 
   return (
