@@ -146,7 +146,7 @@ function RecordView() {
   return (
     <div>
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
-        {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading?
+        {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
           <>
             {[1, 2, 3, 4, 5].map((_, index) => (
 
@@ -178,7 +178,7 @@ function RecordView() {
                   rows={item.row}
                 >
                   <App
-                    jsxString={atob(item.component.code)}
+                    jsxString={decodeURIComponent(escape(atob(item.component.code)))}
                     onClick={() => console.log("Clicked A button")}
                     metaData={{ recordData: DynamicGetQuaryResponse?.data?.[`get${modelName}`], model: GetModelResponse?.data?.getModel, modelFields: data?.listModelFields?.docs }}
                   />

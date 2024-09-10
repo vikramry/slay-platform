@@ -44,6 +44,10 @@ export function SideBar() {
         link: `dashboard/setup/models/${useParams()?.id}/options`,
       },
       {
+        title: "Hook",
+        link: `dashboard/setup/models/${useParams()?.id}/hook`,
+      },
+      {
         title: "Permissions",
         link: `dashboard/setup/models/${useParams()?.id}/permissions`,
       },
@@ -84,7 +88,7 @@ export function SideBar() {
 
           let isActive = regex.test(usePathname());
           if (item.title === "Fields")
-            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`, `${useParams()?.id}/layouts`].some((item) =>
+            isActive = [`${useParams()?.id}/options`, `${useParams()?.id}/permissions`, `${useParams()?.id}/layouts`, `${useParams()?.id}/hook`].some((item) =>
               usePathname().includes(item)
             )
               ? false
