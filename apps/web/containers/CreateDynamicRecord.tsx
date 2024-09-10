@@ -10,6 +10,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@repo/ui";
+import FileRecordContainer from "./fileRecordContainer";
 
 export const generateSchema = (metadata: ModelFieldType[]) => {
     const schemaObj: Record<string, any> = {};
@@ -159,12 +160,13 @@ const CreateDynamicRecord = () => {
 
     return (
         <div>
+            {modelName !== "File" ?
             <DynamicForm
                 handleSubmit={onSubmit}
                 modelFields={data?.listModelFields?.docs || []}
                 form={form}
                 loading={createRecordResponse?.loading}
-            />
+            />:<FileRecordContainer/>}
         </div>
     );
 };
