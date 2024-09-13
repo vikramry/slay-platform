@@ -15,24 +15,35 @@ import resolvers from "./Search.Resolvers";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import logify from "@mercury-js/core/plugins/logify";
 import razorPay from "@mercury-js/core/plugins/razorpay";
+import media from "@mercury-js/core/plugins/media";
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
 await mercury.package([
   // redisCache(),
-  redisCache({ client: { socket: { tls: true }, url: process.env.REDIS_URL } }),
+  redisCache({
+    client: {
+      socket: { tls: true },
+      url: process.env.REDIS_URL,
+    },
+  }),
   platform({
     plugins: [
-      logify({ JWT_EXPRIES_IN: process.env.NEXT_PUBLIC_JWT_EXPRIES_IN!, JWT_SECRET: process.env.NEXT_PUBLIC_JWT_SECRET!}),
+      logify({
+        JWT_EXPRIES_IN: process.env.NEXT_PUBLIC_JWT_EXPRIES_IN!,
+        JWT_SECRET: process.env.NEXT_PUBLIC_JWT_SECRET!,
+      }),
       ecommerce({
         options: {
-          CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
-          CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
-          CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
           NODEMAILER_EMAIL: process.env.NODEMAILER_EMAIL,
           NODEMAILER_PASSWORD: process.env.NODEMAILER_PASSWORD,
         },
         plugins: [
+          media({
+            CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+            CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+            CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+          }),
           razorPay({
             RAZOR_PAY_API_KEY: process.env.RAZOR_PAY_API_KEY!,
             RAZOR_PAY_SECRET_KEY: process.env.RAZOR_PAY_SECRET_KEY!,
