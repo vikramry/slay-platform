@@ -1338,3 +1338,31 @@ mutation UpdateHookM($input: updateHookMInput!) {
     }
   }
 }`
+
+export const UPLOAD_FILE =`
+mutation Uploadfile($base64File: String, $fileName: String, $description: String) {
+  uploadfile(base64File: $base64File, fileName: $fileName, description: $description) {
+    file
+    message
+  }
+}`
+
+export const UPDATE_FILE =`
+mutation Updatefile($fileId: String, $base64File: String, $fileName: String, $description: String) {
+  updatefile(fileId: $fileId, base64File: $base64File, fileName: $fileName, description: $description) {
+    message
+  }
+}`
+
+export const GET_FILE =`
+query GetFile($where: whereFileInput!) {
+  getFile(where: $where) {
+    id
+    description
+    extension
+    location
+    mimeType
+    name
+    size
+  }
+}`

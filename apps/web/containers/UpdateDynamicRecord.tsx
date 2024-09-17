@@ -11,6 +11,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '@repo/ui';
 import { generateSchema } from './CreateDynamicRecord';
+import FileRecordContainer from './fileRecordContainer';
 
 const UpdateDynamicRecord = () => {
     const router = useRouter()
@@ -149,8 +150,10 @@ const UpdateDynamicRecord = () => {
 
     return (
         <div>
+                        {modelName !== "File" ?
+
             <DynamicForm handleSubmit={onSubmit} modelFields={data?.listModelFields?.docs || []} form={form} loading={updateRecordResponse?.loading}
-            />
+            />:<FileRecordContainer edit={true}/>}
         </div>
     )
 }

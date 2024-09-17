@@ -28,7 +28,15 @@ import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 import { CREATE_HOOKM, LIST_HOOKM, UPDATE_HOOKM } from "@/app/queries";
 import { useParams } from "next/navigation";
+import lz from "lzutf8";
 
+export const compressStringToBase64 = (json: any): string => {
+  return lz.encodeBase64(lz.compress(json));
+};
+
+export const compressBase64ToString = (content: string): any => {
+  return lz.decompress(lz.decodeBase64(content));
+};
 const formSchema = z.object({
   event: z.string({
     required_error: "Event is required",
@@ -120,25 +128,16 @@ const HookForm = () => {
         enableAfterGet: fetchedData?.enableAfterGet || false,
         enableBeforeList: fetchedData?.enableBeforeList || false,
         enableAfterList: fetchedData?.enableAfterList || false,
-        afterCreate:
-          decodeURIComponent(escape(atob(fetchedData?.afterCreate))) || "",
-        beforeCreate:
-          decodeURIComponent(escape(atob(fetchedData?.beforeCreate))) || "",
-        beforeUpdate:
-          decodeURIComponent(escape(atob(fetchedData?.beforeUpdate))) || "",
-        beforeDelete:
-          decodeURIComponent(escape(atob(fetchedData?.beforeDelete))) || "",
-        beforeGet:
-          decodeURIComponent(escape(atob(fetchedData?.beforeGet))) || "",
-        afterGet: decodeURIComponent(escape(atob(fetchedData?.afterGet))) || "",
-        beforeList:
-          decodeURIComponent(escape(atob(fetchedData?.beforeList))) || "",
-        afterList:
-          decodeURIComponent(escape(atob(fetchedData?.afterList))) || "",
-        afterDelete:
-          decodeURIComponent(escape(atob(fetchedData?.afterDelete))) || "",
-        afterUpdate:
-          decodeURIComponent(escape(atob(fetchedData?.afterUpdate))) || "",
+        afterCreate: compressBase64ToString(fetchedData?.afterCreate) || "",
+        beforeCreate: compressBase64ToString(fetchedData?.beforeCreate) || "",
+        beforeUpdate: compressBase64ToString(fetchedData?.beforeUpdate) || "",
+        beforeDelete: compressBase64ToString(fetchedData?.beforeDelete) || "",
+        beforeGet: compressBase64ToString(fetchedData?.beforeGet) || "",
+        afterGet: compressBase64ToString(fetchedData?.afterGet) || "",
+        beforeList: compressBase64ToString(fetchedData?.beforeList) || "",
+        afterList: compressBase64ToString(fetchedData?.afterList) || "",
+        afterDelete: compressBase64ToString(fetchedData?.afterDelete) || "",
+        afterUpdate: compressBase64ToString(fetchedData?.afterUpdate) || "",
       });
     } else if (error) {
       console.log(error, "hookmError");
@@ -185,34 +184,16 @@ const HookForm = () => {
         UPDATE_HOOKM,
         {
           input: {
-            afterCreate: btoa(
-              unescape(encodeURIComponent(values?.afterCreate || ""))
-            ),
-            afterDelete: btoa(
-              unescape(encodeURIComponent(values?.afterDelete || ""))
-            ),
-            afterGet: decodeURIComponent(escape(atob(values?.afterGet || ""))),
-            afterList: btoa(
-              unescape(encodeURIComponent(values?.afterList || ""))
-            ),
-            afterUpdate: btoa(
-              unescape(encodeURIComponent(values?.afterUpdate || ""))
-            ),
-            beforeCreate: btoa(
-              unescape(encodeURIComponent(values?.beforeCreate || ""))
-            ),
-            beforeDelete: btoa(
-              unescape(encodeURIComponent(values?.beforeDelete || ""))
-            ),
-            beforeGet: btoa(
-              unescape(encodeURIComponent(values?.beforeGet || ""))
-            ),
-            beforeList: btoa(
-              unescape(encodeURIComponent(values?.beforeList || ""))
-            ),
-            beforeUpdate: btoa(
-              unescape(encodeURIComponent(values?.beforeUpdate || ""))
-            ),
+            afterCreate: compressStringToBase64(values?.afterCreate || ""),
+            afterDelete: compressStringToBase64(values?.afterDelete || ""),
+            afterGet: compressStringToBase64(values?.afterGet || ""),
+            afterList: compressStringToBase64(values?.afterList || ""),
+            afterUpdate: compressStringToBase64(values?.afterUpdate || ""),
+            beforeCreate: compressStringToBase64(values?.beforeCreate || ""),
+            beforeDelete: compressStringToBase64(values?.beforeDelete || ""),
+            beforeGet: compressStringToBase64(values?.beforeGet || ""),
+            beforeList: compressStringToBase64(values?.beforeList || ""),
+            beforeUpdate: compressStringToBase64(values?.beforeUpdate || ""),
             enableAfterCreate: values?.enableAfterCreate,
             enableAfterDelete: values?.enableAfterDelete,
             enableAfterGet: values?.enableAfterGet,
@@ -235,34 +216,16 @@ const HookForm = () => {
         CREATE_HOOKM,
         {
           input: {
-            afterCreate: btoa(
-              unescape(encodeURIComponent(values?.afterCreate || ""))
-            ),
-            afterDelete: btoa(
-              unescape(encodeURIComponent(values?.afterDelete || ""))
-            ),
-            afterGet: decodeURIComponent(escape(atob(values?.afterGet || ""))),
-            afterList: btoa(
-              unescape(encodeURIComponent(values?.afterList || ""))
-            ),
-            afterUpdate: btoa(
-              unescape(encodeURIComponent(values?.afterUpdate || ""))
-            ),
-            beforeCreate: btoa(
-              unescape(encodeURIComponent(values?.beforeCreate || ""))
-            ),
-            beforeDelete: btoa(
-              unescape(encodeURIComponent(values?.beforeDelete || ""))
-            ),
-            beforeGet: btoa(
-              unescape(encodeURIComponent(values?.beforeGet || ""))
-            ),
-            beforeList: btoa(
-              unescape(encodeURIComponent(values?.beforeList || ""))
-            ),
-            beforeUpdate: btoa(
-              unescape(encodeURIComponent(values?.beforeUpdate || ""))
-            ),
+            afterCreate: compressStringToBase64(values?.afterCreate || ""),
+            afterDelete: compressStringToBase64(values?.afterDelete || ""),
+            afterGet: compressStringToBase64(values?.afterGet || ""),
+            afterList: compressStringToBase64(values?.afterList || ""),
+            afterUpdate: compressStringToBase64(values?.afterUpdate || ""),
+            beforeCreate: compressStringToBase64(values?.beforeCreate || ""),
+            beforeDelete: compressStringToBase64(values?.beforeDelete || ""),
+            beforeGet: compressStringToBase64(values?.beforeGet || ""),
+            beforeList: compressStringToBase64(values?.beforeList || ""),
+            beforeUpdate: compressStringToBase64(values?.beforeUpdate || ""),
             enableAfterCreate: values?.enableAfterCreate,
             enableAfterDelete: values?.enableAfterDelete,
             enableAfterGet: values?.enableAfterGet,
