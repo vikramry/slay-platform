@@ -15,7 +15,7 @@ import resolvers from "./Search.Resolvers";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import logify from "@mercury-js/core/plugins/logify";
 import razorPay from "@mercury-js/core/plugins/razorpay";
-import media from "./plugins/media";
+import media from "@mercury-js/core/plugins/media";
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
