@@ -1,5 +1,5 @@
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import mercury from "@mercury-js/core";
+import mercury, { Mercury } from "@mercury-js/core";
 import redisCache from "@mercury-js/core/packages/redisCache";
 import platform from "@mercury-js/core/packages/platform";
 import ecommerce from "@mercury-js/core/packages/ecommerce";
@@ -15,7 +15,7 @@ import resolvers from "./Search.Resolvers";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import logify from "@mercury-js/core/plugins/logify";
 import razorPay from "@mercury-js/core/plugins/razorpay";
-import media from "@mercury-js/core/plugins/media";
+import media from "./plugins/media";
 
 mercury.connect(process.env.DB_URL || "mongodb://localhost:27017/platform");
 
@@ -94,6 +94,22 @@ let server = new ApolloServer({
     ApolloServerPluginLandingPageLocalDefault({ footer: false }),
   ],
 });
+
+// export const platformInitialize = (mercury: Mercury) => {
+//   const newSchema = applyMiddleware(
+//     makeExecutableSchema({
+//       typeDefs: mercury.typeDefs,
+//       resolvers: mercury.resolvers as unknown as IResolvers<
+//         any,
+//         GraphQLResolveInfo
+//       >[],
+//     })
+//   );
+//   // @ts-ignore
+//   await server.setSchema({
+//     schema: newSchema,
+//   });
+// }
 
 mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
   const newSchema = applyMiddleware(

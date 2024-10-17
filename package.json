@@ -25,6 +25,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "cloudinary": "^2.5.1",
     "next-themes": "^0.3.0",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
