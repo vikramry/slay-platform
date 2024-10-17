@@ -214,6 +214,7 @@ class Media {
   }
 
   public createFileModel() {
+    this.mercury.deleteModel("File");
     if (!(File.info.name in this.mercury.db))
       this.platform.createModel(File);
   }
