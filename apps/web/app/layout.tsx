@@ -19,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} style={{
+        overflowY: "hidden"
+      }}>
         <ThemeProvider attribute="class">{children}</ThemeProvider>
         <NextTopLoader color="#817994" />
       </body>
