@@ -45,7 +45,7 @@ const DynamicLayout = () => {
   useEffect(() => {
     if (ListTabsResponse?.data) {
       console.log(ListTabsResponse?.data, "tabsdata")
-      setModelId(ListTabsResponse?.data?.listTabs?.docs[0]?.model?.id)
+      // setModelId(ListTabsResponse?.data?.listTabs?.docs[0]?.model?.id)
     }
     else if (ListTabsResponse?.error) {
       console.log(ListTabsResponse?.error)
