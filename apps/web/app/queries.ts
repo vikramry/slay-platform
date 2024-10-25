@@ -378,8 +378,8 @@ export const getlistmodeloptions = `
   }
   `;
 export const getlistmodelfields = `
-  query ListModelFields($where: whereModelFieldInput) {
-    listModelFields(where: $where) {
+  query ListModelFields($where: whereModelFieldInput, $limit: Int!) {
+    listModelFields(where: $where, limit: $limit) {
       docs {
         id
         fieldName

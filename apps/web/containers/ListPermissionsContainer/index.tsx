@@ -107,6 +107,7 @@ const ListPermissionContainer = ({
               is: id,
             },
           },
+          limit: 200
         },
         {
           cache: "no-store",
