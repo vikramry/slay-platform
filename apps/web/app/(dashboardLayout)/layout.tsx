@@ -1,11 +1,10 @@
-"use client"
+"use client";
+import AppSidebar from "@/containers/app-sidebar";
 import TabsContainer from "@/containers/TabsContainer";
-import { Toaster } from "@repo/ui";
+import { Toaster, SidebarProvider, SidebarTrigger } from "@repo/ui";
 import { Header } from "@repo/ui/header";
-import { SideBar } from "@repo/ui/sideBar";
 import { deleteCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
-
 
 export default function RootLayout({
   children,
@@ -13,27 +12,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const router = usePathname();
+  const isDashboard = router === "/dashboard" || router.includes("/dashboard/o/");
 
   return (
-    <>
-      <div className="flex flex-col w-full">
-        <Toaster/>
-        <Header handleLogout={() => {
+    <div className="flex flex-col w-full">
+      <Toaster />
+      <Header
+        handleLogout={() => {
           deleteCookie("session");
           window.location.reload();
-        }}/>
-        <div className="ml-[10px] mr-[10px]">
-        <TabsContainer />
-        </div>
-        <div className={`border-[1px] m-[10px] rounded-lg ${router === "/dashboard" || router.includes('/dashboard/o/')   ? "h-[calc(100vh-160px)]" : "h-[calc(100vh-80px)]"}  dark:border-gray-700 `}>
-          <div className="flex flex-row gap-3 p-[10px] w-full">
-            <SideBar />
-            <div className={`md:w-[${router === "/dashboard" || router.includes('/dashboard/o/')   ? "calc(100vw-215px)" : "calc(100vw-265px)"}] w-[calc(100vw-50px)] ${router === "/dashboard" || router.includes('/dashboard/o/')   ? "h-[calc(100vh-180px)]" : "h-[calc(100vh-110px)]"}  overflow-y-auto dark:border-gray-700 ${router !== "/dashboard" || router.includes('/dashboard/o/')  && "border-l-[1px]"} px-2`}>
-              {children}
-            </div>
+        }}
+      />
+      <div
+        className={`border m-2 rounded-lg overflow-hidden ${
+          isDashboard ? "h-[calc(100vh-160px)]" : "h-[calc(100vh-80px)]"
+        } dark:border-gray-700`}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-12 p-3 w-full h-full">
+          <div className="md:col-span-2 dark:border-gray-700 ">
+            <TabsContainer /> 
+          </div>
+          <div
+            className={`overflow-y-auto px-2 ${
+              isDashboard ? "h-[calc(100vh-180px)]" : "h-[calc(100vh-110px)]"
+            } col-span-10`}
+          >
+            {children}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -5,8 +5,12 @@ import { LIST_TABS } from '@/app/queries';
 import { NavBar } from '@repo/ui/navBar';
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react'
+import { DashboardSidebar } from './DashboardSidebar';
+import  AppSidebar from "@/containers/app-sidebar";
+import {  SidebarProvider, SidebarTrigger } from "@repo/ui";
 
-const TabsContainer = () => {
+
+const TabsContainer = ({ children }: { children: React.ReactNode }) => {
     const [ListTabs, ListTabsResponse] = useLazyQuery(serverFetch);
     const pathName = usePathname();
 
@@ -43,8 +47,15 @@ const TabsContainer = () => {
             ? "block"
             : "hidden"
             }`}>
-            <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} loading={ListTabsResponse?.loading} />
-
+            {/* <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} loading={ListTabsResponse?.loading} /> */}
+            {/* <DashboardSidebar tabsData={ListTabsResponse?.data?.listTabs?.docs} loading={ListTabsResponse?.loading}/> */}
+            <SidebarProvider >
+            <AppSidebar tabsData={ListTabsResponse?.data?.listTabs?.docs} loading={ListTabsResponse?.loading} />
+            {/* <main>
+        <SidebarTrigger />
+        {children}
+      </main> */}
+            </SidebarProvider>
         </div>
     )
 }
