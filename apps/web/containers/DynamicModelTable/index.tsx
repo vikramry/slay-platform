@@ -29,6 +29,7 @@ const DynamicModelTable = () => {
             is: modelName,
           },
         },
+        limit: 200
       },
       {
         cache: "no-store",

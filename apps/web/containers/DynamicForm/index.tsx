@@ -213,7 +213,9 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                         <FormItem className="">
                           <FormLabel>{item.label}</FormLabel>
                           <FormControl>
-                            <Select onValueChange={(val)=>field.onChange(val)} value={field.value}>
+                            <Select onValueChange={(value) => {
+                              form.setValue(item.fieldName, value)
+                            }} value={form.watch(item.fieldName)}>
                               <SelectTrigger className="">
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>

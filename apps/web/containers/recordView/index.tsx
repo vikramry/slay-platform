@@ -40,6 +40,7 @@ function RecordView() {
             is: modelName,
           },
         },
+        limit: 200
       },
       {
         cache: "no-store",
