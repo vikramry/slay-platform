@@ -149,7 +149,6 @@ const CreateDynamicRecord = () => {
     ]);
 
     const onSubmit: SubmitHandler<FormSchema> = (values) => {
-        console.log(values);
         createRecord(
             Create_Query,
             { input: values },

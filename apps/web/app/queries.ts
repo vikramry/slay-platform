@@ -392,6 +392,7 @@ export const getlistmodelfields = `
         label
         managed
         required
+        enumType
         ref
         many
         unique
