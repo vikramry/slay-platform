@@ -10,8 +10,6 @@ import {
   SidebarMenuItem,
 } from "@repo/ui";
 import { useState } from "react"; // Still useful for loading state handling
-// Import the icons only if needed
-import { X, Menu } from "lucide-react"; // Not needed anymore if you don't use these
 
 export interface LIST_TABSTYPES {
   label: string;
@@ -40,18 +38,8 @@ export function AppSidebar({
   return (
     <div className="w-full h-full block">
       <Sidebar
-      variant="floating"
-      className="h-[78vh] mt-[3.7rem] ml-2"
-        // style={{
-        //   height: '76vh',
-        //   borderRadius: '12px',
-        //   overflowY: 'auto',
-        //   scrollbarWidth: 'none',
-        //   msOverflowStyle: 'none',
-        //   top: '66px',
-        //   left: '17px',
-        // }}
-        // className="hide-scrollbar"
+        variant="floating"
+        className="h-[78vh] mt-[3.7rem] ml-2"
       >
         <SidebarContent>
           <SidebarGroup>
@@ -71,7 +59,15 @@ export function AppSidebar({
                     <SidebarMenuItem key={tab.id}>
                       <SidebarMenuButton asChild>
                         <a href={`/dashboard/o/${tab.model.name}/list`}>
-                          <span>{tab.label}</span>
+                          <span
+                            className={`${
+                              modelName === tab.model.name
+                                ? "text-black dark:text-white font-bold"
+                                : "text-[#7B7B7D] font-medium"
+                            }`}
+                          >
+                            {tab.label}
+                          </span>
                         </a>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
