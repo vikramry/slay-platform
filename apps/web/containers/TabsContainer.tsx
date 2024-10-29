@@ -44,7 +44,7 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <div className={`${pathName === "/dashboard" || pathName.includes("/dashboard/o/")
-            ? "block"
+            ? "flex"
             : "hidden"
             }`}>
             {/* <NavBar tabsData={ListTabsResponse?.data?.listTabs?.docs} loading={ListTabsResponse?.loading} /> */}

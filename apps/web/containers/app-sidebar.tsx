@@ -38,18 +38,20 @@ export function AppSidebar({
   const { modelName } = useParams();
 
   return (
-    <div className="">
+    <div className="w-full h-full block">
       <Sidebar
-        style={{
-          height: '76vh',
-          borderRadius: '12px',
-          overflowY: 'auto',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          top: '66px',
-          left: '17px',
-        }}
-        className="hide-scrollbar"
+      variant="floating"
+      className="h-[78vh] mt-[3.7rem] ml-2"
+        // style={{
+        //   height: '76vh',
+        //   borderRadius: '12px',
+        //   overflowY: 'auto',
+        //   scrollbarWidth: 'none',
+        //   msOverflowStyle: 'none',
+        //   top: '66px',
+        //   left: '17px',
+        // }}
+        // className="hide-scrollbar"
       >
         <SidebarContent>
           <SidebarGroup>
