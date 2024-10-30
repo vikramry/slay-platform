@@ -44,7 +44,7 @@ export function Header({ handleLogout }: { handleLogout: Function }) {
   };
   return (
     <div className='flex flex-row h-[50px] bg-white justify-between items-center p-[15px] border-b-[1px] border-gray dark:border-gray-700 dark:bg-gray-700'>
-      <Link href="/">
+      <Link href="/dashboard">
         <div className="flex items-center">
           <Image 
             src="/assets/MercuryLogo.png" // Use relative path from 'public/'
