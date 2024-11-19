@@ -35,8 +35,12 @@ await mercury.package([
       }),
       ecommerce({
         options: {
-          NODEMAILER_EMAIL: process.env.NODEMAILER_EMAIL,
-          NODEMAILER_PASSWORD: process.env.NODEMAILER_PASSWORD,
+          EMAIL_DOMAIN: process.env.EMAIL_DOMAIN,
+          EMAIL_TEMPLATE: process.env.EMAIL_TEMPLATE,
+          MSG_API_KEY: process.env.MSG_API_KEY,
+          SENDER_EMAIL: process.env.SENDER_EMAIL,
+          SENDER_NAME: process.env.SENDER_NAME,
+          SMS_TEMPLATE: process.env.SMS_TEMPLATE
         },
         plugins: [
           media({
