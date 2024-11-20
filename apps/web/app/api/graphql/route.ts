@@ -90,7 +90,7 @@ const schema = applyMiddleware(
 );
 let server = new ApolloServer({
   schema,
-  introspection: true,
+  introspection: false,
   plugins: [
     // ApolloServerPluginLandingPageGraphQLPlayground({
     //   settings: {
