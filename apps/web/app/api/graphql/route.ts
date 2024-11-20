@@ -40,7 +40,9 @@ await mercury.package([
           MSG_API_KEY: process.env.MSG_API_KEY,
           SENDER_EMAIL: process.env.SENDER_EMAIL,
           SENDER_NAME: process.env.SENDER_NAME,
-          SMS_TEMPLATE: process.env.SMS_TEMPLATE
+          SMS_TEMPLATE: process.env.SMS_TEMPLATE,
+          INVOICE_PRINT_URL: process.env.INVOICE_PRINT_URL,
+          RESET_PASSWORD_OTP_TEMPLATE_EMAIL: process.env.RESET_PASSWORD_OTP_TEMPLATE_EMAIL
         },
         plugins: [
           media({
@@ -85,7 +87,6 @@ const schema = applyMiddleware(
     >[],
   })
 );
-
 let server = new ApolloServer({
   schema,
   introspection: true,

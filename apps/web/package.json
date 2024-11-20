@@ -14,7 +14,7 @@
     "@babel/standalone": "^7.24.6",
     "@graphql-tools/schema": "^10.0.3",
     "@hookform/resolvers": "^3.3.4",
-    "@mercury-js/core": "2.0.0-beta.24.6",
+    "@mercury-js/core": "2.0.0-beta.24.7",
     "@monaco-editor/react": "^4.6.0",
     "@repo/ui": "*",
     "cookies-next": "^4.2.1",
