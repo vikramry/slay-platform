@@ -8,9 +8,10 @@ import { deleteCookie, getCookie } from "cookies-next";
 import { useRouter, usePathname } from "next/navigation";
 import { SideBar } from "@repo/ui/sideBar";
 import { useEffect, useState } from "react";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { GET_USER_BY_ID } from "@/app/queries";
 import { useLazyQuery } from "../hook";
+import { serverFetch } from "../action";
 
 export default function RootLayout({
   children,
@@ -20,54 +21,45 @@ export default function RootLayout({
   const router = useRouter();
   const pathname = usePathname();
   const [profile, setProfile] = useState(null);
-  const [fetchUser,] = useLazyQuery(); 
+  const [fetchUser, { data, loading, error }] = useLazyQuery(serverFetch);
 
   useEffect(() => {
-    async function fetchData() {
-      const token = getCookie("session") || "";
-
-      if (!token) {
-        router.push("/"); 
-        return;
-      }
-
-      const payload: any = jwtDecode(token);
-
-      try {
-        const response = await fetchUser(process.env.PLATFORM_BACKEND_URL!, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            profile: "SystemAdmin",
-          },
-          body: JSON.stringify({
-            query: GET_USER_BY_ID,
-            variables: {
-              where: {
-                id: {
-                  is: payload?.user?.id,
-                },
-              },
-            },
-          }),
-          cache: "no-store",
-        });
-
-        const data = await response.json();
-
-        if (data?.data?.getUser?.profile?.name !== "SystemAdmin") {
-          router.push("/"); 
-        } else {
-          setProfile(data?.data?.getUser?.profile); 
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        router.push("/"); 
-      }
+    const token = getCookie("session") || "";
+    if (!token) {
+      router.replace("/");
+    }
+    let payload: any = "";
+    try {
+      payload = jwtDecode(token);
+    } catch (error) {
+      router.replace("/");
     }
 
-    fetchData();
-  }, [fetchUser, router]);
+    fetchUser(
+      GET_USER_BY_ID,
+      {
+        where: {
+          id: {
+            is: payload?.user?.id,
+          },
+        },
+      },
+      {
+        cache: "no-store",
+      }
+    );
+  }, [fetchUser]);
+
+  useEffect(() => {
+    if (data) {
+      if (data?.getUser?.profile?.name !== "SystemAdmin") {
+        router.replace("/");
+      }
+    }
+    if (error) {
+      router.replace("/");
+    }
+  }, [data, error]);
 
   const isDashboard =
     pathname === "/dashboard" || pathname.includes("/dashboard/o/");

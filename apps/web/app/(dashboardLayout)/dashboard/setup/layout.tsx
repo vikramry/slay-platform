@@ -1,5 +1,4 @@
-import AccessCheck from "@/containers/AccessCheck";
-import { getCookie } from "cookies-next";
+
 import { jwtDecode } from 'jwt-decode';
 import { serverFetch } from '@/app/action';
 import { GET_PROFILE, GET_USER_BY_ID } from '@/app/queries';
@@ -17,7 +16,13 @@ export default async function RootLayout({
     if (!token) {
         redirect('/');
     }
-    const payload: any = jwtDecode(token);
+    let payload: any = ""
+    try {
+        payload = jwtDecode(token);
+    } catch (error) {
+        redirect('/');
+    }
+    
     const response = await fetch(
         process.env.PLATFORM_BACKEND_URL!,
         {
