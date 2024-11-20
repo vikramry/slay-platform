@@ -9,7 +9,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui";
-import { useState } from "react"; // Still useful for loading state handling
+import { serverFetch } from "@/app/action";
+import { useLazyQuery } from "@/app/hook";
+import { LIST_TABS } from "@/app/queries";
+import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
 
 export interface LIST_TABSTYPES {
   label: string;
@@ -21,53 +25,74 @@ export interface LIST_TABSTYPES {
   };
 }
 
-export function AppSidebar({
-  setACTIVETab,
-  aCTIVETab,
-  tabsData = [],
-  loading,
-}: {
-  setACTIVETab?: (tab: string) => void;
-  aCTIVETab?: string;
-  tabsData?: LIST_TABSTYPES[];
-  loading: boolean;
-}) {
+export function AppSidebar() {
   const router = useRouter();
   const { modelName } = useParams();
+  const [ListTabs, ListTabsResponse] = useLazyQuery(serverFetch);
+  const pathName = usePathname();
 
+  useEffect(() => {
+    if (pathName === "/dashboard" || pathName.includes("/dashboard/o/")) {
+      ListTabs(
+        LIST_TABS,
+        {
+          limit: 100,
+          sort: {
+            order: "asc",
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (ListTabsResponse?.data) {
+      console.log(ListTabsResponse?.data, "tabsdata");
+      // setModelId(ListTabsResponse?.data?.listTabs?.docs[0].model?.id)
+    } else if (ListTabsResponse?.error) {
+      console.log(ListTabsResponse?.error);
+    }
+  }, [
+    ListTabsResponse?.data,
+    ListTabsResponse?.error,
+    ListTabsResponse?.loading,
+  ]);
   return (
-    <div className="w-full h-full block">
+    <div className={`${
+      pathName === "/dashboard" || pathName.includes("/dashboard/o/")
+        ? "block"
+        : "hidden"
+    }`}>
       <Sidebar
         variant="floating"
-        className="h-[78vh] mt-[3.7rem] ml-2"
+        className="hide-scrollbar h-[84vh] my-auto ml-2 pt-2"
       >
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                {loading ? (
-                  <>
+                {ListTabsResponse?.loading ? (
+                  <div className="flex flex-col gap-4 mt-2">
                     {[1, 2, 3, 4, 5].map((_, index) => (
                       <div
                         key={index}
-                        className="h-[25px] flex flex-col w-[100%] bg-gray-200 rounded-[12px] dark:bg-gray-700"
+                        className="h-[20px] flex flex-col w-[95%] bg-gray-200 rounded-[12px] dark:bg-gray-700"
                       ></div>
                     ))}
-                  </>
+                  </div>
                 ) : (
-                  tabsData.map((tab) => (
+                  ListTabsResponse?.data?.listTabs?.docs?.map((tab: any) => (
                     <SidebarMenuItem key={tab.id}>
                       <SidebarMenuButton asChild>
-                        <a href={`/dashboard/o/${tab.model.name}/list`}>
-                          <span
-                            className={`${
-                              modelName === tab.model.name
-                                ? "text-black dark:text-white font-bold"
-                                : "text-[#7B7B7D] font-medium"
-                            }`}
-                          >
-                            {tab.label}
-                          </span>
+                        <a href={`/dashboard/o/${tab?.model?.name}/list`}>
+                          <span className={`${
+                          modelName == tab?.model?.name
+                            ? "text-black dark:text-white font-bold"
+                            : "text-[#7B7B7D] font-[500px]"
+                        } text-[14px] sm:text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white ease-in-out duration-300`}>{tab.label}</span>
                         </a>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

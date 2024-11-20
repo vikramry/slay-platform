@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { TbSettingsCog } from 'react-icons/tb';
 import { HiOutlineUsers } from 'react-icons/hi2';
 import { TiTabsOutline } from 'react-icons/ti';
+import { FaUser } from "react-icons/fa";
+import Image from "next/image"; // Import Image for optimization.
+// import MercuryLogo from "../public/assets/MercuryLogo.png";
 
 const data = [
   {
@@ -41,12 +44,24 @@ export function Header({ handleLogout }: { handleLogout: Function }) {
   };
   return (
     <div className='flex flex-row h-[50px] bg-white justify-between items-center p-[15px] border-b-[1px] border-gray dark:border-gray-700 dark:bg-gray-700'>
-      <h3 className='flex flex-row font-semibold text-[#817994] text-xl'>Mercury Platform</h3>
+      <Link href="/dashboard">
+        <div className="flex items-center">
+          <Image 
+            src="/assets/MercuryLogo.png" // Use relative path from 'public/'
+            alt="Mercury Logo" 
+            width={50} 
+            height={50} 
+            priority 
+          />
+        </div>
+      </Link>
       <div className='flex flex-row gap-2 justify-between items-center'>
         <div>
           <ModeToggleButton />
         </div>
-        <div className='rounded-full w-[35px] h-[35px] border-gray border-[1px] mr-5 dark:border-gray md:block hidden' onClick={() => setdropdown(!dropdown)}></div>
+        <div className='rounded-full w-[35px] h-[35px] border-gray border-[1px] mr-5 dark:border-gray md:block hidden' onClick={() => setdropdown(!dropdown)}>
+          <div className='flex justify-center items-center mt-2'><FaUser /></div>
+          </div>
         {dropdown &&
           <div className="drop-down z-10 w-40 overflow-hidden bg-white dark:bg-black rounded-md shadow absolute top-12 right-3">
             <ul>
