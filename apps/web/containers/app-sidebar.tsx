@@ -87,7 +87,7 @@ export function AppSidebar() {
                   ListTabsResponse?.data?.listTabs?.docs?.map((tab: any) => (
                     <SidebarMenuItem key={tab.id}>
                       <SidebarMenuButton asChild>
-                        <a href={`/dashboard/o/${tab.model.name}/list`}>
+                        <a href={`/dashboard/o/${tab?.model?.name}/list`}>
                           <span className={`${
                           modelName == tab?.model?.name
                             ? "text-black dark:text-white font-bold"
