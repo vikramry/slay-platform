@@ -48,7 +48,7 @@ export default function RootLayout({
         cache: "no-store",
       }
     );
-  }, [fetchUser]);
+  }, []);
 
   useEffect(() => {
     if (data) {
