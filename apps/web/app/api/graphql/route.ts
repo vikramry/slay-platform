@@ -42,7 +42,8 @@ await mercury.package([
           SENDER_NAME: process.env.SENDER_NAME,
           SMS_TEMPLATE: process.env.SMS_TEMPLATE,
           INVOICE_PRINT_URL: process.env.INVOICE_PRINT_URL,
-          RESET_PASSWORD_OTP_TEMPLATE_EMAIL: process.env.RESET_PASSWORD_OTP_TEMPLATE_EMAIL
+          RESET_PASSWORD_OTP_TEMPLATE_EMAIL: process.env.RESET_PASSWORD_OTP_TEMPLATE_EMAIL,
+          JWT_SECRET: process.env.JWT_SECRET
         },
         plugins: [
           media({
