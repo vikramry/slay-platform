@@ -135,6 +135,18 @@ mercury.hook.after("PLATFORM_INITIALIZE", async function (this: any) {
 
 const handler = startServerAndCreateNextHandler(server, {
   context: async (req: any, res) => {
+    const session = await req.headers.get("session");
+    const xApiKey = req.headers.get("x_api_key");
+    const envApiKey = process.env.NEXT_PUBLIC_X_API_KEY;
+    if (xApiKey !== envApiKey) {
+      return {
+        ...req,
+        user: {
+          id: "1",
+          profile: "Anonymous",
+        },
+      };
+    }
     return {
       ...req,
       user: {

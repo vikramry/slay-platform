@@ -27,9 +27,11 @@ export default async function RootLayout({
         process.env.PLATFORM_BACKEND_URL!,
         {
             method: "POST",
+            //@ts-ignore
             headers: {
                 "content-type": "application/json",
-                "profile": "SystemAdmin"
+                "session": cookies().get("session")?.value,
+                "x_api_key": process.env.NEXT_PUBLIC_X_API_KEY
             },
             body: JSON.stringify({
                 query: GET_USER_BY_ID,
