@@ -5,7 +5,6 @@ import { LIST_TABS } from "@/app/queries";
 import { NavBar } from "@repo/ui/navBar";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
-import { DashboardSidebar } from "./DashboardSidebar";
 import AppSidebar from "@/containers/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@repo/ui";
 
@@ -22,6 +21,7 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
           sort: {
             order: "asc",
           },
+          where: {}
         },
         {
           cache: "no-store",

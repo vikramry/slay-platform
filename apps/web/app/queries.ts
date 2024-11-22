@@ -245,6 +245,11 @@ export const GetTabQuary = `
         label
         prefix
       }
+      profiles {
+        id
+        label
+        name
+      }
       label
       order
       createdBy {
@@ -594,6 +599,11 @@ export const listtabs = `
       docs {
         label
         id
+        profiles {
+          id
+          label
+          name
+        }
         model {
           id
           name
@@ -1104,8 +1114,8 @@ mutation DeleteLayoutStructure($deleteLayoutStructureId: ID!) {
   deleteLayoutStructure(id: $deleteLayoutStructureId)
 }`
 export const LIST_TABS = `
-query Docs($sort: sortTabInput, $limit: Int!) {
-  listTabs(sort: $sort, limit: $limit) {
+query Docs($sort: sortTabInput, $limit: Int!, $where: whereTabInput) {
+  listTabs(sort: $sort, limit: $limit, where: $where) {
     docs {
       label
       id

@@ -11,9 +11,10 @@ import {
 } from "@repo/ui";
 import { serverFetch } from "@/app/action";
 import { useLazyQuery } from "@/app/hook";
-import { LIST_TABS } from "@/app/queries";
+import { GET_PROFILE, LIST_TABS } from "@/app/queries";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
+import { getCookie, setCookie } from "cookies-next";
 
 export interface LIST_TABSTYPES {
   label: string;
@@ -29,16 +30,25 @@ export function AppSidebar() {
   const router = useRouter();
   const { modelName } = useParams();
   const [ListTabs, ListTabsResponse] = useLazyQuery(serverFetch);
+  const [getProfile, { data, error, loading }] = useLazyQuery(serverFetch);
   const pathName = usePathname();
 
   useEffect(() => {
     if (pathName === "/dashboard" || pathName.includes("/dashboard/o/")) {
+      if(!getCookie("profile")){
+        router.replace('/');
+      }
       ListTabs(
         LIST_TABS,
         {
           limit: 100,
           sort: {
             order: "asc",
+          },
+          where: {
+            profiles: {
+              is: getCookie("profile")
+            },
           },
         },
         {
@@ -61,11 +71,13 @@ export function AppSidebar() {
     ListTabsResponse?.loading,
   ]);
   return (
-    <div className={`${
-      pathName === "/dashboard" || pathName.includes("/dashboard/o/")
-        ? "block"
-        : "hidden"
-    }`}>
+    <div
+      className={`${
+        pathName === "/dashboard" || pathName.includes("/dashboard/o/")
+          ? "block"
+          : "hidden"
+      }`}
+    >
       <Sidebar
         variant="floating"
         className="hide-scrollbar h-[84vh] my-auto ml-2 pt-2"
@@ -88,11 +100,15 @@ export function AppSidebar() {
                     <SidebarMenuItem key={tab.id}>
                       <SidebarMenuButton asChild>
                         <a href={`/dashboard/o/${tab?.model?.name}/list`}>
-                          <span className={`${
-                          modelName == tab?.model?.name
-                            ? "text-black dark:text-white font-bold"
-                            : "text-[#7B7B7D] font-[500px]"
-                        } text-[14px] sm:text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white ease-in-out duration-300`}>{tab.label}</span>
+                          <span
+                            className={`${
+                              modelName == tab?.model?.name
+                                ? "text-black dark:text-white font-bold"
+                                : "text-[#7B7B7D] font-[500px]"
+                            } text-[14px] sm:text-[16px] hover:text-black hover:font-bold cursor-pointer dark:hover:text-white ease-in-out duration-300`}
+                          >
+                            {tab.label}
+                          </span>
                         </a>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
