@@ -53,16 +53,16 @@ function CustomerPdfComponent({
         </header>
 
         {/* Customer & Company Info */}
-        <div className="flex flex-col md:flex-row   justify-between px-8 py-6 border-b">
-          <div className="xl:w-[45%]">
-            <h3 className="text-lg font-semibold">Billing</h3>
+        <div className="flex flex-col md:flex-row   justify-between md:px-8 md:py-6 p-4 border-b gap-5">
+          <div className=" text-left text-black">
+            <h3 className="text-lg font-semibold  ">Billing</h3>
             <p>{customer?.firstName} {customer?.lastName}</p>
             <p>{shippingAddress.addressLine1}, {shippingAddress?.city}</p>
             <p>{shippingAddress.state}, {shippingAddress?.country}, {shippingAddress?.zipCode}</p>
             <p>{customer?.mobile}</p>
           </div>
-          <div className="text-right xl:w-[45%]">
-            <h3 className="text-lg font-semibold">Shipping</h3>
+          <div className="text-right  text-black">
+            <h3 className="text-lg font-semibold ">Shipping</h3>
             <p>{customer?.firstName} {customer?.lastName}</p>
             <p>{billingAddress?.addressLine1}, {billingAddress?.city}</p>
             <p>{billingAddress?.state}, {billingAddress?.country}, {billingAddress?.zipCode}</p>
@@ -109,39 +109,37 @@ function CustomerPdfComponent({
             </table>
           </div>
         </div> */}
-        <div className='  '>
-        <div className="p-5">
-  <div className="grid grid-cols-4 font-bold border-b-2 pb-2">
-    <h1>Item</h1>
-    <h1 className="text-right">Qty</h1>
-    <h1 className="text-right">Unit Price</h1>
-    <h1 className="text-right">Subtotal</h1>
-  </div>
+        {/* <div className='  '>
+          <div className="p-5">
+            <div className="grid grid-cols-4 font-bold border-b-2 pb-2">
+              <h1>Item</h1>
+              <h1 className="text-right">Qty</h1>
+              <h1 className="text-right">Unit Price</h1>
+              <h1 className="text-right">Subtotal</h1>
+            </div>
 
-  {invoiceLines.map((line: any) => (
-  <div key={line.id} className="grid grid-cols-4 items-center py-2">
-    <h1 className="w-[100%]">{line?.productItem?.name}</h1>
-    <h1 className="text-right">{line?.quantity}</h1>
-    <h1 className="text-right">₹{line?.pricePerUnit.toFixed(2)}</h1>
-    <h1 className="text-right">₹{line?.amount.toFixed(2)}</h1>
-  </div>
-))}
-
-
-  {discountedAmount > 0 && (
-    <div className="grid grid-cols-4 font-bold mt-4 border-t-2 pt-2">
-      <h1 className="col-span-3 text-right">Discount ({couponApplied?.code})</h1>
-      <h1 className="text-right">-₹{discountedAmount?.toFixed(2)}</h1>
-    </div>
-  )}
-  <div className="grid grid-cols-4 font-bold mt-2 border-t-2 pt-2">
-    <h1 className="col-span-3 text-right">Total</h1>
-    <h1 className="text-right">₹{(totalAmount - discountedAmount).toFixed(2)}</h1>
-  </div>
-</div>
+            {invoiceLines.map((line: any) => (
+              <div key={line.id} className="grid grid-cols-4 items-center py-2">
+                <h1 className="w-[100%]">{line?.productItem?.name}</h1>
+                <h1 className="text-right">{line?.quantity}</h1>
+                <h1 className="text-right">₹{line?.pricePerUnit.toFixed(2)}</h1>
+                <h1 className="text-right">₹{line?.amount.toFixed(2)}</h1>
+              </div>
+            ))}
 
 
-        </div>
+            {discountedAmount > 0 && (
+              <div className="grid grid-cols-4 font-bold mt-4 border-t-2 pt-2">
+                <h1 className="col-span-3 text-right">Discount ({couponApplied?.code})</h1>
+                <h1 className="text-right">-₹{discountedAmount?.toFixed(2)}</h1>
+              </div>
+            )}
+            <div className="grid grid-cols-4 font-bold mt-2 border-t-2 pt-2">
+              <h1 className="col-span-3 text-right">Total</h1>
+              <h1 className="text-right">₹{(totalAmount - discountedAmount).toFixed(2)}</h1>
+            </div>
+          </div>
+        </div> */}
 
         {/* Footer */}
         <footer className="bg-gray-700 text-white text-center py-4 print:bg-white print:text-black">
