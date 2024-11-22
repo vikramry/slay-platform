@@ -11,14 +11,17 @@ import {
 import { Layout, ModelFieldType } from "@/types";
 import Card from "@repo/ui/card";
 import { useParams, usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import App from "../DynamicComponent";
 import { getCookie } from "cookies-next";
+import { Button } from "@repo/ui";
+import DownloadInvoiceContainer from "../downloadInvoiceContainer";
 
 function RecordView() {
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
   const [getModel, GetModelResponse] = useLazyQuery(serverFetch);
   const { modelName, recordId } = useParams();
+  const[openPopUp,setPopUp]=useState(false)
   const [getCurrentLayoutStructures, getCurrentLayoutStructuresResponse] =
     useLazyQuery(serverFetch);
   const [getAllModelFields, { data, loading, error }] =
@@ -147,6 +150,9 @@ function RecordView() {
   return (
     <div>
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
+        {modelName =="Order" &&   
+        <DownloadInvoiceContainer recordId={recordId}/>}
+        
         {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
           <>
             {[1, 2, 3, 4, 5].map((_, index) => (

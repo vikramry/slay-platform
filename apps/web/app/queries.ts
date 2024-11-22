@@ -1367,3 +1367,82 @@ query GetFile($where: whereFileInput!) {
     size
   }
 }`
+
+export const GET_ORDER=`
+query GetOrder($where: whereOrderInput!) {
+  getOrder(where: $where) {
+  shipmentStatus
+    date
+    id
+    orderId
+
+    invoice {
+      id
+      customer {
+        id
+        firstName
+        email
+        lastName
+        mobile
+      }
+      billingAddress {
+        id
+        addressLine1
+        addressLine2
+        city
+        country
+        isDefault
+        landmark
+        mobile
+        name
+        state
+        street
+        zipCode
+      }
+      payment {
+        id
+        status
+      }
+
+      status
+      couponApplied {
+        code
+        id
+      }
+      discountedAmount
+      totalAmount
+      invoiceLines {
+        id
+        productItem {
+          name
+          id
+          slug
+          description
+          product {
+            id
+            name
+          }
+
+        }
+        amount
+        quantity
+        pricePerUnit
+      }
+      shippingAddress {
+        id
+        addressLine1
+        addressLine2
+        city
+        country
+        isDefault
+        landmark
+        mobile
+        name
+        state
+        street
+        zipCode
+      }
+        document
+    }
+  }
+}`
