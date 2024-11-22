@@ -39,6 +39,7 @@ const ListTabs = () => {
         columns={tabsColumns}
         loading={loading}
         data={tabsData}
+        filterBy={"label"}
         url="/dashboard/setup/tabs/createTab"
         text="Create tab"
       />

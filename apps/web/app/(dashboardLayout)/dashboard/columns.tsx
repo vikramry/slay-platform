@@ -800,6 +800,27 @@ export const tabsColumns: ColumnDef<TabType>[] = [
     ),
   },
   {
+    accessorKey: "profiles",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Profiles
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="">
+        {row.original.profiles
+          ?.map((profile: ProfileType) => profile.label)
+          .join(", ") || "-"}
+      </div>
+    ),
+  },
+  {
     accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (

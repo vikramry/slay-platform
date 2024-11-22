@@ -289,7 +289,7 @@ const DynamicModelTable = () => {
           columns={columns || []}
           loading={listModelDataResponse.loading || loading}
           data={listModelDataResponse.data?.[`list${modelName}s`]?.docs || []}
-          filterBy="id"
+          filterBy={data?.listModelFields?.docs[0]?.model?.key || data?.listModelFields?.docs[0]?.fieldName}
           text={"Create"}
           url={`/dashboard/o/${modelName}/r/create`}
         />

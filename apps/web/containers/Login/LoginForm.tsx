@@ -49,6 +49,7 @@ const LoginForm = () => {
 
       const expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + 2);
+      setCookie("profile", data?.SignIn?.profile);
       setCookie("session", data?.SignIn?.session, { expires: expiryDate });
       router.replace('/dashboard');
     }
