@@ -34,6 +34,9 @@ interface DataTableProps<TData, TValue> {
   url?: string
   filterBy?: string
   loading?: boolean
+  filters?:boolean
+  statusFilter?:any
+  statusFilterData?:any
 }
 
 export function DataTable<TData, TValue>({
@@ -42,7 +45,10 @@ export function DataTable<TData, TValue>({
   text,
   url,
   filterBy,
-  loading = false
+  loading = false,
+  filters=false,
+  statusFilter,
+  statusFilterData
 }: DataTableProps<TData, TValue>) {
   // const table = useReactTable({
   //   data,
@@ -77,10 +83,12 @@ export function DataTable<TData, TValue>({
 
 
   })
-
+console.log(table.getColumn(statusFilter),"hebayybbjhb")
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
+        <div className="flex fex-row gap-5">
+          
         {filterBy && <Input
           placeholder={`Filter by ${filterBy}...`}
           value={(table.getColumn(filterBy)?.getFilterValue() as string) ?? ""}
@@ -89,6 +97,34 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />}
+        {filters&& 
+        <div className="w-[200px]">
+  <Select
+  onValueChange={(value) =>
+    table.getColumn(statusFilter)?.setFilterValue(value)
+  }
+  defaultValue={(table.getColumn(statusFilter)?.getFilterValue() as string) ?? ""}
+>
+  <SelectTrigger>
+    <SelectValue placeholder= {`Select Status...`} />
+  </SelectTrigger>
+  <SelectContent>
+    {statusFilterData
+      .find((item: any) => item?.fieldName === statusFilter)
+      ?.enumValues?.map((enumValue: string) => (
+        <SelectItem key={enumValue} value={enumValue}>
+          {enumValue}
+        </SelectItem>
+      )) || (
+        <SelectItem value="" disabled>
+          No options available
+        </SelectItem>
+      )}
+  </SelectContent>
+</Select>
+          </div>
+        }
+        </div>
         <div className="ml-auto flex flex-row gap-5">
 
           {text &&

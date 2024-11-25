@@ -1,11 +1,12 @@
 import { serverFetch } from '@/app/action';
-import { useLazyQuery, useMutation } from '@/app/hook'; // Assuming useMutation is similar to useLazyQuery
+import { useLazyQuery } from '@/app/hook'; // Assuming useMutation is similar to useLazyQuery
 import { GET_ORDER, UPDATE_ORDER } from '@/app/queries';
-import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, toast } from '@repo/ui';
+import { Button, toast } from '@repo/ui';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
-function Updateshippment({ recordId }: { recordId: any }) {
+function Updateshippment() {
+  const {recordId}=useParams()
   const router = useRouter(); 
   const [updateMessage, setUpdateMessage] = useState('');
   const [shipmentStatus, setShipmentStatus] = useState(''); 

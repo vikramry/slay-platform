@@ -72,6 +72,8 @@ const DynamicModelTable = () => {
   }, [DeleteRecorddResponse?.data, DeleteRecorddResponse?.loading, DeleteRecorddResponse?.error])
   useEffect(() => {
     if (data) {
+      // console.log(data,"ajScjbxsj")
+
       (async () => {
         const refKeyMap: Record<string, string> = {};
 
@@ -268,7 +270,7 @@ const DynamicModelTable = () => {
 
   useEffect(() => {
     if (listModelDataResponse.data) {
-      console.log(listModelDataResponse.data);
+      console.log(listModelDataResponse.data,"data11");
     }
 
     if (listModelDataResponse.error) {
@@ -279,7 +281,7 @@ const DynamicModelTable = () => {
     listModelDataResponse.error,
     listModelDataResponse.loading,
   ]);
-
+console.log(data?.listModelFields?.docs[0]?.model?.key || data?.listModelFields?.docs,"testing")
   return (
     <div>
       <Toaster />
@@ -292,6 +294,9 @@ const DynamicModelTable = () => {
           filterBy={data?.listModelFields?.docs[0]?.model?.key || data?.listModelFields?.docs[0]?.fieldName}
           text={"Create"}
           url={`/dashboard/o/${modelName}/r/create`}
+          filters={modelName=="Order"&&true}
+          statusFilterData={data?.listModelFields?.docs}
+          statusFilter="shipmentStatus"
         />
       ) : <div>
 

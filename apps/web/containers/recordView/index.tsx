@@ -154,7 +154,7 @@ function RecordView() {
         <div>
 
         <DownloadInvoiceContainer recordId={recordId}/>
-        <Updateshippment recordId={recordId}/></div>}
+        </div>}
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
         
         {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
