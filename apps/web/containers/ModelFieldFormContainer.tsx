@@ -441,7 +441,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
             )}
           />
           {["number", "string", "float", "enum"].includes(
-            form.watch("type")
+            form.watch("enumType")
           ) && (
               <FormField
                 control={form.control}
@@ -453,7 +453,7 @@ const ModelFieldFormContainer = ({ edit = false }: { edit?: boolean }) => {
                       <Input
                         placeholder="Enter default value"
                         {...field}
-                        type={form.watch("type") === "string" ? "text" : "number"}
+                        type={form.watch("enumType") === "string" ? "text" : "number"}
                       />
                     </FormControl>
                     <FormMessage />

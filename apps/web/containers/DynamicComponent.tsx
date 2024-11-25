@@ -16,7 +16,7 @@ function createComponentFromJSX({
   modules: Array<any>;
 }): React.FC<DyComProps> {
   // Transpile the JSX string to JavaScript using Babel
-  const bodyCode = jsxString?.split("// ---Component---")[1].trim();
+  const bodyCode = jsxString?.split("// ---Component---")[1]?.trim();
   const result = Babel.transform(bodyCode, { presets: ["react"] });
   const code = result ? result.code : null;
   const componentFunction = Function.prototype.apply.apply(Function, [
