@@ -1382,6 +1382,7 @@ export const GET_ORDER=`
 query GetOrder($where: whereOrderInput!) {
   getOrder(where: $where) {
   shipmentStatus
+  update
     date
     id
     orderId
@@ -1456,3 +1457,13 @@ query GetOrder($where: whereOrderInput!) {
     }
   }
 }`
+
+export const UPDATE_ORDER = `
+mutation UpdateOrder($input: updateOrderInput!) {
+  updateOrder(input: $input) {
+    shipmentStatus
+    id
+update
+}
+}
+`

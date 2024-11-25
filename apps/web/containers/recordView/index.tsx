@@ -16,6 +16,7 @@ import App from "../DynamicComponent";
 import { getCookie } from "cookies-next";
 import { Button } from "@repo/ui";
 import DownloadInvoiceContainer from "../downloadInvoiceContainer";
+import Updateshippment from "../updateShipment";
 
 function RecordView() {
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
@@ -151,7 +152,9 @@ function RecordView() {
     <div>
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
         {modelName =="Order" &&   
+        
         <DownloadInvoiceContainer recordId={recordId}/>}
+        <Updateshippment recordId={recordId}/>
         
         {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
           <>

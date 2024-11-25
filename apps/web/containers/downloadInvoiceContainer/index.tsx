@@ -51,11 +51,11 @@ function DownloadInvoiceContainer({recordId}:{recordId:any}) {
   }, [data, loading, error]);
 if(loading){
     return(
-        <h4 className="text-[white] flex flex-row justify-center">loading....</h4>
+        <h4 className="text-[black] dark:text-white flex flex-row justify-center">loading....</h4>
     )
 }
   return (
-<Dialog >
+<Dialog  >
   <DialogTrigger>Download Invoice</DialogTrigger>
   <DialogContent className="w-screen h-[80%] overflow-auto">
     <DialogHeader>
@@ -91,7 +91,6 @@ if(loading){
         </button>
       </div>
       <div>
-        
         {customerData?.id && 
         <CustomerPdfComponent
           reference={targetRef}
