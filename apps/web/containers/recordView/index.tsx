@@ -188,6 +188,7 @@ function RecordView() {
                     jsxString={decodeURIComponent(escape(atob(item.component.code)))}
                     onClick={() => console.log("Clicked A button")}
                     metaData={{ recordData: DynamicGetQuaryResponse?.data?.[`get${modelName}`], model: GetModelResponse?.data?.getModel, modelFields: data?.listModelFields?.docs }}
+                    managed={item.component?.managed} componentName={item.component?.name}
                   />
                 </Card>
               )

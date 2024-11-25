@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import _, { map, set } from "lodash";
 import * as Babel from "@babel/standalone";
+import dynamic from "next/dynamic";
 
 type DyComProps = {
   onClick: () => void;
-  metaData?: any
+  metaData?: any;
 };
 
 function createComponentFromJSX({
@@ -56,12 +57,26 @@ async function loadModules(jsxString: string) {
   // Note: This uses 'new Function' which can have security implications
 }
 
-function App({ onClick, jsxString ,metaData}: { onClick: () => void, jsxString: string ,metaData?:any}) {
+function App({
+  onClick,
+  jsxString,
+  metaData,
+  managed = false,
+  componentName,
+}: {
+  onClick: () => void;
+  jsxString: string;
+  metaData?: any;
+  managed?: boolean;
+  componentName?: string;
+}) {
   // const [componentUrl, setComponentUrl] = useState<string | null>(null);
   const [nodeModules, setNodeModules] = useState<{
     jsxString: string;
     modules: Array<any>;
   } | null>(null);
+
+  // const [MyComponent, setMyComponent] = useState<any>();
 
   // const [MyComponent, ready] = useLoader(componentUrl);
 
@@ -70,19 +85,39 @@ function App({ onClick, jsxString ,metaData}: { onClick: () => void, jsxString: 
     //   .then((response) => response.text())
     //   .then(loadModules)
     //   .then(setNodeModules);
-
-    (async () => {
-      const response = await loadModules(jsxString)
-      setNodeModules(response);
-    })()
-
-
+    if (!managed)
+      (async () => {
+        const response = await loadModules(jsxString);
+        setNodeModules(response);
+      })();
   }, []);
+
+  // useEffect(()=>{
+  //   if(nodeModules)
+  //   setMyComponent(createComponentFromJSX(nodeModules))
+  // }, [nodeModules])
   // const Component = ready && MyComponent?.apply(null, [React, _]);
-  const MyComponent = nodeModules ? createComponentFromJSX(nodeModules) : null;
+  let MyComponent =
+    managed && componentName
+      ? dynamic(() =>
+          import(`./CustomLayoutComponents`).then(
+            (mod: any) => mod[componentName]
+          )
+        )
+      : nodeModules
+        ? createComponentFromJSX(nodeModules)
+        : null;
   return (
     <div className="App">
-      <header className="App-header" style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+      <header
+        className="App-header"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
         {MyComponent && <MyComponent onClick={onClick} metaData={metaData} />}
       </header>
     </div>

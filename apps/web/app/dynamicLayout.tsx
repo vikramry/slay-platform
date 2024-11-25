@@ -147,7 +147,7 @@ const DynamicLayout = () => {
                 classNames={`col-span-${item.col} bg-white`}
                 rows={item.row}
               >
-                <App jsxString={decodeURIComponent(escape(atob(item.component.code)))} onClick={() => console.log("Clicked A button")} />
+                <App jsxString={decodeURIComponent(escape(atob(item.component.code)))} onClick={() => console.log("Clicked A button")} managed={true} componentName={"ProfileForm"}/>
               </Card>
             ))}
           </>}
