@@ -150,11 +150,12 @@ function RecordView() {
   }, [DynamicGetQuaryResponse?.data, DynamicGetQuaryResponse?.loading, DynamicGetQuaryResponse?.error])
   return (
     <div>
-      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
         {modelName =="Order" &&   
-        
-        <DownloadInvoiceContainer recordId={recordId}/>}
-        <Updateshippment recordId={recordId}/>
+        <div>
+
+        <DownloadInvoiceContainer recordId={recordId}/>
+        <Updateshippment recordId={recordId}/></div>}
+      <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
         
         {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
           <>
@@ -191,6 +192,7 @@ function RecordView() {
                     jsxString={decodeURIComponent(escape(atob(item.component.code)))}
                     onClick={() => console.log("Clicked A button")}
                     metaData={{ recordData: DynamicGetQuaryResponse?.data?.[`get${modelName}`], model: GetModelResponse?.data?.getModel, modelFields: data?.listModelFields?.docs }}
+                    managed={item.component?.managed} componentName={item.component?.name}
                   />
                 </Card>
               )

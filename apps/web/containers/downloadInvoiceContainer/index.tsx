@@ -13,6 +13,7 @@ import {
     DialogFooter,
     DialogTitle,
     DialogDescription,
+    Button,
   } from "@repo/ui"
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -55,28 +56,16 @@ if(loading){
     )
 }
   return (
-<Dialog  >
-  <DialogTrigger>Download Invoice</DialogTrigger>
+<Dialog >
+  <DialogTrigger><Button className="ml-3"> Download Invoice</Button></DialogTrigger>
   <DialogContent className="w-screen h-[80%] overflow-auto">
     <DialogHeader>
       <DialogTitle>Invoice</DialogTitle>
       <DialogDescription >
       <div>
       <div className="flex justify-end mr-10 pb-5 gap-4">
-        <button
+        <Button
           type="button"
-          onClick={() => router.push("/")}
-          className="bg-red-500 text-[white] px-6 py-2 rounded-lg hover:bg-red-800"
-        >
-          <span className=" flex justify-center items-center gap-2">
-            <RiArrowGoBackFill className="text-gray h-4 w-4" />
-            Back
-          </span>
-        </button>
-
-        <button
-          type="button"
-          className="bg-green-500 text-[white] px-6 py-2 rounded-lg hover:bg-green-800"
           onClick={() =>
             generatePDF(targetRef, {
               method: "save",
@@ -88,7 +77,7 @@ if(loading){
             <HiOutlineDocumentDownload className="text-gray h-4 w-4" />
             Download
           </span>
-        </button>
+        </Button>
       </div>
       <div>
         {customerData?.id && 

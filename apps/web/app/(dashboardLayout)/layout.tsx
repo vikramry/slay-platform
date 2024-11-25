@@ -52,7 +52,7 @@ export default function RootLayout({
 
   useEffect(() => {
     if (data) {
-      if (data?.getUser?.profile?.name !== "SystemAdmin") {
+      if (!data?.getUser?.profile?.name  && data?.getUser?.profile?.name == "Anonymous") {
         router.replace("/");
       }
     }
