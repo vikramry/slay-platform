@@ -653,6 +653,7 @@ export const listcomponents = `
         name
         label
         id
+        managed
         createdBy {
           id
           firstName
@@ -908,6 +909,7 @@ mutation CreateComponent($input: ComponentInput!) {
     id
     label
     description
+    managed
   }
 }`;
 
@@ -915,6 +917,7 @@ export const UPDATE_COMPONENT = `mutation UpdateComponent($input: updateComponen
   updateComponent(input: $input) {
     id
     label
+    managed
   }
 }`;
 
@@ -924,6 +927,7 @@ query GetComponent($where: whereComponentInput!) {
     id
     name
     label
+    managed
     description
     code
     modules
@@ -1091,6 +1095,7 @@ export const LIST_LAYOUT_STRUCTURES = `query Docs($sort: sortLayoutStructureInpu
     docs {
       id
       component {
+      managed
         id
         name
         label
@@ -1386,7 +1391,15 @@ query GetOrder($where: whereOrderInput!) {
     date
     id
     orderId
-
+ trackings {
+      id
+      order {
+        id
+        orderId
+      }
+      status
+      update
+    }
     invoice {
       id
       customer {
@@ -1467,3 +1480,30 @@ update
 }
 }
 `
+export const SHIPMENT_TRACKING=`
+mutation CreateShipmenttracking($input: ShipmenttrackingInput!) {
+  createShipmenttracking(input: $input) {
+    id
+    order {
+      id
+    }
+    status
+    update
+  }
+}`
+
+
+export const LIST_SHIPMENT_STATUS =`
+query ListShipmenttrackings($where: whereShipmenttrackingInput, $sort: sortShipmenttrackingInput) {
+  listShipmenttrackings(where: $where, sort: $sort) {
+    docs {
+      id
+      order {
+        id
+        orderId
+      }
+      status
+      update
+    }
+  }
+}`

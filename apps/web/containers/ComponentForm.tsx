@@ -52,6 +52,7 @@ const formSchema = z.object({
   modules: z.array(z.string(), {
     required_error: "Modules is required",
   }),
+  managed:z.boolean()
 });
 
 const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
@@ -100,6 +101,7 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
             modules: values.modules,
             name: values.name,
             updatedBy: null,
+            managed:values?.managed
           },
         },
         {
@@ -119,6 +121,7 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
             modules: values.modules,
             name: values.name,
             updatedBy: null,
+            managed:values?.managed
           },
         },
         {
@@ -138,6 +141,7 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
         label: getComponentResponse.data?.getComponent.label,
         modules: getComponentResponse.data?.getComponent.modules,
         name: getComponentResponse.data?.getComponent.name,
+        managed:getComponentResponse.data?.getComponent?.managed
       });
     }
     if (getComponentResponse.error) {
@@ -262,6 +266,25 @@ const ComponentForm = ({ edit = false }: { edit?: boolean }) => {
               </FormItem>
             )}
           />
+          <FormField
+                        control={form.control}
+                        name="managed"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 ">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                    <FormLabel>
+                                        Managed
+                                    </FormLabel>
+                                </div>
+                            </FormItem>
+                        )}
+                    />
           <div className="col-span-2">
             <FormField
               control={form.control}

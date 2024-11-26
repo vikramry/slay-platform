@@ -1304,6 +1304,19 @@ export const componentsColumns: ColumnDef<ComponentsType>[] = [
     cell: ({ row }) => <div className="">{row.getValue("label")}</div>,
   },
   {
+    accessorKey: "managed",
+    header: "Managed",
+    cell: ({ row }) => (
+      <div className="">
+        <Checkbox
+          checked={row.getValue("managed")}
+          readonly
+          aria-label="Select all"
+        />
+      </div>
+    ),
+  },
+  {
     accessorKey: "createdBy.firstName",
     header: ({ column }) => {
       return (
