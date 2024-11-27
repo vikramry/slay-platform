@@ -201,7 +201,7 @@ const DynamicModelTable = () => {
                   },
                   cell: ({ row }) => (
                     <div className="">
-                      {field.many ? row.getValue(field.fieldName)?.map((item: string) => new Date(item).getTime())?.join(', ') : new Date(row.getValue(field.fieldName)).getTime()}
+                      {field.many ? row.getValue(field.fieldName)?.map((item: string) => new Date(item).toLocaleString())?.join(', ') : new Date(row.getValue(field.fieldName)).toLocaleString()}
                     </div>
                   ),
                 };
