@@ -10,6 +10,7 @@ import { Button, Checkbox, DataTable, toast, Toaster } from "@repo/ui";
 import { ChevronsUpDown, Copy, ExternalLink, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import { PulseLoader } from "react-spinners"
+import _ from "lodash";
 
 const DynamicModelTable = () => {
   const modelName = useParams()?.modelName;
@@ -101,7 +102,7 @@ const DynamicModelTable = () => {
                           column.toggleSorting(column.getIsSorted() === "asc")
                         }
                       >
-                        {field.label}
+                        {_.startCase(field.label)}
                         <ChevronsUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     );
@@ -123,8 +124,10 @@ const DynamicModelTable = () => {
                         onClick={() =>
                           column.toggleSorting(column.getIsSorted() === "asc")
                         }
+                        className="font-bold"
                       >
-                        {field.label}({field.ref})
+                        {_.startCase(field.label)}
+                        {/* ({field.ref}) */}
                         <ChevronsUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     );
@@ -156,7 +159,7 @@ const DynamicModelTable = () => {
               case "boolean":
                 return {
                   accessorKey: field.fieldName,
-                  header: field.label,
+                  header: _.startCase(field.label),
                   cell: ({ row }) => {
                     if (field.many) {
                       return <div className="flex justify-center items-center gap-3 flex-wrap">
@@ -194,7 +197,7 @@ const DynamicModelTable = () => {
                           column.toggleSorting(column.getIsSorted() === "asc")
                         }
                       >
-                        {field.label}
+                        {_.startCase(field.label)}
                         <ChevronsUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     );
@@ -216,7 +219,7 @@ const DynamicModelTable = () => {
                           column.toggleSorting(column.getIsSorted() === "asc")
                         }
                       >
-                        {field.label}
+                        {_.startCase(field.label)}
                         <ChevronsUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     );
@@ -298,7 +301,7 @@ console.log(data?.listModelFields?.docs[0]?.model?.key || data?.listModelFields?
           statusFilterData={data?.listModelFields?.docs}
           statusFilter="shipmentStatus"
         />
-      ) : <div>
+      ) : <div className="w-screen mx-auto my-auto">
 
         <PulseLoader color="#817994" />
       </div>}

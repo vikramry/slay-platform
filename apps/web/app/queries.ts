@@ -1507,3 +1507,83 @@ query ListShipmenttrackings($where: whereShipmenttrackingInput, $sort: sortShipm
     }
   }
 }`
+
+
+export const GET_INVOICE=`
+query GetInvoice($where: whereInvoiceInput!) {
+  getInvoice(where: $where) {
+  invoiceId
+  updatedOn
+      id
+      customer {
+        id
+        firstName
+        email
+        lastName
+        mobile
+      }
+      billingAddress {
+        id
+        addressLine1
+        addressLine2
+        city
+        country
+        isDefault
+        landmark
+        mobile
+        name
+        state
+        street
+        zipCode
+      }
+      payment {
+        id
+        status
+      }
+
+      status
+      couponApplied {
+        code
+        id
+      }
+      discountedAmount
+      totalAmount
+      invoiceLines {
+        id
+          variants {
+                id
+                name
+            }
+        productItem {
+          name
+          id
+          slug
+          description
+          product {
+            id
+            name
+          }
+
+        }
+        amount
+        quantity
+        pricePerUnit
+      }
+      shippingAddress {
+        id
+        addressLine1
+        addressLine2
+        city
+        country
+        isDefault
+        landmark
+        mobile
+        name
+        state
+        street
+        zipCode
+      }
+        document
+    }  
+  }
+`

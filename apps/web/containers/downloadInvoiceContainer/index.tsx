@@ -36,6 +36,8 @@ function DownloadInvoiceContainer({recordId}:{recordId:any}) {
           is: recordId,
         },
       },
+    },{
+      cache: "no-store"
     });
   }, [recordId]);
 
