@@ -199,12 +199,27 @@ function Updateshippment() {
 export default Updateshippment;
 
  function TableDemo({trackings}: {trackings: any[]}) {
-
+  function dateFun(createdOn:string){
+    const date = new Date(createdOn);
+console.log(date,"date")
+    // Format the date using toLocaleString with custom options
+    const formattedDate = date.toLocaleString('en-US', {
+      month: 'long', // Full month name
+      day: 'numeric', // Numeric day
+      year: 'numeric', // Full year
+      hour: 'numeric', // Numeric hour
+      minute: 'numeric', // Numeric minute
+      hour12: true, // 12-hour clock (AM/PM)
+    });
+    // console.log(formattedDate,typeof(formattedDate),"formattedDate")
+    return formattedDate
+  }
   return (
     <Table>
       <TableCaption>A list of your Shipment Trackings.</TableCaption>
       <TableHeader>
         <TableRow>
+        <TableHead className="min-w-[200px] font-bold">Date</TableHead>
           <TableHead className="min-w-[200px] font-bold">Status</TableHead>
           <TableHead className="min-w-[200px] font-bold">Update</TableHead>
         </TableRow>
@@ -213,6 +228,7 @@ export default Updateshippment;
       <TableBody>
         {trackings?.map((invoice) => (
           <TableRow key={invoice.id}>
+            <TableCell>{dateFun(invoice.createdOn)}</TableCell>
             <TableCell>{_.startCase(invoice.status)}</TableCell>
             <TableCell>{invoice.update}</TableCell>
           </TableRow>

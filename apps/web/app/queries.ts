@@ -1387,7 +1387,6 @@ export const GET_ORDER=`
 query GetOrder($where: whereOrderInput!) {
   getOrder(where: $where) {
   shipmentStatus
-  update
     date
     id
     orderId
@@ -1476,7 +1475,6 @@ mutation UpdateOrder($input: updateOrderInput!) {
   updateOrder(input: $input) {
     shipmentStatus
     id
-update
 }
 }
 `
@@ -1489,6 +1487,7 @@ mutation CreateShipmenttracking($input: ShipmenttrackingInput!) {
     }
     status
     update
+    
   }
 }`
 
@@ -1498,6 +1497,7 @@ query ListShipmenttrackings($where: whereShipmenttrackingInput, $sort: sortShipm
   listShipmenttrackings(where: $where, sort: $sort) {
     docs {
       id
+      createdOn
       order {
         id
         orderId
