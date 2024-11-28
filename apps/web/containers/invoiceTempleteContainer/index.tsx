@@ -62,7 +62,7 @@ function InvoiceContainer() {
             onClick={() =>
               generatePDF(targetRef, {
                 method: "save",
-                filename: `Slay Coffee ${customerName}.pdf`,
+                filename: `Slay Coffee.pdf`,
               })
             }
           >

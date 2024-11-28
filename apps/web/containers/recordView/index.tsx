@@ -17,6 +17,7 @@ import { getCookie } from "cookies-next";
 import { Button } from "@repo/ui";
 import DownloadInvoiceContainer from "../downloadInvoiceContainer";
 import Updateshippment from "../updateShipment";
+import InvoiceContainer from "../invoiceTempleteContainer";
 
 function RecordView() {
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
@@ -150,11 +151,6 @@ function RecordView() {
   }, [DynamicGetQuaryResponse?.data, DynamicGetQuaryResponse?.loading, DynamicGetQuaryResponse?.error])
   return (
     <div>
-        {modelName =="Order" &&   
-        <div>
-
-        <DownloadInvoiceContainer recordId={recordId}/>
-        </div>}
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
         
         {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
