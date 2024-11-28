@@ -65,7 +65,7 @@ function DownloadInvoiceContainer({ recordId }: { recordId: any }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className="ml-3"> Download Invoice</Button>
+        <Button className="ml-3" variant="outline"> Download Invoice</Button>
       </DialogTrigger>
       <DialogContent className="w-screen h-[80%] overflow-auto">
         <DialogHeader>

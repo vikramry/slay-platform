@@ -1447,6 +1447,10 @@ query GetOrder($where: whereOrderInput!) {
           }
 
         }
+        variants {
+          id
+          name
+        }
         amount
         quantity
         pricePerUnit
