@@ -44,7 +44,7 @@ function InvoiceContainer() {
       )
   }
     return (
-      <div>
+      <div className='w-full px-10 py-10'>
         <div className="flex justify-end mr-10 pb-5 gap-4">
         {/* <div className='text-black h-[30px] '
             onClick={() => router.push("/")}

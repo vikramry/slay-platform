@@ -244,7 +244,7 @@ const DynamicModelTable = () => {
           cell: ({ row }) => (
             <div className="flex justify-start items-center gap-2">
               <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}><ExternalLink className="ml-2 h-4 w-4" /></Link>
-              <div title="Copy Record URL" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(`${window.location.host}/dashboard/o/${modelName}/r/${row.original?.id}`)}><Copy className="ml-2 h-4 w-4" /></div>
+              {/* <div title="Copy Record URL" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(`${window.location.host}/dashboard/o/${modelName}/r/${row.original?.id}`)}><Copy className="ml-2 h-4 w-4" /></div> */}
               <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}/edit`}><Pencil className="ml-2 h-4 w-4" /></Link>
               <Trash className="ml-2 h-4 w-4 cursor-pointer" color="#a11212" onClick={() => DeleteRecord(row.original?.id)} />
 

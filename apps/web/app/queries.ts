@@ -1469,6 +1469,34 @@ query GetOrder($where: whereOrderInput!) {
     }
   }
 }`
+export const GET_ORDER_CUSTOMER_DATA=`
+query GetOrder($where: whereOrderInput!) {
+  getOrder(where: $where) {
+    id
+    customer {
+      id
+      firstName
+      email
+      lastName
+      mobile
+    }
+  }
+}`
+
+export const GET_ADDRESS=`
+query GetAddress($where: whereAddressInput!) {
+  getAddress(where: $where) {
+    id
+    addressLine1
+    city
+    country
+    name
+    state
+    street
+    mobile
+    zipCode
+  }
+}`
 
 export const UPDATE_ORDER = `
 mutation UpdateOrder($input: updateOrderInput!) {

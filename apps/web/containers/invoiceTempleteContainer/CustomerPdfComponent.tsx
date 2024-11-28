@@ -1,155 +1,54 @@
-import React from 'react';
+import { serverFetch } from '@/app/action';
+import { useLazyQuery } from '@/app/hook';
+import { GET_ORDER_CUSTOMER_DATA } from '@/app/queries';
+import { useParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 
-function CustomerPdfComponent({
-  reference,
-  loading,
-  OrderData,
-}: {
-  reference?: any;
-  loading?: boolean;
-  OrderData?: any;
-}) {
-  if (loading) {
-    return (
-      <h4 className="flex justify-center text-[white] text-lg">
-        Loading...
-      </h4>
-    );
-  }
+function CustomerDetailsCard() {
+  const [getOrder, {data, loading, error}] = useLazyQuery(serverFetch);
+  const {recordId}=useParams()
+  useEffect(()=>{
+    getOrder(
+      GET_ORDER_CUSTOMER_DATA,
+      {
+        where: {
+          id: {
+            is: recordId
+          }
+        }
+      },
+      {
+        cache: "no-store"
+      }
+    )
+  }, [])
 
-  if (!OrderData) {
-    return (
-      <h4 className="flex justify-center text-[white] text-lg">
-        No data available
-      </h4>
-    );
-  }
-// console.log(OrderData,"orderDATAA")
-  const { customer, billingAddress, shippingAddress, payment, totalAmount, invoiceLines, discountedAmount, couponApplied } = OrderData;
-console.log(invoiceLines,"invoiceLines")
+
   return (
-    <div className=" print:bg-[white] flex justify-center  text-[black]" ref={reference}>
-      <div className="w-full bg-[white] lg:w-3/4 xl:w-2/3 shadow-lg print:shadow-none print:scale-90">
-        {/* Header Section */}
-        <header className="flex flex-col md:flex-row items-center px-8 pt-12 pb-6 text-gray-700 bg-[white] border-t-8 border-black">
-          <img
-            className="w-[200px] md:w-[200px] h-[200px] md:h-[200px] object-contain mb-6 md:mb-0"
-            src="https://res.cloudinary.com/diowg4rud/image/upload/v1732807570/Slay%20Logo.webp"
-            alt="Logo"
-          />
-          <div className="ml-auto text-right">
-            <h2 className="text-3xl font-bold text-gray-800">INVOICE:<span className='font-normal'>{OrderData?.invoiceId}</span></h2>
-            <p className="mt-2 text-gray-600">
-              Issue Date: <span>{new Date(OrderData.updatedOn).toLocaleDateString()}</span>
-            </p>
-            <p className="text-gray-600">
-              Status: <span>{OrderData?.status}</span>
-            </p>
-            <p className="text-gray-600">
-              Payment Status: <span>{payment.status}</span>
-            </p>
-          </div>
-        </header>
-
-        {/* Customer & Company Info */}
-        <div className="flex flex-col   justify-between px-8 py-6 border-b">
-          <div className="">
-            <h3 className="text-lg font-semibold">Billing</h3>
-            <p>{customer?.firstName} {customer?.lastName}</p>
-            <p>{shippingAddress.addressLine1}, {shippingAddress?.city}</p>
-            <p>{shippingAddress.state}, {shippingAddress?.country}, {shippingAddress?.zipCode}</p>
-            <p>{customer?.mobile}</p>
-          </div>
-          <div className="text-right ">
-            <h3 className="text-lg font-semibold">Shipping</h3>
-            <p>{customer?.firstName} {customer?.lastName}</p>
-            <p>{billingAddress?.addressLine1}, {billingAddress?.city}</p>
-            <p>{billingAddress?.state}, {billingAddress?.country}, {billingAddress?.zipCode}</p>
-            <p>{customer?.mobile}</p>
-          </div>
+    <div className="max-w-sm p-4 rounded-lg shadow-md bg-white border-t-black border-t-4">
+      <div className="flex flex-row justify-center mb-4">
+        <h1 className="text-xl font-bold">Customer Details</h1>
+      </div>
+      <div className="flex items-center mb-4">
+        <div>
+          <h2 className="text-lg text-gray-500">Name</h2>
+          <h2 className="text-lg text-black font-semibold">{`${data?.getOrder?.firstName} ${data?.getOrder?.lastName}`}</h2>
         </div>
-
-        {/* Items Table */}
-        {/* <div className='md:block hidden'>
-          <div className="px-8 py-6">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-700 text-white text-left">
-                  <th className="px-4 py-2">Item</th>
-                  <th className="px-4 py-2 text-right">Qty</th>
-                  <th className="px-4 py-2 text-right">Unit Price</th>
-                  <th className="px-4 py-2 text-right">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {invoiceLines.map((line: any) => (
-                  <tr className="border-b" key={line.id}>
-                    <td className="px-4 py-2">{line.productItem.name}</td>
-                    <td className="px-4 py-2 text-right">{line.quantity}</td>
-                    <td className="px-4 py-2 text-right">₹{line.pricePerUnit.toFixed(2)}</td>
-                    <td className="px-4 py-2 text-right">₹{line.amount.toFixed(2)}</td>
-                  </tr>
-                ))}
-                {discountedAmount >0 && 
-                 <tr className="border-t-2 font-bold">
-                  <td colSpan={3} className="px-4 py-2 text-right">
-                    Discount({couponApplied?.code})
-                  </td>
-                  <td className="px-4 py-2 text-right">-₹{discountedAmount}</td>
-                </tr>}
-                <tr className="border-t-2 font-bold">
-                  <td colSpan={3} className="px-4 py-2 text-right">
-                    Total
-                  </td>
-                  <td className="px-4 py-2 text-right">₹{totalAmount -discountedAmount.toFixed(2)}</td>
-                </tr>
-                
-              </tbody>
-            </table>
-          </div>
-        </div> */}
-        <div className='  '>
-        <div className="p-5">
-  <div className="grid grid-cols-4 font-bold border-b-2 pb-2">
-    <h1>Item</h1>
-    <h1 className="text-right">Qty</h1>
-    <h1 className="text-right">Unit Price</h1>
-    <h1 className="text-right">Subtotal</h1>
-  </div>
-
-  {invoiceLines.map((line: any) => (
-  <div key={line.id} className="grid grid-cols-4 items-center py-2">
-    <h1 className="w-[100%]">{line.productItem.name} {line?.variants.length>0 && `(${line?.variants[0]?.name})`}</h1>
-    <h1 className="text-right">{line.quantity}</h1>
-    <h1 className="text-right">₹{line.pricePerUnit.toFixed(2)}</h1>
-    <h1 className="text-right">₹{line.amount.toFixed(2)}</h1>
-  </div>
-))}
-
-
-  {discountedAmount > 0 && (
-    <div className="grid grid-cols-4 font-bold mt-4 border-t-2 pt-2">
-      <h1 className="col-span-3 text-right">Discount ({couponApplied?.code})</h1>
-      <h1 className="text-right">-₹{discountedAmount.toFixed(2)}</h1>
-    </div>
-  )}
-  <div className="grid grid-cols-4 font-bold mt-2 border-t-2 pt-2">
-    <h1 className="col-span-3 text-right">Total</h1>
-    <h1 className="text-right">₹{(totalAmount - discountedAmount).toFixed(2)}</h1>
-  </div>
-</div>
-
-
+      </div>
+      <div className="flex items-center mb-4">
+        <div>
+          <p className="text-gray-500">Email</p>
+          <h2 className="text-lg text-black font-semibold">{data?.getOrder?.email}</h2>
         </div>
-
-        {/* Footer */}
-        <footer className="bg-gray-700 text-white text-center py-4 print:bg-white print:text-black">
-          <p>Invoice generated on {new Date(OrderData.date).toLocaleDateString()}</p>
-          <p>&copy; 2024 SLAY Coffee. All rights reserved.</p>
-        </footer>
+      </div>
+      <div className="flex items-center">
+        <div>
+          <p className="text-gray-500">Mobile</p>
+          <h2 className="text-lg text-black font-semibold">{data?.getOrder?.mobile}</h2>
+        </div>
       </div>
     </div>
   );
 }
 
-export default CustomerPdfComponent;
+export default CustomerDetailsCard;
