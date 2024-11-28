@@ -15,13 +15,14 @@ import {
     DialogDescription,
     Button,
   } from "@repo/ui"
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineDocumentDownload } from "react-icons/hi";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import generatePDF from "react-to-pdf";
 import CustomerPdfComponent from "../orderpdfdownload";
-function DownloadInvoiceContainer({recordId}:{recordId:any}) {
+function DownloadInvoiceContainer() {
+  const {recordId}=useParams()
     const router = useRouter();
   const targetRef = useRef();
   const [customerName, setCustomerName] = useState("");
@@ -59,7 +60,8 @@ if(loading){
 }
   return (
 <Dialog >
-  <DialogTrigger><Button className="ml-3"> Download Invoice</Button></DialogTrigger>
+  <DialogTrigger>  <Button variant="outline" className="text-black font-medium ">Download Invoice</Button>
+  </DialogTrigger>
   <DialogContent className="w-screen h-[80%] overflow-auto">
     <DialogHeader>
       <DialogTitle>Invoice</DialogTitle>
