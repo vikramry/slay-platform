@@ -75,9 +75,9 @@ export default function RootLayout({
           }}
         />
         <div
-          className={`border m-2 rounded-lg overflow-hidden ${
+          className={` m-2 rounded-lg overflow-hidden ${
             isDashboard ? "h-[calc(100vh-100px)]" : "h-[calc(100vh-100px)]"
-          } dark:border-gray-700`}
+          } `}
         >
           <div className="grid grid-cols-1 md:grid-cols-12 p-3 w-full h-full gap-12">
             <div className="md:col-span-2 dark:border-gray-700">
