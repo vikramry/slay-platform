@@ -3,6 +3,8 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import image from "../../public/assets/loginSideImage.png";
 
+
+
 const Login = () => {
   return (
     <div className="grid lg:grid-cols-10 grid-cols-1 h-screen">
