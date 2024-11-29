@@ -35,7 +35,7 @@ function CustomerPdfComponent({
         <header className="flex flex-col md:flex-row items-center px-8 pt-12 pb-6 text-gray-700 bg-[white] border-t-8 border-green-700">
           <img
             className="w-2/5 md:w-1/4 mb-6 md:mb-0"
-            src="https://www.slaycoffee.in/cdn/shop/files/logo.png?v=1714476294&width=240"
+            src="https://res.cloudinary.com/diowg4rud/image/upload/v1732807570/Slay%20Logo.webp"
             alt="Logo"
           />
           <div className="ml-auto text-right">

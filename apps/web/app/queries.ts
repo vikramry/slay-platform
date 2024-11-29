@@ -647,8 +647,8 @@ query ListUsers {
 }
   `;
 export const listcomponents = `
-  query ListComponents($where: whereComponentInput) {
-    listComponents(where: $where) {
+  query ListComponents($where: whereComponentInput, $limit: Int!) {
+    listComponents(where: $where, limit: $limit) {
       docs {
         name
         label
@@ -1447,6 +1447,10 @@ query GetOrder($where: whereOrderInput!) {
           }
 
         }
+        variants {
+          id
+          name
+        }
         amount
         quantity
         pricePerUnit
@@ -1480,6 +1484,17 @@ query GetOrder($where: whereOrderInput!) {
       lastName
       mobile
     }
+  }
+}`
+
+export const GET_CUSTOMER=`
+query GetCustomer($where: whereCustomerInput!) {
+  getCustomer(where: $where) {
+    id
+    firstName
+    email
+    lastName
+    mobile
   }
 }`
 

@@ -12,7 +12,9 @@ const ListComponent = () => {
   useEffect(() => {
     listcomponentsdata(
       listcomponents,
-      {},
+      {
+        limit: 100
+      },
       {
         cache: "no-store",
       }
