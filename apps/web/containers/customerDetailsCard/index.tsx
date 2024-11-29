@@ -54,7 +54,7 @@ export { CustomerData };
 
 const CustomerCard = ({ data }: { data: any }) => {
   return (
-    <div className="max-w-sm p-4 rounded-lg shadow-md bg-white border-t-black border-t-4">
+    <div className="max-w-sm p-4 rounded-lg shadow-md bg-white border-t-black border-t-4 w-full">
       <div className="flex flex-row justify-center mb-4">
         <h1 className="text-xl font-bold">Customer Details</h1>
       </div>
