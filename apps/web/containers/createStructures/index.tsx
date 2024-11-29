@@ -91,7 +91,9 @@ const CreatStructure = ({ edit = false }: { edit?: boolean }) => {
     );
     ListComponents(
       listcomponents,
-      {},
+      {
+        limit: 100
+      },
       {
         cache: "no-store",
       }

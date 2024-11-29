@@ -4,7 +4,8 @@ import Updateshippment from "./updateShipment/index";
 import InvoiceContainer from "./invoiceTempleteContainer";
 import AddressCardContainer from "./addressCardComponent";
 import OrdersCardContainer from "./orderCardContainer";
-import CustomerDetailsCard from "./customerDetailsCard";
+import { CustomerData } from "./customerDetailsCard";
+import CustomerOrderCard from "./customerDetailsCard";
 import { AddressContainer } from "./addressCardComponent";
 export {
   ProfileForm,
@@ -13,6 +14,7 @@ export {
   InvoiceContainer,
   AddressCardContainer,
   OrdersCardContainer,
-  CustomerDetailsCard,
-  AddressContainer
+  CustomerData,
+  AddressContainer,
+  CustomerOrderCard,
 };
