@@ -18,6 +18,7 @@ import { Button } from "@repo/ui";
 import DownloadInvoiceContainer from "../downloadInvoiceContainer";
 import Updateshippment from "../updateShipment";
 import InvoiceContainer from "../invoiceTempleteContainer";
+import BreadcrumbComp from "../breadcrumb";
 
 function RecordView() {
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
@@ -150,9 +151,11 @@ function RecordView() {
     }
   }, [DynamicGetQuaryResponse?.data, DynamicGetQuaryResponse?.loading, DynamicGetQuaryResponse?.error])
   return (
-    <div>
+    <div className="w-full">
+      <div className="ml-5 mb-4">
+        <BreadcrumbComp breadcrumb={[{name: "Dashboard", url: "/dashboard", active: false}, {name: modelName as string || "Model", url: `/dashboard/o/${modelName}/list`, active: false}, {name: `Current ${modelName}`, active: true}]}/>
+      </div>
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1 dark:bg-black bg-white p-2">
-        
         {getCurrentLayoutStructuresResponse.loading || loading || ListLayoutsResponse?.loading || GetModelResponse?.loading || getCurrentLayoutStructuresResponse.loading || DynamicGetQuaryResponse?.loading ?
           <>
             {[1, 2, 3, 4, 5].map((_, index) => (
