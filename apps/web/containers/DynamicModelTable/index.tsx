@@ -11,6 +11,7 @@ import { ChevronsUpDown, Copy, ExternalLink, Pencil, Trash } from "lucide-react"
 import Link from "next/link";
 import { PulseLoader } from "react-spinners"
 import _ from "lodash";
+import BreadcrumbComp from "../breadcrumb";
 
 const DynamicModelTable = () => {
   const modelName = useParams()?.modelName;
@@ -288,7 +289,9 @@ console.log(data?.listModelFields?.docs[0]?.model?.key || data?.listModelFields?
   return (
     <div>
       <Toaster />
-
+      <div className="ml-5 mb-4">
+        <BreadcrumbComp breadcrumb={[{name: "Dashboard", url: "/dashboard", active: false}, {name: modelName as string || "Model", url: `/dashboard/o/${modelName}/list`, active: true}]}/>
+      </div>
       {columns?.length > 0 ? (
         <DataTable
           columns={columns || []}
