@@ -17,6 +17,7 @@ import {
 import { ModelFieldType } from "@/types";
 import GenerateRelationshipValues from "./GenerateRelationshipSelectItems";
 import GenerateMultiRelationshipItems from "./GenerateMultiRelationshipItems";
+import _ from "lodash";
 
 
 const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmit: Function, modelFields: ModelFieldType[], form: any, loading?: boolean }) => {
@@ -36,7 +37,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{item.label}</FormLabel>
+                          <FormLabel>{_.startCase(item.label)}</FormLabel>
                           <FormControl>
                             <Input placeholder={item.fieldName} {...field} type="text" />
                           </FormControl>
@@ -53,7 +54,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{item.label}</FormLabel>
+                          <FormLabel>{_.startCase(item.label)}</FormLabel>
                           <FormControl>
                             <DateTimePicker
                               granularity="second"
@@ -75,7 +76,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>[{item.label}]</FormLabel>
+                          <FormLabel>[{_.startCase(item.label)}]</FormLabel>
                           <FormControl>
                             <Input
                               placeholder={`Enter values separated by comma`}
@@ -122,7 +123,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                         name={item.fieldName}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{item.label}</FormLabel>
+                            <FormLabel>{_.startCase(item.label)}</FormLabel>
                             <FormControl>
                               <Select onValueChange={(val) => {
                                 if (val)
@@ -151,7 +152,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{item.label}</FormLabel>
+                          <FormLabel>{_.startCase(item.label)}</FormLabel>
                           <FormControl>
                             <MultiSelector values={form.watch(item.fieldName) || []} onValuesChange={(values) => {
                               form.setValue(item.fieldName, values)
@@ -175,7 +176,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{item.label}</FormLabel>
+                          <FormLabel>{_.startCase(item.label)}</FormLabel>
                           <FormControl>
                             <Input placeholder={item.fieldName} {...field} type="number" />
                           </FormControl>
@@ -198,7 +199,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel>{item.label}</FormLabel>
+                            <FormLabel>{_.startCase(item.label)}</FormLabel>
                           </div>
                         </FormItem>
                       )}
@@ -211,7 +212,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                       name={item.fieldName}
                       render={({ field }) => (
                         <FormItem className="">
-                          <FormLabel>{item.label}</FormLabel>
+                          <FormLabel>{_.startCase(item.label)}</FormLabel>
                           <FormControl>
                             <Select onValueChange={(value) => {
                               form.setValue(item.fieldName, value)
@@ -221,7 +222,7 @@ const DynamicForm = ({ handleSubmit, modelFields, form, loading }: { handleSubmi
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectGroup>
-                                  <SelectLabel>Select {item.label}</SelectLabel>
+                                  <SelectLabel>Select {_.startCase(item.label)}</SelectLabel>
                                   {item?.enumValues.map(
                                     (enumValue: any) => {
                                       return (
