@@ -1522,8 +1522,8 @@ mutation UpdateOrder($input: updateOrderInput!) {
 }
 `
 export const SHIPMENT_TRACKING=`
-mutation CreateShipmenttracking($input: ShipmentTrackingInput!) {
-  createShipmenttracking(input: $input) {
+mutation CreateShipmentTracking($input: ShipmentTrackingInput!) {
+  createShipmentTracking(input: $input) {
     id
     order {
       id
