@@ -23,5 +23,6 @@ export * from './ui/skeleton'
 export * from './ui/separator'
 export * from './ui/dialog'
 export * from './ui/breadcrumb'
+export * from './ui/calendar'
 
 
