@@ -150,7 +150,7 @@ export default {
                 variant: "$orderItems.variants",
               },
               productName: { $first: "$product.name" },
-              variantNames: { $first: "$variants.name" },
+              variantName: { $first: "$variants.name" },
               totalQuantity: { $sum: "$orderItems.quantity" },
               totalRevenue: {
                 $sum: {

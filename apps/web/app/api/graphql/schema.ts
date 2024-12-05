@@ -26,7 +26,7 @@ const typeDefs = `
 
   type ProductVariantInsight {
     productName: String
-    variantNames: String
+    variantName: String
     totalQuantity: Int
     totalRevenue: Float
   }
