@@ -36,7 +36,7 @@ import {
 } from "@repo/ui";
 import { Workbook } from "exceljs";
 import FileSaver from "file-saver";
-import { addDays, format } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 const DynamicModelTable = () => {
@@ -46,10 +46,10 @@ const DynamicModelTable = () => {
   const [listModelData, listModelDataResponse] = useLazyQuery(serverFetch);
   const [DeleteRecordd, DeleteRecorddResponse] = useLazyQuery(serverFetch);
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: subDays(new Date(),30),
+    to: new Date(),
   });
-
+// console.log(date,"date")
   const [columns, setColumns] = useState<any>();
 
   useEffect(() => {
@@ -434,11 +434,11 @@ const DynamicModelTable = () => {
         />
         {modelName === "Order" && (
           <div>
-            <Dialog>
+            <Dialog >
               <DialogTrigger asChild>
                 <Button variant="outline">Export</Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className=" min-w-fit">
                 <DialogHeader>
                   <DialogTitle>Export Orders</DialogTitle>
                   <DialogDescription>
@@ -446,7 +446,7 @@ const DynamicModelTable = () => {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-2">
-                  <Popover>
+                  {/* <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         id="date"
@@ -481,7 +481,15 @@ const DynamicModelTable = () => {
                         numberOfMonths={2}
                       />
                     </PopoverContent>
-                  </Popover>
+                  </Popover> */}
+                   <Calendar
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={2}
+                      />
                 </div>
                 <DialogFooter>
                   <Button type="submit" onClick={handleExcelDownload}>Export Orders</Button>

@@ -328,8 +328,8 @@ export default {
         {
           $match: {
             date: {
-              $gte: startDate,
-              $lte: endDate
+              $gte: new Date(startDate),
+              $lte: new Date(endDate)
             }
           }
         },
