@@ -3,6 +3,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@types/file-saver": "^2.0.7",
     "prettier": "^3.2.5",
     "turbo": "latest"
   },
@@ -27,6 +28,8 @@
   "dependencies": {
     "@radix-ui/react-separator": "^1.1.0",
     "cloudinary": "^2.5.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
     "lzutf8": "^0.6.3",
     "next-themes": "^0.3.0",

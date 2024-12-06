@@ -1,7 +1,8 @@
 const typeDefs = `
   type Query {
     hello: String
-    dashboardAnalytics: DashboardAnalytics
+    dashboardAnalytics: DashboardAnalytics,
+    ordersExport(startDate: DateTime!, endDate: DateTime!): JSON
   }
 
   type DashboardAnalytics {

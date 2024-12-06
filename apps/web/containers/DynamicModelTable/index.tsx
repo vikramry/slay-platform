@@ -5,6 +5,7 @@ import {
   GET_DYNAMIC_MODEL_LIST,
   getlistmodelfields,
   getModelFieldRefModelKey,
+  ORDER_EXPORT_QUERY,
 } from "@/app/queries";
 import { ModelFieldType } from "@/types";
 import { useParams } from "next/navigation";
@@ -33,6 +34,8 @@ import {
   DialogTrigger,
   Calendar,
 } from "@repo/ui";
+import { Workbook } from "exceljs";
+import FileSaver from "file-saver";
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
@@ -360,10 +363,61 @@ const DynamicModelTable = () => {
     listModelDataResponse.error,
     listModelDataResponse.loading,
   ]);
-  console.log(
-    data?.listModelFields?.docs[0]?.model?.key || data?.listModelFields?.docs,
-    "testing"
-  );
+  const handleExcelDownload = async () => {
+    let res = await serverFetch(
+      ORDER_EXPORT_QUERY,
+      {
+        "startDate": date?.from,
+        "endDate": date?.to
+      },
+      {
+        cache: "no-store",
+      }
+    );
+
+    const workBook = new Workbook();
+    workBook.creator = "Slay Admin";
+    workBook.created = new Date();
+    workBook.modified = new Date();
+    workBook.views = [
+      {
+        x: 0,
+        y: 0,
+        width: 10000,
+        height: 20000,
+        firstSheet: 0,
+        activeTab: 0,
+        visibility: "visible",
+      },
+    ];
+
+    const customers = workBook.addWorksheet("Orders List", {
+      properties: { tabColor: { argb: "00B050" } },
+      views: [{ state: "frozen", ySplit: 1 }],
+    });
+
+    customers.columns = res.ordersExport.columns.map((column: any) => ({
+      header: column.displayName,
+      key: column.id,
+    }));
+
+    res.ordersExport.orders.forEach((rowData: any) => {
+      customers.addRow(rowData);
+    });
+
+    workBook.xlsx
+      .writeBuffer()
+      .then((buffer) => {
+        const blob = new Blob([buffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8",
+        });
+        FileSaver.saveAs(blob, "Slay_Coffee_Order_List.xlsx");
+      })
+      .catch((err: any) => {
+        console.error("Error generating Excel file:", err);
+      });
+  };
+
   return (
     <div>
       <Toaster />
@@ -430,7 +484,7 @@ const DynamicModelTable = () => {
                   </Popover>
                 </div>
                 <DialogFooter>
-                  <Button type="submit">Export Orders</Button>
+                  <Button type="submit" onClick={handleExcelDownload}>Export Orders</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

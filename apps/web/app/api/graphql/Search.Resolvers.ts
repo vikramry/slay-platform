@@ -323,5 +323,192 @@ export default {
         customerInsights,
       };
     },
+    ordersExport: async (root:any, {startDate, endDate}: {startDate: string, endDate: string}, ctx: any) => {
+      const orders = await mercury.db.Order?.mongoModel.aggregate([
+        {
+          $match: {
+            date: {
+              $gte: new Date(
+                new Date().setMonth(
+                  new Date().getMonth() - 1
+                )
+              )
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: "invoices",
+            localField: "invoice",
+            foreignField: "_id",
+            as: "invoice"
+          }
+        },
+        {
+          $unwind: "$invoice"
+        },
+        {
+          $lookup: {
+            from: "customers",
+            localField: "customer",
+            foreignField: "_id",
+            as: "customer"
+          }
+        },
+        {
+          $unwind: "$customer"
+        },
+        {
+          $lookup: {
+            from: "payments",
+            localField: "invoice.payment",
+            foreignField: "_id",
+            as: "payment"
+          }
+        },
+        {
+          $unwind: "$payment"
+        },
+        {
+          $lookup: {
+            from: "addresses",
+            localField: "invoice.billingAddress",
+            foreignField: "_id",
+            as: "billingAddress"
+          }
+        },
+        {
+          $unwind: "$billingAddress"
+        },
+        {
+          $lookup: {
+            from: "addresses",
+            localField: "invoice.shippingAddress",
+            foreignField: "_id",
+            as: "shippingAddress"
+          }
+        },
+        {
+          $unwind: "$shippingAddress"
+        },
+        {
+          $lookup: {
+            from: "coupons",
+            localField: "invoice.couponApplied",
+            foreignField: "_id",
+            as: "coupon"
+          }
+        },
+        {
+          $lookup: {
+            from: "invoicelines",
+            localField: "invoice._id",
+            foreignField: "invoice",
+            as: "orderItems",
+            pipeline: [
+              {
+                $lookup: {
+                  from: "productitems",
+                  localField: "productItem",
+                  foreignField: "_id",
+                  as: "productItem"
+                }
+              },
+              {
+                $unwind: "$productItem"
+              },
+              {
+                $lookup: {
+                  from: "variants",
+                  localField: "variants",
+                  foreignField: "_id",
+                  as: "variants"
+                }
+              }
+            ]
+          }
+        },
+        {
+          $unwind: "$orderItems"
+        },
+        {
+          $project: {
+            _id: 0,
+            orderId: 1,
+            name: {$concat:["$customer.firstName", " ", "$customer.lastName"]},
+            email: "$customer.email",
+            mobileNumber: "$customer.mobile",
+            shipmentStatus: 1,
+            date: 1,
+            billingName: "$billingAddress.name",
+            billingAddressLine:
+              "$billingAddress.addressLine1",
+            billingCity: "$billingAddress.city",
+            billingCountry: "$billingAddress.country",
+            billingZipcode: "$billingAddress.zipCode",
+            billingState: "$billingAddress.state",
+            billingMobileNumber:
+              "$billingAddress.mobile",
+            shippingName: "shippingName.name",
+            shippingAddressLine:
+              "$shippingAddress.addressLine1",
+            shippingCity: "$shippingAddress.city",
+            shippingCountry: "$shippingAddress.country",
+            shippingZipcode: "$shippingAddress.zipCode",
+            shippingState: "$shippingAddress.state",
+            shippingMobileNumber:
+              "$shippingAddress.mobile",
+            couponApplied: {
+              $arrayElemAt: ["$coupon.code", 0]
+            },
+            productName: "$orderItems.productItem.name",
+            productDescription:
+              "$orderItems.productItem.description",
+            quantity: "$orderItems.quantity",
+            costPerUnit: "$orderItems.pricePerUnit",
+            varaint: {$arrayElemAt: ["$orderItems.variants.name", 0]},
+            totalCost: {
+              $subtract: [
+                "$invoice.totalAmount",
+                "$invoice.discountedAmount"
+              ]
+            }
+          }
+        }
+      ])
+      let columns = [
+        { id: 'orderId', displayName: 'Order ID' },
+        { id: 'date', displayName: 'Order Date' },
+        { id: 'shipmentStatus', displayName: 'Shipment Status' },
+        { id: 'name', displayName: 'Customer Name' },
+        { id: 'email', displayName: 'Email Address' },
+        { id: 'mobileNumber', displayName: 'Mobile Number' },
+        { id: 'billingName', displayName: 'Billing Name' },
+        { id: 'billingAddressLine', displayName: 'Billing Address Line' },
+        { id: 'billingCity', displayName: 'Billing City' },
+        { id: 'billingCountry', displayName: 'Billing Country' },
+        { id: 'billingZipcode', displayName: 'Billing Zip Code' },
+        { id: 'billingState', displayName: 'Billing State' },
+        { id: 'billingMobileNumber', displayName: 'Billing Mobile Number' },
+        { id: 'shippingName', displayName: 'Shipping Name' },
+        { id: 'shippingAddressLine', displayName: 'Shipping Address Line' },
+        { id: 'shippingCity', displayName: 'Shipping City' },
+        { id: 'shippingCountry', displayName: 'Shipping Country' },
+        { id: 'shippingZipcode', displayName: 'Shipping Zip Code' },
+        { id: 'shippingState', displayName: 'Shipping State' },
+        { id: 'shippingMobileNumber', displayName: 'Shipping Mobile Number' },
+        { id: 'productName', displayName: 'Product Name' },
+        { id: 'productDescription', displayName: 'Product Description' },
+        { id: 'quantity', displayName: 'Quantity' },
+        { id: 'costPerUnit', displayName: 'Cost Per Unit' },
+        { id: 'varaints', displayName: 'Variants' },
+        { id: 'totalCost', displayName: 'Total Cost' }
+      ];
+      
+      return {
+        orders, 
+        columns
+      }
+    }
   },
 };

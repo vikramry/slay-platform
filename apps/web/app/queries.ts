@@ -1630,3 +1630,7 @@ query GetInvoice($where: whereInvoiceInput!) {
     }  
   }
 `
+
+export const ORDER_EXPORT_QUERY=`query Query($startDate: DateTime!, $endDate: DateTime!) {
+  ordersExport(startDate: $startDate, endDate: $endDate)
+}`
