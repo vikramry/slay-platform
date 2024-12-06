@@ -328,11 +328,8 @@ export default {
         {
           $match: {
             date: {
-              $gte: new Date(
-                new Date().setMonth(
-                  new Date().getMonth() - 1
-                )
-              )
+              $gte: startDate,
+              $lte: endDate
             }
           }
         },
