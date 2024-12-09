@@ -1,6 +1,6 @@
 "use client";
 import { Label } from "@repo/ui";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -22,6 +22,13 @@ import {
   SelectGroup,
   SelectLabel,
   SelectItem,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@repo/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,6 +37,11 @@ import { serverFetch } from "@/app/action";
 import { LuX } from "react-icons/lu";
 const productData = [
   {
+    name: "product1",
+    qty: 1,
+    price: 199,
+    TotalAmount: 199,
+    type: "ck-bbl",
     name: "product1",
     qty: 1,
     price: 199,
@@ -51,7 +63,7 @@ const productData = [
     type: "ck-bbl",
   },
 ];
-import { LIST_ADDRESSES, LIST_ALL_CUSTOMERS } from "@/app/queries";
+import { LIST_ADDRESSES, LIST_ALL_CUSTOMERS,GET_COLLECTION, LIST_COLLECTION } from "@/app/queries";
 import _ from "lodash";
 
 const productSchema = z.object({
@@ -85,10 +97,26 @@ const CreateOrderContainer = () => {
   });
   const [listCustomers, { data, loading, error }] = useLazyQuery(serverFetch);
   const [listAddresses, listAddressesResponse] = useLazyQuery(serverFetch);
+  const [listColections, listColectionsResponse] = useLazyQuery(serverFetch);
+  const [listProductItems, listProductItemsResponse] =
+    useLazyQuery(serverFetch);
 
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string>("");
+  const [selectedVarentId, setSelectedVarentId] = useState<string[]>([]);
+
+  const [selectedProductItemId, setSelectedProductItemId] = useState();
   useEffect(() => {
     listCustomers(
       LIST_ALL_CUSTOMERS,
+      {
+        limit: 1000,
+      },
+      {
+        cache: "no-store",
+      }
+    );
+    listColections(
+      LIST_COLLECTION,
       {
         limit: 1000,
       },
@@ -120,6 +148,47 @@ const CreateOrderContainer = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
+  useEffect(() => {
+    if (listColectionsResponse?.data) {
+      console.log(
+        listColectionsResponse?.data?.listCollections?.docs,
+        "collections"
+      );
+    } else if (listColectionsResponse?.error) {
+      console.log(listColectionsResponse?.error, "error");
+    }
+  }, [
+    listColectionsResponse?.data,
+    listColectionsResponse?.loading,
+    listColectionsResponse?.error,
+  ]);
+
+  useEffect(() => {
+    if (selectedCollectionId) {
+      listProductItems(
+        GET_COLLECTION,
+        {
+          where: {
+            id: {
+              is: selectedCollectionId,
+            },
+          },
+        },
+        {
+          cache: "no-store",
+        }
+      );
+    }
+  }, [selectedCollectionId]);
+  useEffect(() => {}, [
+    listProductItemsResponse?.data,
+    listProductItemsResponse?.error,
+    listProductItemsResponse?.loading,
+  ]);
+  useEffect(() => {
+    console.log(selectedProductItemId, "selectedProductItemId");
+  }, [selectedProductItemId]);
 
   return (
     <div className="justify-center items-center w-full">
@@ -264,21 +333,163 @@ const CreateOrderContainer = () => {
               </div>
               <div className="justify-center items-center w-full grid grid-cols-12 col-span-12">
                 <div className="col-span-8">
-                  <div className="bg-white p-5 rounded-lg shadow-md col-span-8 flex flex-col gap-2">
+                  <div className="bg-white p-5 rounded-lg shadow-md col-span-8 flex flex-col gap-3">
                     <h4>Products</h4>
-                    <Select onValueChange={(value) => {}}>
+                    <Dialog>
+            <DialogTrigger asChild>
+              <div className="flex justify-end w-[100%]">
+                <Button variant="outline" className="w-[150px]">
+                  Add product
+                </Button>
+              </div>
+            </DialogTrigger>
+            <DialogContent className=" min-w-fit">
+              <DialogHeader>
+                <DialogTitle>Add product</DialogTitle>
+                {/* <DialogDescription>
+                  Select the timeline and export the data into an Excel.
+                </DialogDescription> */}
+              </DialogHeader>
+              <div className="grid gap-5">
+                <div className="flex flex-col gap-2">
+                <Label>Select collection</Label>
+
+                  <Select
+                    onValueChange={(value) => {
+                      setSelectedCollectionId(value);
+                    }}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Select collection" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select collection</SelectLabel>
+                        {listColectionsResponse?.data?.listCollections?.docs
+                          ?.length > 0 && (
+                          <>
+                            {listColectionsResponse?.data?.listCollections?.docs.map(
+                              (singleCollection: any) => {
+                                return (
+                                  <SelectItem value={singleCollection?.id}>
+                                    {singleCollection?.name}
+                                  </SelectItem>
+                                );
+                              }
+                            )}
+                          </>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {selectedCollectionId && listProductItemsResponse?.data && (
+                  <div className="flex flex-col gap-2">
+                    <Label>Select product</Label>
+
+                    <Select
+                      onValueChange={(value) => {
+                        const product =
+                          listProductItemsResponse?.data?.getCollection?.productItems?.find(
+                            (item: any) => item?.id == value
+                          );
+                        setSelectedProductItemId(product);
+                        setSelectedVarentId([])
+                      }}
+                    >
                       <SelectTrigger className="">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select product" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Product</SelectLabel>
-                          <SelectItem value={"kewnsfkdj"}>
-                            {"product"}
-                          </SelectItem>
+                          {listProductItemsResponse?.data?.getCollection
+                            ?.productItems?.length > 0 && (
+                            <>
+                              {listProductItemsResponse?.data?.getCollection?.productItems.map(
+                                (singleProduct: any) => {
+                                  return (
+                                    <SelectItem value={singleProduct?.id}>
+                                      {singleProduct?.name}
+                                    </SelectItem>
+                                  );
+                                }
+                              )}
+                            </>
+                          )}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                  </div>
+                )}
+                {selectedProductItemId?.product?.variantGroups && (
+                  <div>
+                    {selectedProductItemId?.product?.variantGroups?.map(
+                      (singlevarentGroup: any,index:number) => {
+                        return (
+                          <div className="flex flex-col gap-2">
+                            <Label>Select {singlevarentGroup?.label}</Label>
+
+                            <Select
+                              onValueChange={(value) => {
+                                // const product =listProductItemsResponse?.data?.getCollection?.productItems?.find((item:any)=>item?.id == value)
+                                // setSelectedProductItemId(product);
+                                const variants=selectedVarentId;
+                                variants[index]=value;
+                                setSelectedVarentId(variants);
+                              }}
+                            >
+                              <SelectTrigger className="">
+                                <SelectValue
+                                  placeholder={`Select ${singlevarentGroup?.label}`}
+                                />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>
+                                    Select {singlevarentGroup?.label}
+                                  </SelectLabel>
+                                  {singlevarentGroup?.variants?.length > 0 && (
+                                    <>
+                                      {singlevarentGroup?.variants.map(
+                                        (singleItem: any) => {
+                                          return (
+                                            <SelectItem value={singleItem?.id}>
+                                              {singleItem?.name}
+                                            </SelectItem>
+                                          );
+                                        }
+                                      )}
+                                    </>
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                )}
+              </div>
+              <DialogFooter>
+                <Button type="submit" onClick={()=>{
+                  const price= listProductItemsResponse?.data?.getCollection?.priceBook?.priceBookItems.find((productPrice:any)=>productPrice?.product?.id ===selectedProductItemId?.product?.id && _.isEqual(selectedVarentId,productPrice?.variants))
+                  console.log(price,"price")
+                  form.setValue("products", [...form.getValues("products"), {
+                    quantity:1,
+                    productItemId:selectedProductItemId?.id,
+                    productItemImage:selectedProductItemId?.images[0]?.location,
+                    productItemName:selectedProductItemId?.name,
+                    variants:selectedVarentId,
+                    pricePerUnit:price?.offerPrice,
+                    totalAmount:1*price?.offerPrice
+                  }])
+                }}>Submit</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
                     <div className="flex flex-col gap-2 ">
                       <div className="grid grid-cols-12 pb-2 border-b border-gray">
                         <h5 className="col-span-8">Product</h5>

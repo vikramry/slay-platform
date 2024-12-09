@@ -1662,3 +1662,74 @@ export const LIST_ADDRESSES=`query Docs($limit: Int!, $where: whereAddressInput)
     }
   }
 }`
+
+export const LIST_COLLECTION =`
+query Docs($limit: Int!) {
+  listCollections(limit: $limit) {
+    docs {
+      id
+      market {
+        id
+        name
+        isActive
+        currency
+      }
+      name
+    }
+  }
+}`
+
+export const GET_COLLECTION=`
+query GetCollection($where: whereCollectionInput!) {
+  getCollection(where: $where) {
+    id
+    description
+    name
+    priceBook {
+      id
+      name
+      currency
+      priceBookItems {
+        id
+        offerPrice
+        price
+        variants {
+          id
+          name
+          description
+        }
+      }
+    }
+    productItems {
+      id
+      images {
+        id
+        mimeType
+        name
+        location
+      }
+      name
+      description
+      product {
+        id
+        description
+        name
+        variantGroups {
+          id
+          name
+          label
+          variants {
+            id
+            name
+            description
+          }
+             product {
+          id
+        }
+        }
+      }
+      slug
+    }
+  }
+}
+`
