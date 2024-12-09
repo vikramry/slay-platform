@@ -498,7 +498,7 @@ export default {
         { id: 'productDescription', displayName: 'Product Description' },
         { id: 'quantity', displayName: 'Quantity' },
         { id: 'costPerUnit', displayName: 'Cost Per Unit' },
-        { id: 'varaints', displayName: 'Variants' },
+        { id: 'varaint', displayName: 'Variants' },
         { id: 'totalCost', displayName: 'Total Cost' }
       ];
       

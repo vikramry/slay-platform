@@ -50,30 +50,42 @@ const productData=[
     type:"ck-bbl"
   }
 ]
+const productSchema = z.object({
+  productItem: z.string({ required_error: "Product is required" }),
+  quantity: z.coerce.number(),
+  pricePerUnit: z.coerce.number(),
+  variants: z.array(z.string()).optional(),
+  totalAmount: z.coerce.number()
+});
+
+const formSchema = z.object({
+  customer : z.string({
+    required_error: "Customer is required",
+  }),
+  shippingAddress: z.string().optional(),
+  billingAddress: z.string().optional(),
+  isBillingSameAsShipping: z.boolean(),
+  products: z.array(productSchema),
+  totalAmount: z.coerce.number()
+});
+
 const CreateOrderContainer = () => {
-  const [listProducts,{data,loading,error}]=useLazyQuery(serverFetch)
-  const formSchema = z.object({
-    name: z.string({
-      required_error: "Name is required",
-    }),
-    label: z.string({
-      required_error: "Label is required",
-    }),
-    key: z.string().optional(),
-    managed: z.boolean(),
-    prefix: z.string().optional(),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      isBillingSameAsShipping: false
+    },
   });
-// useEffect(()=>{
-//   listProducts()
-// },[])
-  /*
-        create customer
-        create Invoice
-        create Invoice Lines
-      */
+  const [getCustomersAddresses, {data, loading, error}] = useLazyQuery(serverFetch);
+
+  useEffect(()=>{
+    getCustomersAddresses(
+
+    )
+  }, [])
+  
   return (
     <div className="justify-center items-center w-full grid grid-cols-12">
-      {/* <Label className="text-lg">Custom Customer Order</Label> */}
       <div className="col-span-8">
 
       <div className="bg-white p-5 rounded-lg shadow-md col-span-8 flex flex-col gap-2">
@@ -126,3 +138,5 @@ const CreateOrderContainer = () => {
 };
 
 export default CreateOrderContainer;
+
+
