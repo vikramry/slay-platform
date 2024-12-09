@@ -1,6 +1,6 @@
 "use client";
-import { Label } from '@repo/ui'
-import React from 'react'
+import { Label } from "@repo/ui";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -21,39 +21,57 @@ import {
   SelectContent,
   SelectGroup,
   SelectLabel,
-  SelectItem
+  SelectItem,
 } from "@repo/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 
+const productSchema = z.object({
+  productItem: z.string({ required_error: "Product is required" }),
+  quantity: z.coerce.number(),
+  pricePerUnit: z.coerce.number(),
+  variants: z.array(z.string()).optional(),
+  totalAmount: z.coerce.number()
+});
+
+const formSchema = z.object({
+  customer : z.string({
+    required_error: "Customer is required",
+  }),
+  shippingAddress: z.string().optional(),
+  billingAddress: z.string().optional(),
+  isBillingSameAsShipping: z.boolean(),
+  products: z.array(productSchema),
+  totalAmount: z.coerce.number()
+});
+
 const CreateOrderContainer = () => {
-    const formSchema = z.object({
-        name: z.string({
-          required_error: "Name is required"
-        }),
-        label: z.string({
-          required_error: "Label is required"
-        }),
-        key: z.string().optional(),
-        managed: z.boolean(),
-        prefix: z.string().optional(),
-      });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      isBillingSameAsShipping: false
+    },
+  });
+  const [getCustomersAddresses, {data, loading, error}] = useLazyQuery(serverFetch);
 
-      /*
-        create customer
-        create Invoice
-        create Invoice Lines
-      */
+  useEffect(()=>{
+    getCustomersAddresses(
+
+    )
+  }, [])
+  
   return (
-    <div className='justify-center items-center w-full'>
-        <Label className="text-lg">Custom Customer Order</Label>
-        <div>
-
-        </div>
+    <div className="justify-center items-center w-full">
+      <Label className="text-lg">Custom Customer Order</Label>
+      <div>
+        
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateOrderContainer
+export default CreateOrderContainer;
+
+
