@@ -53,6 +53,7 @@ const productData = [
 ];
 import { LIST_ADDRESSES, LIST_ALL_CUSTOMERS } from "@/app/queries";
 import _ from "lodash";
+import Image from "next/image";
 
 const productSchema = z.object({
   productItemId: z.string().optional(),
@@ -99,6 +100,9 @@ const CreateOrderContainer = () => {
   }, []);
 
   useEffect(() => {
+    form.setValue("billingAddress", "");
+    form.setValue("shippingAddress", "");
+
     if (!_.isEmpty(data)) {
       listAddresses(
         LIST_ADDRESSES,
@@ -167,7 +171,12 @@ const CreateOrderContainer = () => {
                     <FormLabel>Shipping Address</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(value: any) => {
+                          form.setValue("shippingAddress", value);
+                          if (form.watch("isBillingSameAsShipping")) {
+                            form.setValue("billingAddress", value);
+                          }
+                        }}
                         value={field.value}
                       >
                         <SelectTrigger className="">
@@ -205,7 +214,15 @@ const CreateOrderContainer = () => {
                       <FormControl>
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(value: any) => {
+                            if (value) {
+                              form.setValue(
+                                "billingAddress",
+                                form.watch("shippingAddress")
+                              );
+                            }
+                            form.setValue("isBillingSameAsShipping", value);
+                          }}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none break-words">
@@ -229,11 +246,7 @@ const CreateOrderContainer = () => {
                         <Select
                           disabled={form.watch("isBillingSameAsShipping")}
                           onValueChange={field.onChange}
-                          value={
-                            form.watch("isBillingSameAsShipping")
-                              ? form.watch("shippingAddress")
-                              : field.value
-                          }
+                          value={field.value}
                         >
                           <SelectTrigger className="">
                             <SelectValue placeholder="Select Billing Address" />
@@ -290,8 +303,18 @@ const CreateOrderContainer = () => {
                         ?.map((item: any, index: number) => {
                           return (
                             <div className="grid grid-cols-12 pb-2 border-b border-gray items-center">
-                              <div className="col-span-8">
-                                <h5>{item?.productItemName}</h5>
+                              <div className="col-span-8 flex justify-center items-center">
+                                <Image
+                                  src={item?.productItemImage}
+                                  alt={`${index}-img`}
+                                  width={100}
+                                  height={100}
+                                  className="h-25 w-25"
+                                />
+                                <div className="flex flex-col justify-start items-center">
+                                  <h5>{item?.productItemName}</h5>
+                                  <h6>{`₹ ${item?.pricePerUnit}.00`}</h6>
+                                </div>
                               </div>
                               <Input
                                 type="text"
