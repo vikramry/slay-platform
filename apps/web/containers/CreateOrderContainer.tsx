@@ -111,7 +111,7 @@ const CreateOrderContainer = () => {
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>("");
   const [selectedVarentId, setSelectedVarentId] = useState<string[]>([]);
 
-  const [selectedProductItemId, setSelectedProductItemId] = useState();
+  const [selectedProductItemId, setSelectedProductItemId] = useState<any>();
   useEffect(() => {
     listCustomers(
       LIST_ALL_CUSTOMERS,
@@ -420,7 +420,7 @@ const CreateOrderContainer = () => {
                     {form.watch("products")?.map((item: any, index: number) => {
                       return (
                         <div className="grid grid-cols-12 pb-2 border-b border-gray items-center">
-                          <div className="col-span-8 flex justify-start items-center">
+                          <div className="col-span-8 flex justify-start items-center gap-2">
                             <img
                               src={item?.productItemImage}
                               alt={`${index}-img`}
@@ -435,6 +435,7 @@ const CreateOrderContainer = () => {
                           </div>
                           <Input
                             type="number"
+                            min={"1"}
                             placeholder="Enter quantity"
                             className="col-span-1 text-center"
                             value={item?.quantity}
