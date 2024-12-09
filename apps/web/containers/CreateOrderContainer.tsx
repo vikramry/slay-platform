@@ -1,5 +1,5 @@
 "use client";
-import { Label } from "@repo/ui";
+import { DialogClose, Label } from "@repo/ui";
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -268,7 +268,7 @@ const CreateOrderContainer = () => {
                         </div>
 
                         {selectedCollectionId &&
-                          listProductItemsResponse?.data && (
+                          listProductItemsResponse?.data  && (
                             <div className="flex flex-col gap-2">
                               <Label>Select product</Label>
 
@@ -310,6 +310,7 @@ const CreateOrderContainer = () => {
                               </Select>
                             </div>
                           )}
+                          {listProductItemsResponse?.loading &&<h5 className="text-gray-500 text-center text-sm">Loading...</h5>}
                         {selectedProductItemId?.product?.variantGroups && (
                           <div>
                             {selectedProductItemId?.product?.variantGroups?.map(
@@ -365,7 +366,7 @@ const CreateOrderContainer = () => {
                           </div>
                         )}
                       </div>
-                      <DialogFooter>
+                      <DialogClose>
                         <Button
                           onClick={() => {
                             const price =
@@ -399,16 +400,20 @@ const CreateOrderContainer = () => {
                                 totalAmount: 1 * price?.offerPrice,
                               },
                             ]);
+                            setSelectedCollectionId("")
+                            setSelectedProductItemId({})
+                            setSelectedVarentId([])
+                            
                           }}
                         >
                           Submit
                         </Button>
-                      </DialogFooter>
+                      </DialogClose>
                     </DialogContent>
                   </Dialog>
                   <div className="flex flex-col gap-2 ">
-                    <div className="grid grid-cols-12 pb-2 border-b border-gray">
-                      <h5 className="col-span-8">Product</h5>
+                    <div className="grid grid-cols-12 pb-2 border-b border-gray text-gray-500">
+                      <h5 className="col-span-8 ">Product</h5>
                       <h5 className="col-span-1 text-center">Quantity</h5>
                       <h5 className="col-span-2 text-center">Total</h5>
                     </div>
@@ -466,6 +471,9 @@ const CreateOrderContainer = () => {
                         </div>
                       );
                     })}
+                    {form.watch("products").length ==0 && (
+                      <div><h5 className="text-gray-500 text-center">No products added</h5> </div>
+                    )}
                   </div>
                 </div>
                 <div className="bg-white p-5 rounded-lg shadow-md col-span-8 flex flex-col gap-2 mt-5">
