@@ -1693,6 +1693,9 @@ query GetCollection($where: whereCollectionInput!) {
         id
         offerPrice
         price
+        product {
+          id
+        }
         variants {
           id
           name
@@ -1723,9 +1726,6 @@ query GetCollection($where: whereCollectionInput!) {
             name
             description
           }
-             product {
-          id
-        }
         }
       }
       slug

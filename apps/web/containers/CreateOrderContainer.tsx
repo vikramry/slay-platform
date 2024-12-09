@@ -63,7 +63,12 @@ const productData = [
     type: "ck-bbl",
   },
 ];
-import { LIST_ADDRESSES, LIST_ALL_CUSTOMERS,GET_COLLECTION, LIST_COLLECTION } from "@/app/queries";
+import {
+  LIST_ADDRESSES,
+  LIST_ALL_CUSTOMERS,
+  GET_COLLECTION,
+  LIST_COLLECTION,
+} from "@/app/queries";
 import _ from "lodash";
 import Image from "next/image";
 
@@ -349,127 +354,45 @@ const CreateOrderContainer = () => {
                   <div className="bg-white p-5 rounded-lg shadow-md col-span-8 flex flex-col gap-3">
                     <h4>Products</h4>
                     <Dialog>
-            <DialogTrigger asChild>
-              <div className="flex justify-end w-[100%]">
-                <Button variant="outline" className="w-[150px]">
-                  Add product
-                </Button>
-              </div>
-            </DialogTrigger>
-            <DialogContent className=" min-w-fit">
-              <DialogHeader>
-                <DialogTitle>Add product</DialogTitle>
-                {/* <DialogDescription>
+                      <DialogTrigger asChild>
+                        <div className="flex justify-end w-[100%]">
+                          <Button variant="outline" className="w-[150px]">
+                            Add product
+                          </Button>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className=" min-w-fit">
+                        <DialogHeader>
+                          <DialogTitle>Add product</DialogTitle>
+                          {/* <DialogDescription>
                   Select the timeline and export the data into an Excel.
                 </DialogDescription> */}
-              </DialogHeader>
-              <div className="grid gap-5">
-                <div className="flex flex-col gap-2">
-                <Label>Select collection</Label>
-
-                  <Select
-                    onValueChange={(value) => {
-                      setSelectedCollectionId(value);
-                    }}
-                  >
-                    <SelectTrigger className="">
-                      <SelectValue placeholder="Select collection" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Select collection</SelectLabel>
-                        {listColectionsResponse?.data?.listCollections?.docs
-                          ?.length > 0 && (
-                          <>
-                            {listColectionsResponse?.data?.listCollections?.docs.map(
-                              (singleCollection: any) => {
-                                return (
-                                  <SelectItem value={singleCollection?.id}>
-                                    {singleCollection?.name}
-                                  </SelectItem>
-                                );
-                              }
-                            )}
-                          </>
-                        )}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {selectedCollectionId && listProductItemsResponse?.data && (
-                  <div className="flex flex-col gap-2">
-                    <Label>Select product</Label>
-
-                    <Select
-                      onValueChange={(value) => {
-                        const product =
-                          listProductItemsResponse?.data?.getCollection?.productItems?.find(
-                            (item: any) => item?.id == value
-                          );
-                        setSelectedProductItemId(product);
-                        setSelectedVarentId([])
-                      }}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder="Select product" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Select Product</SelectLabel>
-                          {listProductItemsResponse?.data?.getCollection
-                            ?.productItems?.length > 0 && (
-                            <>
-                              {listProductItemsResponse?.data?.getCollection?.productItems.map(
-                                (singleProduct: any) => {
-                                  return (
-                                    <SelectItem value={singleProduct?.id}>
-                                      {singleProduct?.name}
-                                    </SelectItem>
-                                  );
-                                }
-                              )}
-                            </>
-                          )}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-                {selectedProductItemId?.product?.variantGroups && (
-                  <div>
-                    {selectedProductItemId?.product?.variantGroups?.map(
-                      (singlevarentGroup: any,index:number) => {
-                        return (
+                        </DialogHeader>
+                        <div className="grid gap-5">
                           <div className="flex flex-col gap-2">
-                            <Label>Select {singlevarentGroup?.label}</Label>
+                            <Label>Select collection</Label>
 
                             <Select
                               onValueChange={(value) => {
-                                // const product =listProductItemsResponse?.data?.getCollection?.productItems?.find((item:any)=>item?.id == value)
-                                // setSelectedProductItemId(product);
-                                const variants=selectedVarentId;
-                                variants[index]=value;
-                                setSelectedVarentId(variants);
+                                setSelectedCollectionId(value);
                               }}
                             >
                               <SelectTrigger className="">
-                                <SelectValue
-                                  placeholder={`Select ${singlevarentGroup?.label}`}
-                                />
+                                <SelectValue placeholder="Select collection" />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectGroup>
-                                  <SelectLabel>
-                                    Select {singlevarentGroup?.label}
-                                  </SelectLabel>
-                                  {singlevarentGroup?.variants?.length > 0 && (
+                                  <SelectLabel>Select collection</SelectLabel>
+                                  {listColectionsResponse?.data?.listCollections
+                                    ?.docs?.length > 0 && (
                                     <>
-                                      {singlevarentGroup?.variants.map(
-                                        (singleItem: any) => {
+                                      {listColectionsResponse?.data?.listCollections?.docs.map(
+                                        (singleCollection: any) => {
                                           return (
-                                            <SelectItem value={singleItem?.id}>
-                                              {singleItem?.name}
+                                            <SelectItem
+                                              value={singleCollection?.id}
+                                            >
+                                              {singleCollection?.name}
                                             </SelectItem>
                                           );
                                         }
@@ -480,29 +403,147 @@ const CreateOrderContainer = () => {
                               </SelectContent>
                             </Select>
                           </div>
-                        );
-                      }
-                    )}
-                  </div>
-                )}
-              </div>
-              <DialogFooter>
-                <Button type="submit" onClick={()=>{
-                  const price= listProductItemsResponse?.data?.getCollection?.priceBook?.priceBookItems.find((productPrice:any)=>productPrice?.product?.id ===selectedProductItemId?.product?.id && _.isEqual(selectedVarentId,productPrice?.variants))
-                  console.log(price,"price")
-                  form.setValue("products", [...form.getValues("products"), {
-                    quantity:1,
-                    productItemId:selectedProductItemId?.id,
-                    productItemImage:selectedProductItemId?.images[0]?.location,
-                    productItemName:selectedProductItemId?.name,
-                    variants:selectedVarentId,
-                    pricePerUnit:price?.offerPrice,
-                    totalAmount:1*price?.offerPrice
-                  }])
-                }}>Submit</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+
+                          {selectedCollectionId &&
+                            listProductItemsResponse?.data && (
+                              <div className="flex flex-col gap-2">
+                                <Label>Select product</Label>
+
+                                <Select
+                                  onValueChange={(value) => {
+                                    const product =
+                                      listProductItemsResponse?.data?.getCollection?.productItems?.find(
+                                        (item: any) => item?.id == value
+                                      );
+                                    setSelectedProductItemId(product);
+                                    setSelectedVarentId([]);
+                                  }}
+                                >
+                                  <SelectTrigger className="">
+                                    <SelectValue placeholder="Select product" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      <SelectLabel>Select Product</SelectLabel>
+                                      {listProductItemsResponse?.data
+                                        ?.getCollection?.productItems?.length >
+                                        0 && (
+                                        <>
+                                          {listProductItemsResponse?.data?.getCollection?.productItems.map(
+                                            (singleProduct: any) => {
+                                              return (
+                                                <SelectItem
+                                                  value={singleProduct?.id}
+                                                >
+                                                  {singleProduct?.name}
+                                                </SelectItem>
+                                              );
+                                            }
+                                          )}
+                                        </>
+                                      )}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+                          {selectedProductItemId?.product?.variantGroups && (
+                            <div>
+                              {selectedProductItemId?.product?.variantGroups?.map(
+                                (singlevarentGroup: any, index: number) => {
+                                  return (
+                                    <div className="flex flex-col gap-2">
+                                      <Label>
+                                        Select {singlevarentGroup?.label}
+                                      </Label>
+
+                                      <Select
+                                        onValueChange={(value) => {
+                                          // const product =listProductItemsResponse?.data?.getCollection?.productItems?.find((item:any)=>item?.id == value)
+                                          // setSelectedProductItemId(product);
+                                          const variants = selectedVarentId;
+                                          variants[index] = value;
+                                          setSelectedVarentId(variants);
+                                        }}
+                                      >
+                                        <SelectTrigger className="">
+                                          <SelectValue
+                                            placeholder={`Select ${singlevarentGroup?.label}`}
+                                          />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectGroup>
+                                            <SelectLabel>
+                                              Select {singlevarentGroup?.label}
+                                            </SelectLabel>
+                                            {singlevarentGroup?.variants
+                                              ?.length > 0 && (
+                                              <>
+                                                {singlevarentGroup?.variants.map(
+                                                  (singleItem: any) => {
+                                                    return (
+                                                      <SelectItem
+                                                        value={singleItem?.id}
+                                                      >
+                                                        {singleItem?.name}
+                                                      </SelectItem>
+                                                    );
+                                                  }
+                                                )}
+                                              </>
+                                            )}
+                                          </SelectGroup>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <DialogFooter>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              const price =
+                                listProductItemsResponse?.data?.getCollection?.priceBook?.priceBookItems.find(
+                                  (productPrice: any) => {
+                                    console.log(productPrice);
+
+                                    return (
+                                      productPrice?.product?.id ===
+                                        selectedProductItemId?.product?.id &&
+                                      _.isEqual(
+                                        selectedVarentId,
+                                        productPrice?.variants.map(
+                                          (item: any) => item.id
+                                        )
+                                      )
+                                    );
+                                  }
+                                );
+                              console.log(price, "price");
+                              form.setValue("products", [
+                                ...(form.getValues("products") || []),
+                                {
+                                  quantity: 1,
+                                  productItemId: selectedProductItemId?.id,
+                                  productItemImage:
+                                    selectedProductItemId?.images[0]?.location,
+                                  productItemName: selectedProductItemId?.name,
+                                  variants: selectedVarentId,
+                                  pricePerUnit: price?.offerPrice,
+                                  totalAmount: 1 * price?.offerPrice,
+                                },
+                              ]);
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                     <div className="flex flex-col gap-2 ">
                       <div className="grid grid-cols-12 pb-2 border-b border-gray">
                         <h5 className="col-span-8">Product</h5>
@@ -515,7 +556,7 @@ const CreateOrderContainer = () => {
                           return (
                             <div className="grid grid-cols-12 pb-2 border-b border-gray items-center">
                               <div className="col-span-8 flex justify-center items-center">
-                                <Image
+                                <img
                                   src={item?.productItemImage}
                                   alt={`${index}-img`}
                                   width={100}
@@ -528,7 +569,7 @@ const CreateOrderContainer = () => {
                                 </div>
                               </div>
                               <Input
-                                type="text"
+                                type="number"
                                 placeholder="Enter quantity"
                                 className="col-span-1 text-center"
                                 value={item?.quantity}
@@ -553,7 +594,7 @@ const CreateOrderContainer = () => {
                                 }}
                               />
                               <h5 className="col-span-2 text-center">{`₹ ${item?.totalAmount}.00`}</h5>
-                              <LuX size={20} />
+                              <LuX size={20} onClick={}/>
                             </div>
                           );
                         })}
