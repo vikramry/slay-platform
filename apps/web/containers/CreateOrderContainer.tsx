@@ -199,6 +199,14 @@ const CreateOrderContainer = () => {
     console.log(selectedProductItemId, "selectedProductItemId");
   }, [selectedProductItemId]);
 
+
+  useEffect(()=>{
+    const newTotalAmount = form.getValues("products").reduce(
+      (sum, product) => sum + product.totalAmount,
+      0
+    );
+    form.setValue("totalAmount", newTotalAmount);
+  }, [form.watch("products")])
   return (
     <div className="justify-center items-center w-full">
       <Label className="text-lg">Custom Customer Order</Label>
@@ -504,7 +512,6 @@ const CreateOrderContainer = () => {
                         </div>
                         <DialogFooter>
                           <Button
-                            type="button"
                             onClick={() => {
                               const price =
                                 listProductItemsResponse?.data?.getCollection?.priceBook?.priceBookItems.find(
@@ -594,7 +601,11 @@ const CreateOrderContainer = () => {
                                 }}
                               />
                               <h5 className="col-span-2 text-center">{`₹ ${item?.totalAmount}.00`}</h5>
-                              <LuX size={20} onClick={}/>
+                              <LuX size={20} className="cursor-pointer" onClick={()=>{
+                                const products = form.getValues("products");
+                                products.splice(index, 1);
+                                form.setValue("products", products)
+                              }}/>
                             </div>
                           );
                         })}
