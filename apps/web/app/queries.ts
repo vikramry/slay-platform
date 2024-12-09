@@ -1634,3 +1634,31 @@ query GetInvoice($where: whereInvoiceInput!) {
 export const ORDER_EXPORT_QUERY=`query Query($startDate: DateTime!, $endDate: DateTime!) {
   ordersExport(startDate: $startDate, endDate: $endDate)
 }`
+
+export const  LIST_ALL_CUSTOMERS=`query Docs($limit: Int!) {
+  listCustomers(limit: $limit) {
+    docs {
+      id
+      firstName
+      email
+      lastName
+      mobile
+    }
+  }
+}`
+
+export const LIST_ADDRESSES=`query Docs($limit: Int!, $where: whereAddressInput) {
+  listAddresss(limit: $limit, where: $where) {
+    docs {
+      id
+      name
+      addressLine1
+      state
+      street
+      zipCode
+      landmark
+      city
+      mobile
+    }
+  }
+}`
