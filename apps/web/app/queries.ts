@@ -1522,8 +1522,8 @@ mutation UpdateOrder($input: updateOrderInput!) {
 }
 `
 export const SHIPMENT_TRACKING=`
-mutation CreateShipmenttracking($input: ShipmenttrackingInput!) {
-  createShipmenttracking(input: $input) {
+mutation CreateShipmentTracking($input: ShipmentTrackingInput!) {
+  createShipmentTracking(input: $input) {
     id
     order {
       id
@@ -1629,4 +1629,107 @@ query GetInvoice($where: whereInvoiceInput!) {
         document
     }  
   }
+`
+
+export const ORDER_EXPORT_QUERY=`query Query($startDate: DateTime!, $endDate: DateTime!) {
+  ordersExport(startDate: $startDate, endDate: $endDate)
+}`
+
+export const  LIST_ALL_CUSTOMERS=`query Docs($limit: Int!) {
+  listCustomers(limit: $limit) {
+    docs {
+      id
+      firstName
+      email
+      lastName
+      mobile
+    }
+  }
+}`
+
+export const LIST_ADDRESSES=`query Docs($limit: Int!, $where: whereAddressInput) {
+  listAddresss(limit: $limit, where: $where) {
+    docs {
+      id
+      name
+      addressLine1
+      state
+      street
+      zipCode
+      landmark
+      city
+      mobile
+    }
+  }
+}`
+
+export const LIST_COLLECTION =`
+query Docs($limit: Int!) {
+  listCollections(limit: $limit) {
+    docs {
+      id
+      market {
+        id
+        name
+        isActive
+        currency
+      }
+      name
+    }
+  }
+}`
+
+export const GET_COLLECTION=`
+query GetCollection($where: whereCollectionInput!) {
+  getCollection(where: $where) {
+    id
+    description
+    name
+    priceBook {
+      id
+      name
+      currency
+      priceBookItems {
+        id
+        offerPrice
+        price
+        product {
+          id
+        }
+        variants {
+          id
+          name
+          description
+        }
+      }
+    }
+    productItems {
+      id
+      images {
+        id
+        mimeType
+        name
+        location
+      }
+      name
+      description
+      product {
+        id
+        description
+        name
+        variantGroups {
+          id
+          name
+          label
+          variants {
+            id
+            name
+            description
+          }
+        }
+      }
+      slug
+    }
+  }
+}
 `
