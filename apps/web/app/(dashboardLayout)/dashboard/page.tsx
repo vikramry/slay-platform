@@ -1,10 +1,11 @@
 import React from 'react'
 import DynamicLayout from '../../dynamicLayout'
+import DashboardAnalyticsContainer from '@/containers/dashboardAnalyticsContainer'
 
 const page = () => {
     return (
         <div>
-            {/* <DynamicLayout /> */}
+            <DashboardAnalyticsContainer/>
         </div>
     )
 }

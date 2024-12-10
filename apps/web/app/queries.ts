@@ -1733,3 +1733,39 @@ query GetCollection($where: whereCollectionInput!) {
   }
 }
 `
+
+
+export const DASHBOARD_ANALYTICS=`
+query DashboardAnalytics($orderRevenueBy: timeFrame) {
+  dashboardAnalytics(orderRevenueBy: $orderRevenueBy) {
+    orderRevenueInsights {
+      dailyRevenue
+      orderCount
+      date
+    }
+    orderShipmentStatusInsights {
+      status
+      count
+    }
+    orderedProductVariantInsights {
+      productName
+      variantName
+      totalQuantity
+      totalRevenue
+    }
+    couponsInsights {
+      couponCode
+      usageCount
+      totalDiscount
+    }
+    inventoryInsights {
+      product
+      availableQuantity
+    }
+    customerInsights {
+      totalOrders
+      totalRevenue
+      customerName
+    }
+  }
+}`
