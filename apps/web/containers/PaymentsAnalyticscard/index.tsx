@@ -60,12 +60,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function PaymentAnalyticsCard() {
+export function BarChartCard({title,data}:{title?:string,data?:any}) {
   return (
-    <Card className="w-[22rem] h-[22rem]">
+    <Card className="">
       <CardHeader>
-        <CardTitle>Payment Analytics</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -104,14 +104,14 @@ export function PaymentAnalyticsCard() {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
+      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing total Payments for the last 6 months
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   )
 }

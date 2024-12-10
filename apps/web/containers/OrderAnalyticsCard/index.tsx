@@ -36,11 +36,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function OrderAnalyticsCard() {
+export function AreaChartCard({title,data}:{title?:string,data?:any}) {
   return (
-    <Card className="w-[22rem] h-[22rem]"> 
+    <Card className=" "> 
       <CardHeader className="pb-1">
-        <CardTitle className="text-sm">Weekly Orders</CardTitle>
+        <CardTitle className="text-sm">{title}</CardTitle>
         <CardDescription className="text-xs">
           Total Orders in the past week
         </CardDescription>
