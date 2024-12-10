@@ -1,7 +1,7 @@
 const typeDefs = `
   type Query {
     hello: String
-    dashboardAnalytics: DashboardAnalytics,
+    dashboardAnalytics(orderRevenueBy: timeFrame): DashboardAnalytics,
     ordersExport(startDate: DateTime!, endDate: DateTime!): JSON
   }
 
@@ -12,6 +12,12 @@ const typeDefs = `
     couponsInsights: [CouponInsight]
     inventoryInsights: [InventoryInsight]
     customerInsights: [CustomerInsight]
+  }
+
+  enum timeFrame {
+    MONTH
+    YEAR
+    DAY
   }
 
   type OrderRevenueInsight {

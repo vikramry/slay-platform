@@ -9,7 +9,9 @@ export default {
 
       return "Hello";
     },
-    dashboardAnalytics: async (root: any, {}, ctx: any) => {
+    dashboardAnalytics: async (root: any, {
+      orderRevenueBy = "DAY"
+    }: {orderRevenueBy: string}, ctx: any) => {
       /*
         Revenue Received per day - compare the payment from last month revenue - Total month revenue
         Daily Order count - same compare with last week order count
@@ -23,6 +25,19 @@ export default {
         Top 5 customers - either by most orders or most revenue
       */
 
+      const getDateFromOrderRevenueBy = (timeType: string) => {
+        switch(timeType) {
+          case "DAY": 
+            return "%Y-%m-%d";
+          case "MONTH": 
+            return "%Y-%m";
+          case "YEAR": 
+            return "%Y";
+          default: 
+            return "%Y-%m-%d";
+        }
+      }
+
       const [
         orderRevenueInsights,
         orderShipmentStatusInsights,
@@ -32,13 +47,13 @@ export default {
         customerInsights,
       ] = await Promise.all([
         mercury.db.Order?.mongoModel.aggregate([
-          {
-            $match: {
-              date: {
-                $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-              },
-            },
-          },
+          // {
+          //   $match: {
+          //     date: {
+          //       $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+          //     },
+          //   },
+          // },
           {
             $lookup: {
               from: "invoices",
@@ -69,7 +84,7 @@ export default {
           {
             $group: {
               _id: {
-                date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+                date: { $dateToString: { format: getDateFromOrderRevenueBy(orderRevenueBy), date: "$date" } },
               },
               dailyRevenue: { $sum: { $toDouble: "$payment.amount" } },
               orderCount: { $sum: 1 },
@@ -85,7 +100,7 @@ export default {
               dailyRevenue: 1,
               orderCount: 1,
             },
-          },
+          }
         ]),
         mercury.db.Order?.mongoModel.aggregate([
           {
