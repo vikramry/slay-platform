@@ -78,7 +78,14 @@ const productSchema = z.object({
   productItemImage: z.string().optional(),
   quantity: z.coerce.number(),
   pricePerUnit: z.coerce.number(),
-  variants: z.array(z.string()).optional(),
+  variants: z
+    .array(
+      z.object({
+        name: z.string(),
+        id: z.string(),
+      })
+    )
+    .optional(),
   totalAmount: z.coerce.number(),
 });
 
@@ -109,7 +116,7 @@ const CreateOrderContainer = () => {
     useLazyQuery(serverFetch);
 
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>("");
-  const [selectedVarentId, setSelectedVarentId] = useState<string[]>([]);
+  const [selectedVarentId, setSelectedVarentId] = useState<any[]>([]);
 
   const [selectedProductItemId, setSelectedProductItemId] = useState<any>();
   useEffect(() => {
@@ -197,8 +204,8 @@ const CreateOrderContainer = () => {
     listProductItemsResponse?.loading,
   ]);
   useEffect(() => {
-    console.log(selectedProductItemId, "selectedProductItemId");
-  }, [selectedProductItemId]);
+    console.log(form.getValues("products"), "products");
+  }, [form.watch("products")]);
 
   useEffect(() => {
     const newTotalAmount = form
@@ -268,7 +275,7 @@ const CreateOrderContainer = () => {
                         </div>
 
                         {selectedCollectionId &&
-                          listProductItemsResponse?.data  && (
+                          listProductItemsResponse?.data && (
                             <div className="flex flex-col gap-2">
                               <Label>Select product</Label>
 
@@ -310,7 +317,11 @@ const CreateOrderContainer = () => {
                               </Select>
                             </div>
                           )}
-                          {listProductItemsResponse?.loading &&<h5 className="text-gray-500 text-center text-sm">Loading...</h5>}
+                        {listProductItemsResponse?.loading && (
+                          <h5 className="text-gray-500 text-center text-sm">
+                            Loading...
+                          </h5>
+                        )}
                         {selectedProductItemId?.product?.variantGroups && (
                           <div>
                             {selectedProductItemId?.product?.variantGroups?.map(
@@ -323,8 +334,6 @@ const CreateOrderContainer = () => {
 
                                     <Select
                                       onValueChange={(value) => {
-                                        // const product =listProductItemsResponse?.data?.getCollection?.productItems?.find((item:any)=>item?.id == value)
-                                        // setSelectedProductItemId(product);
                                         const variants = selectedVarentId;
                                         variants[index] = value;
                                         setSelectedVarentId(variants);
@@ -347,7 +356,10 @@ const CreateOrderContainer = () => {
                                                 (singleItem: any) => {
                                                   return (
                                                     <SelectItem
-                                                      value={singleItem?.id}
+                                                      value={{
+                                                        id: singleItem?.id,
+                                                        name: singleItem?.name,
+                                                      }}
                                                     >
                                                       {singleItem?.name}
                                                     </SelectItem>
@@ -372,21 +384,21 @@ const CreateOrderContainer = () => {
                             const price =
                               listProductItemsResponse?.data?.getCollection?.priceBook?.priceBookItems.find(
                                 (productPrice: any) => {
-                                  console.log(productPrice);
-
                                   return (
                                     productPrice?.product?.id ===
                                       selectedProductItemId?.product?.id &&
                                     _.isEqual(
                                       selectedVarentId,
                                       productPrice?.variants.map(
-                                        (item: any) => item.id
+                                        (item: any) => ({
+                                          id: item.id,
+                                          name: item.name,
+                                        })
                                       )
                                     )
                                   );
                                 }
                               );
-                            console.log(price, "price");
                             form.setValue("products", [
                               ...(form.getValues("products") || []),
                               {
@@ -400,10 +412,9 @@ const CreateOrderContainer = () => {
                                 totalAmount: 1 * price?.offerPrice,
                               },
                             ]);
-                            setSelectedCollectionId("")
-                            setSelectedProductItemId({})
-                            setSelectedVarentId([])
-                            
+                            setSelectedCollectionId("");
+                            setSelectedProductItemId({});
+                            setSelectedVarentId([]);
                           }}
                         >
                           Submit
@@ -430,7 +441,24 @@ const CreateOrderContainer = () => {
                             />
                             <div className="flex flex-col justify-start items-start">
                               <h5>{item?.productItemName}</h5>
-                              <h6>{`₹ ${item?.pricePerUnit}.00`}</h6>
+                              <h6 className="text-sm font-bold">
+                                {`₹ ${item?.pricePerUnit}.00`}
+                                {item.variants?.length && (
+                                  <span className="font-normal ml-1">
+                                    (
+                                    {item?.variants
+                                      .reduce(
+                                        (str: string, item: any) =>
+                                          `${str}, ${item.name}`,
+                                        ""
+                                      )
+                                      .split(", ")
+                                      .filter((item: string) => item)
+                                      .join(", ")}
+                                    )
+                                  </span>
+                                )}
+                              </h6>
                             </div>
                           </div>
                           <Input
@@ -472,8 +500,12 @@ const CreateOrderContainer = () => {
                         </div>
                       );
                     })}
-                    {form.watch("products").length ==0 && (
-                      <div><h5 className="text-gray-500 text-center">No products added</h5> </div>
+                    {form.watch("products").length == 0 && (
+                      <div>
+                        <h5 className="text-gray-500 text-center">
+                          No products added
+                        </h5>{" "}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -499,7 +531,7 @@ const CreateOrderContainer = () => {
                 </div>
               </div>
               <div className="col-span-4 space-y-10">
-      <Label className="text-lg">Custom Customer Order</Label>
+                <Label className="text-lg">Custom Customer Order</Label>
 
                 <FormField
                   control={form.control}
