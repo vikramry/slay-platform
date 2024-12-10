@@ -60,7 +60,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function BarChartCard({title,data}:{title?:string,data?:any}) {
+export function BarChartCard({
+  title,
+  data,
+}: {
+  title?: string;
+  data?: any;
+}) {
   return (
     <Card className="">
       <CardHeader>
@@ -69,36 +75,43 @@ export function BarChartCard({title,data}:{title?:string,data?:any}) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart width={500} height={300} data={data}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="Weekly"
+              dataKey="date"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
+              interval={0}
+              tickFormatter={(date: string) => {
+                // Format the date for better readability
+                const options: Intl.DateTimeFormatOptions = {
+                  // weekday: "short", // Short weekday (e.g., Mon, Tue)
+                  month: "short",   // Short month (e.g., Jan, Feb)
+                  day: "numeric",   // Numeric day
+                };
+                return new Date(date).toLocaleDateString("en-US", options);
+              }}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Bar
-              dataKey="Payments"
+              dataKey="orderCount"
               strokeWidth={2}
-              radius={8}
-              activeIndex={2}
+              radius={[8, 8, 0, 0]} // Rounded top corners
+              fill="hsl(var(--chart-bar))" // Default fill color
               activeBar={({ ...props }) => {
                 return (
                   <Rectangle
                     {...props}
                     fillOpacity={0.8}
                     stroke={props.payload.fill}
-                    strokeDasharray={4}
+                    strokeDasharray="4"
                     strokeDashoffset={4}
                   />
-                )
+                );
               }}
             />
           </BarChart>
@@ -113,5 +126,5 @@ export function BarChartCard({title,data}:{title?:string,data?:any}) {
         </div>
       </CardFooter> */}
     </Card>
-  )
+  );
 }

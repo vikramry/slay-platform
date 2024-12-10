@@ -40,16 +40,16 @@ export function AreaChartCard({title,data}:{title?:string,data?:any}) {
   return (
     <Card className=" "> 
       <CardHeader className="pb-1">
-        <CardTitle className="text-sm">{title}</CardTitle>
-        <CardDescription className="text-xs">
+        <CardTitle >{title}</CardTitle>
+        {/* <CardDescription className="text-xs">
           Total Orders in the past week
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent className="pt-0">
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
-            data={weeklyChartData}
+            data={data}
             margin={{
               left: 8,
               right: 8,
@@ -58,17 +58,27 @@ export function AreaChartCard({title,data}:{title?:string,data?:any}) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="day"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={4}
+              interval={0}
+              tickFormatter={(date: string) => {
+                // Format the date for better readability
+                const options: Intl.DateTimeFormatOptions = {
+                  // weekday: "short", // Short weekday (e.g., Mon, Tue)
+                  month: "short",   // Short month (e.g., Jan, Feb)
+                  day: "numeric",   // Numeric day
+                };
+                return new Date(date).toLocaleDateString("en-US", options);
+              }}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
-              dataKey="Orders"
+              dataKey="dailyRevenue"
               type="natural"
               fill="var(--color-Orders)"
               fillOpacity={0.4}
@@ -77,7 +87,7 @@ export function AreaChartCard({title,data}:{title?:string,data?:any}) {
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="">
+      {/* <CardFooter className="">
         <div className="flex w-full items-start gap-1 text-xs">
           <div className="grid gap-1">
             <div className="flex items-center gap-1 font-medium leading-none">
@@ -86,7 +96,7 @@ export function AreaChartCard({title,data}:{title?:string,data?:any}) {
             <div className="text-muted-foreground">This week</div>
           </div>
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }

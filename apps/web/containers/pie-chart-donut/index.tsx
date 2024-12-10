@@ -27,41 +27,31 @@ const chartData = [
 ]
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
+    in_transit: { label: "In Transit", color: "#878787" },
+    dispatch: { label: "Dispatch", color: "#363636" },
+    delivered: { label: "Delivered", color: "#515151" },
+    packaging: { label: "Packaging", color: "#1B1B1B" },
+  } satisfies ChartConfig
 
 export function PieChartDonut({title,data}:{title?:string,data?:any}) {
   const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
+    return data.reduce((acc, curr) => acc + curr.count, 0)
   }, [])
-
+  const formattedData = React.useMemo(() => {
+    return data.map((item: any) => {
+      const config = chartConfig[item.status.toLowerCase()];
+      return {
+        ...item,
+        fill: config?.color || "hsl(var(--chart-default))", // Default color fallback
+        label: config?.label || item.status,
+      };
+    });
+  }, [data]);
   return (
     <Card className="flex flex-col  ">
       <CardHeader className="items-center pb-0">
         <CardTitle>{title}</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -74,9 +64,9 @@ export function PieChartDonut({title,data}:{title?:string,data?:any}) {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              data={formattedData}
+              dataKey="count"
+              nameKey="status"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -102,7 +92,7 @@ export function PieChartDonut({title,data}:{title?:string,data?:any}) {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Shipments
                         </tspan>
                       </text>
                     )
