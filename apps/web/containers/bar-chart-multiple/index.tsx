@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui";
+import { useEffect, useState } from "react";
 
 export function BarChartMultiple({
   title,
@@ -15,7 +16,31 @@ export function BarChartMultiple({
   title?: string;
   data: { couponCode: string; usageCount: number; totalDiscount: number }[];
 }) {
+  const PAGE_SIZE = 4; // Number of data points per page
+  const [currentPage, setCurrentPage] = useState(0);
 
+  // Compute the paginated data
+  const paginatedData = data.slice(
+    currentPage * PAGE_SIZE,
+    (currentPage + 1) * PAGE_SIZE
+  );
+
+  const totalPages = Math.ceil(data.length / PAGE_SIZE);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+useEffect(() => {
+
+}, [data])
   return (
     <Card>
       <CardHeader>
@@ -23,7 +48,7 @@ export function BarChartMultiple({
       </CardHeader>
       <CardContent>
         <BarChart
-          data={data}
+          data={paginatedData}
           width={450}
           height={300}
           barCategoryGap={20}
@@ -61,6 +86,22 @@ export function BarChartMultiple({
           />
         </BarChart>
       </CardContent>
+      <div className="flex justify-between px-6">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 0}
+            className="p-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages - 1}
+            className="p-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
     </Card>
   );
 }

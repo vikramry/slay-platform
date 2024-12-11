@@ -86,6 +86,8 @@ function DashboardAnalyticsContainer() {
               getDashboardDataResponse?.data?.dashboardAnalytics
                 ?.orderRevenueInsights
             }
+            xaxis="date"
+            yaxis="orderCount"
           />
           {/* <LineChartLinear /> */}
           <PieChartDonut
@@ -109,8 +111,18 @@ function DashboardAnalyticsContainer() {
                 ?.couponsInsights
             }
           />
-          {/* <PieChartStacked title='Coupons' data={getDashboardDataResponse?.data?.dashboardAnalytics?.couponsInsights}/>
-        <TooltipDefault title='Coupons' data={getDashboardDataResponse?.data?.dashboardAnalytics?.couponsInsights}/> */}
+           <BarChartCard
+            title="Inventory"
+            data={
+              getDashboardDataResponse?.data?.dashboardAnalytics
+                ?.inventoryInsights
+            }
+            xaxis="product"
+            yaxis="availableQuantity"
+            PAGESIZE={2}
+          />
+          <PieChartStacked title='Sales Overview' data={getDashboardDataResponse?.data?.dashboardAnalytics?.orderedProductVariantInsights} />
+        {/* <TooltipDefault title='Coupons' data={getDashboardDataResponse?.data?.dashboardAnalytics?.couponsInsights}/> */}
         </div>
       ) : (
         <h4>loading..</h4>

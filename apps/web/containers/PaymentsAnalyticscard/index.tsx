@@ -1,96 +1,86 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts"
-
+import { useEffect, useState } from "react";
+import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui"
-import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui"
-const chartData = [
-  { Weekly: "Mon", Payments: 187, fill: "var(--color-Mon)" },
-  { Weekly: "Tue", Payments: 200, fill: "var(--color-Tue)" },
-  { Weekly: "Wed", Payments: 275, fill: "var(--color-Wed)" },
-  { Weekly: "Thu", Payments: 173, fill: "var(--color-Thu)" },
-  { Weekly: "Fri", Payments: 90, fill: "var(--color-Fri)" },
-  { Weekly: "Sat", Payments: 230, fill: "var(--color-Sat)" },
-  { Weekly: "Sun", Payments: 170, fill: "var(--color-Sun)" },
-]
-
-const chartConfig = {
-  Payments: {
-    label: "Payments",
-  },
-  Mon: {
-    label: "Mon",
-    color: "hsl(var(--chart-1))",
-  },
-  Tue: {
-    label: "Tue",
-    color: "hsl(var(--chart-2))",
-  },
-  Wed: {
-    label: "Wed",
-    color: "hsl(var(--chart-3))",
-  },
-  Thu: {
-    label: "Thu",
-    color: "hsl(var(--chart-4))",
-  },
-  Fri: {
-    label: "Fri",
-    color: "hsl(var(--chart-5))",
-  },
-  Sat: {
-    label: "Sat",
-    color: "hsl(var(--chart-6))",
-  }, Sun: {
-    label: "Sun",
-    color: "hsl(var(--chart-7))",
-  },
-} satisfies ChartConfig
+} from "@repo/ui";
 
 export function BarChartCard({
   title,
   data,
+  xaxis,
+  yaxis,
+  PAGESIZE,
 }: {
   title?: string;
-  data?: any;
+  data?: { dailyRevenue: number; orderCount: number; date: string }[];
+  xaxis?:string;
+  yaxis?:string;
+  PAGESIZE?:number
 }) {
+
+
+  const PAGE_SIZE = PAGESIZE || 4; // Number of data points per page
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Compute the paginated data
+  const paginatedData = data.slice(
+    currentPage * PAGE_SIZE,
+    (currentPage + 1) * PAGE_SIZE
+  );
+
+  const totalPages = Math.ceil(data.length / PAGE_SIZE);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+useEffect(() => {
+
+}, [data])
+
   return (
     <Card className="">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart width={500} height={300} data={data}>
+        <ChartContainer config={{ Payments: { label: "Payments" } }}>
+          <BarChart width={500} height={300} data={paginatedData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="date"
+              dataKey={xaxis}//date
               tickLine={false}
               tickMargin={10}
               axisLine={false}
               interval={0}
-              tickFormatter={(date: string) => {
-                // Format the date for better readability
-                const options: Intl.DateTimeFormatOptions = {
-                  // weekday: "short", // Short weekday (e.g., Mon, Tue)
-                  month: "short",   // Short month (e.g., Jan, Feb)
-                  day: "numeric",   // Numeric day
-                };
-                return new Date(date).toLocaleDateString("en-US", options);
+              tickFormatter={(value: string) => {
+                if (xaxis === "date") {
+                  // Format the date for better readability
+                  const options: Intl.DateTimeFormatOptions = {
+                    month: "short",
+                    day: "numeric",
+                  };
+                  return new Date(value).toLocaleDateString("en-US", options);
+                } else {
+                  // If not date, return the value as it is
+                  return value;
+                }
               }}
             />
             <ChartTooltip
@@ -98,10 +88,10 @@ export function BarChartCard({
               content={<ChartTooltipContent hideLabel />}
             />
             <Bar
-              dataKey="orderCount"
+              dataKey={yaxis}//orderCount
               strokeWidth={2}
-              radius={[8, 8, 0, 0]} // Rounded top corners
-              fill="hsl(var(--chart-bar))" // Default fill color
+              radius={[8, 8, 0, 0]}
+              fill="hsl(var(--chart-bar))"
               activeBar={({ ...props }) => {
                 return (
                   <Rectangle
@@ -116,15 +106,23 @@ export function BarChartCard({
             />
           </BarChart>
         </ChartContainer>
+        <div className="flex justify-between mt-4">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 0}
+            className="p-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages - 1}
+            className="p-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total Payments for the last 6 months
-        </div>
-      </CardFooter> */}
     </Card>
   );
 }
