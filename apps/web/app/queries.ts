@@ -1668,6 +1668,7 @@ query Docs($limit: Int!) {
   listCollections(limit: $limit) {
     docs {
       id
+      description
       market {
         id
         name
