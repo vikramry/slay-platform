@@ -35,34 +35,6 @@ import { z } from "zod";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
 import { LuX } from "react-icons/lu";
-const productData = [
-  {
-    name: "product1",
-    qty: 1,
-    price: 199,
-    TotalAmount: 199,
-    type: "ck-bbl",
-    name: "product1",
-    qty: 1,
-    price: 199,
-    TotalAmount: 199,
-    type: "ck-bbl",
-  },
-  {
-    name: "product2",
-    qty: 1,
-    price: 199,
-    TotalAmount: 199,
-    type: "ck-bbl",
-  },
-  {
-    name: "product3",
-    qty: 1,
-    price: 199,
-    TotalAmount: 199,
-    type: "ck-bbl",
-  },
-];
 import {
   LIST_ADDRESSES,
   LIST_ALL_CUSTOMERS,
@@ -70,7 +42,6 @@ import {
   LIST_COLLECTION,
 } from "@/app/queries";
 import _ from "lodash";
-import Image from "next/image";
 
 const productSchema = z.object({
   productItemId: z.string().optional(),
@@ -226,7 +197,7 @@ const CreateOrderContainer = () => {
                   <Dialog>
                     <DialogTrigger asChild>
                       <div className="flex justify-end w-[100%]">
-                        <Button variant="outline" className="w-[150px]">
+                        <Button variant="outline" type="button" className="w-[150px]">
                           Add product
                         </Button>
                       </div>
@@ -262,7 +233,7 @@ const CreateOrderContainer = () => {
                                           <SelectItem
                                             value={singleCollection?.id}
                                           >
-                                            {singleCollection?.name}
+                                            {singleCollection?.description}
                                           </SelectItem>
                                         );
                                       }
@@ -674,6 +645,11 @@ const CreateOrderContainer = () => {
                       </FormItem>
                     )}
                   />
+                </div>
+                <div className="flex justify-center items-center">
+                  <Button type="submit" variant="default">
+                    Create Order
+                  </Button>
                 </div>
               </div>
             </div>
