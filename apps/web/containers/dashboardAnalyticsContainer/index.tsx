@@ -79,7 +79,7 @@ function DashboardAnalyticsContainer() {
         </div>
       </div>
       {getDashboardDataResponse?.data ? (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 grid-cols-1">
           <BarChartCard
             title="Orders"
             data={

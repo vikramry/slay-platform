@@ -49,7 +49,7 @@ useEffect(() => {
       <CardContent>
         <BarChart
           data={paginatedData}
-          width={450}
+          width={350}
           height={300}
           barCategoryGap={20}
           barGap={5}

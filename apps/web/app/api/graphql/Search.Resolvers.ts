@@ -121,73 +121,85 @@ export default {
           {
             $match: {
               date: {
-                $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-              },
-            },
+                $gte: new Date(
+                  new Date().setMonth(
+                    new Date().getMonth() - 1
+                  )
+                )
+              }
+            }
           },
           {
             $lookup: {
               from: "invoicelines",
               localField: "invoice",
               foreignField: "invoice",
-              as: "orderItems",
-            },
+              as: "orderItems"
+            }
           },
           {
-            $unwind: "$orderItems",
+            $unwind: "$orderItems"
           },
           {
             $lookup: {
               from: "productitems",
               localField: "orderItems.productItem",
               foreignField: "_id",
-              as: "product",
-            },
+              as: "product"
+            }
           },
           {
-            $unwind: "$product",
+            $unwind: "$product"
           },
           {
             $lookup: {
               from: "variants",
               localField: "orderItems.variants",
               foreignField: "_id",
-              as: "variants",
-            },
+              as: "variants"
+            }
           },
           {
-            $unwind: "$variants",
+            $addFields: {
+              variants: {
+                $cond: {
+                  if: {
+                    $eq: [{ $size: "$variants" }, 0]
+                  },
+                  then: { name: "No Variant" },
+                  else: { $arrayElemAt: ["$variants", 0] }
+                }
+              }
+            }
           },
           {
             $group: {
               _id: {
-                productId: "$orderItems.productItem",
-                variant: "$orderItems.variants",
+                productId:
+                  "$orderItems.productItem",
+                variant: "$orderItems.variants"
               },
               productName: { $first: "$product.name" },
               variantName: { $first: "$variants.name" },
-              totalQuantity: { $sum: "$orderItems.quantity" },
-              totalRevenue: {
-                $sum: {
-                  $multiply: [
-                    "$orderItems.quantity",
-                    "$orderItems.pricePerUnit",
-                  ],
-                },
+              totalQuantity: {
+                $sum: "$orderItems.quantity"
               },
-            },
+              totalRevenue: {
+                $sum: "$orderItems.amount"
+              }
+            }
           },
           {
-            $sort: { totalQuantity: -1 },
+            $sort: { totalQuantity: -1 }
           },
           {
-            $limit: 5,
+            $limit: 10
           },
           {
             $project: {
-              _id: 0,
-            },
-          },
+              _id: 0
+            }
+          }
         ]),
 
         mercury.db.Order?.mongoModel.aggregate([
