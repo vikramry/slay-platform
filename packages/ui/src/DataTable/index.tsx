@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,7 +11,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -20,23 +20,42 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, Input, Button, SelectValue, SelectContent, SelectTrigger, SelectItem, Select } from "../components"
-import { ChevronDownIcon, ChevronsLeft, ChevronsRight, ChevronRight, ChevronLeft } from "lucide-react"
-import { useState } from "react"
-import { CustomButton } from "../CustomButton"
-import { PulseLoader } from "react-spinners"
+} from "../components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  Input,
+  Button,
+  SelectValue,
+  SelectContent,
+  SelectTrigger,
+  SelectItem,
+  Select,
+} from "../components";
+import {
+  ChevronDownIcon,
+  ChevronsLeft,
+  ChevronsRight,
+  ChevronRight,
+  ChevronLeft,
+} from "lucide-react";
+import { useState } from "react";
+import { CustomButton } from "../CustomButton";
+import { PulseLoader } from "react-spinners";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  text?: string
-  url?: string
-  filterBy?: string
-  loading?: boolean
-  filters?:boolean
-  statusFilter?:any
-  statusFilterData?:any
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  text?: string;
+  url?: string;
+  filterBy?: string;
+  loading?: boolean;
+  filters?: boolean;
+  statusFilter?: any;
+  statusFilterData?: any;
+  onRowClick?: (row: any) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -46,22 +65,20 @@ export function DataTable<TData, TValue>({
   url,
   filterBy,
   loading = false,
-  filters=false,
+  filters = false,
   statusFilter,
-  statusFilterData
+  statusFilterData,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   // const table = useReactTable({
   //   data,
   //   columns,
   //   getCoreRowModel: getCoreRowModel(),
   // })
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
   const table = useReactTable({
     data,
     columns,
@@ -79,61 +96,63 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
     },
-
-
-
-  })
-console.log(table.getColumn(statusFilter),"hebayybbjhb")
+  });
+  console.log(table.getColumn(statusFilter), "hebayybbjhb");
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <div className="flex fex-row gap-5">
-          
-        {filterBy && <Input
-          placeholder={`Filter by ${filterBy}...`}
-          value={(table.getColumn(filterBy)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(filterBy)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />}
-        {filters&& 
-        <div className="w-[200px]">
-  <Select
-  onValueChange={(value) =>
-    table.getColumn(statusFilter)?.setFilterValue(value)
-  }
-  defaultValue={(table.getColumn(statusFilter)?.getFilterValue() as string) ?? ""}
->
-  <SelectTrigger>
-    <SelectValue placeholder= {`Select Status...`} />
-  </SelectTrigger>
-  <SelectContent>
-    {statusFilterData
-      .find((item: any) => item?.fieldName === statusFilter)
-      ?.enumValues?.map((enumValue: string) => (
-        <SelectItem key={enumValue} value={enumValue}>
-          {enumValue}
-        </SelectItem>
-      )) || (
-        <SelectItem value="" disabled>
-          No options available
-        </SelectItem>
-      )}
-  </SelectContent>
-</Select>
-          </div>
-        }
+          {filterBy && (
+            <Input
+              placeholder={`Filter by ${filterBy}...`}
+              value={
+                (table.getColumn(filterBy)?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn(filterBy)?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          )}
+          {filters && (
+            <div className="w-[200px]">
+              <Select
+                onValueChange={(value) =>
+                  table.getColumn(statusFilter)?.setFilterValue(value)
+                }
+                defaultValue={
+                  (table.getColumn(statusFilter)?.getFilterValue() as string) ??
+                  ""
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={`Select Status...`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {statusFilterData
+                    .find((item: any) => item?.fieldName === statusFilter)
+                    ?.enumValues?.map((enumValue: string) => (
+                      <SelectItem key={enumValue} value={enumValue}>
+                        {enumValue}
+                      </SelectItem>
+                    )) || (
+                    <SelectItem value="" disabled>
+                      No options available
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
         <div className="ml-auto flex flex-row gap-5">
-
-          {text &&
-            <div >
-
+          {text && (
+            <div>
               <a href={url}>
                 <Button>{text} </Button>
               </a>
-            </div>}
+            </div>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
@@ -156,7 +175,7 @@ console.log(table.getColumn(statusFilter),"hebayybbjhb")
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -173,52 +192,56 @@ console.log(table.getColumn(statusFilter),"hebayybbjhb")
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {loading ?
-              (<TableRow>
+            {loading ? (
+              <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
                   <PulseLoader color="#817994" />
                 </TableCell>
-              </TableRow>)
-              :
-              table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRowClick?.(row.original);
+                  }}
+                  className={`cursor-pointer`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
                 </TableRow>
-              )}
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -233,11 +256,13 @@ console.log(table.getColumn(statusFilter),"hebayybbjhb")
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value: any) => {
-                table.setPageSize(Number(value))
+                table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger className="h-8 w-[70px]">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue
+                  placeholder={table.getState().pagination.pageSize}
+                />
               </SelectTrigger>
               <SelectContent side="top">
                 {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -293,5 +318,5 @@ console.log(table.getColumn(statusFilter),"hebayybbjhb")
         </div>
       </div>
     </div>
-  )
+  );
 }
