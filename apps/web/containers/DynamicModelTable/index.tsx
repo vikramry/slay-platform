@@ -181,6 +181,7 @@ const DynamicModelTable = () => {
                                   ? `/dashboard/o/${field.ref}/r/${item?.id}`
                                   : "#"
                               }`}
+                              onClick={(e) => e.stopPropagation()}
                               className="hover:underline"
                             >
                               {(refKeyMap[field.fieldName] &&
@@ -200,6 +201,7 @@ const DynamicModelTable = () => {
                               : "#"
                           }`}
                           className="hover:underline"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           {(refKeyMap[field.fieldName] &&
                             row.original[field.fieldName]?.[
@@ -310,12 +312,13 @@ const DynamicModelTable = () => {
           },
           cell: ({ row }) => (
             <div className="flex justify-start items-center gap-2">
-              <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`}>
+              <Link href={`/dashboard/o/${modelName}/r/${row.original?.id}`} onClick={(e) => e.stopPropagation()}>
                 <ExternalLink className="ml-2 h-4 w-4" />
               </Link>
               {/* <div title="Copy Record URL" className="cursor-pointer" onClick={() => navigator.clipboard.writeText(`${window.location.host}/dashboard/o/${modelName}/r/${row.original?.id}`)}><Copy className="ml-2 h-4 w-4" /></div> */}
               <Link
                 href={`/dashboard/o/${modelName}/r/${row.original?.id}/edit`}
+                onClick={(e) => e.stopPropagation()}
               >
                 <Pencil className="ml-2 h-4 w-4" />
               </Link>
@@ -477,6 +480,9 @@ const DynamicModelTable = () => {
           filters={modelName == "Order" && true}
           statusFilterData={data?.listModelFields?.docs}
           statusFilter="shipmentStatus"
+          onRowClick={(rowData:any) => {
+            window.location.href = `/dashboard/o/${modelName}/r/${rowData.id}`;
+          }}
         />
       ) : (
         <div className="w-screen mx-auto my-auto">

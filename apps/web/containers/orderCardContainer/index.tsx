@@ -99,7 +99,7 @@ const OrderCard: React.FC<any> = ({ order }) => {
   };
   return (
     <div className="max-w-full w-full bg-white shadow-lg rounded-lg border border-gray-200 p-6 space-y-4 ">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center w-full">
         <div className="flex flex-col gap-2">
           <p className="text-sm text-gray-500">
             Order ID:{" "}
@@ -317,7 +317,7 @@ const OrdersCardContainer = () => {
 
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
         {getOrderResponse?.data?.getOrder &&
       <OrderCard order={getOrderResponse?.data?.getOrder} />}
       
