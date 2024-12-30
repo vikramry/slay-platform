@@ -9,8 +9,7 @@ function OrderHistoryDashboard() {
           customer: "Gaurav Kumar",
           date: "July 27, 2024",
           status: "In Progress",
-          unitPrice: "₹499",
-          platform: "Dotpe",
+          unitPrice: "₹499",  
         },
         {
           orderID: "123456789",
@@ -43,7 +42,12 @@ function OrderHistoryDashboard() {
       ];
   return (
     <div>
-        <div><h1>title</h1><div><Button variant="outline">Show all</Button></div></div>
+        <div className='flex justify-between'>
+        <div><h1 className='text-[20px] font-semibold leading-[27.32px]'>Order History</h1></div>
+        <div><Button variant="outline" className="text-[14px] text-[#777777] font-semibold leading-[19.12px] border border-gray-300 rounded-[6px] h-[35px] w-[78px] flex items-center justify-center">
+                  See All
+        </Button></div>
+        </div>
         <TableDemo data={ordersData}/>
         </div>
   )

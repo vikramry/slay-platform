@@ -37,9 +37,9 @@ export function TableDemo({ data }: { data: any[] }) {
                                     {header === "status" ? (
                                         <Badge
                                             className={`${
-                                                row[header] === "Completed"
+                                                row[header] === "Completed" || row[header] === "Active"
                                                     ? "bg-green-100 text-green-800"
-                                                    : row[header] === "In progress"
+                                                    : row[header] === "In Progress" || row[header] === "Draft"
                                                     ? "bg-[#FFD279] text-black"
                                                     : "bg-gray-100 text-gray-800"
                                             } rounded-full px-2 py-1`}
