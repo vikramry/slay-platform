@@ -26,3 +26,5 @@ export * from './ui/breadcrumb'
 export * from './ui/calendar'
 export * from './ui/card'
 export * from './ui/chart'
+export * from './ui/tabs'
+
