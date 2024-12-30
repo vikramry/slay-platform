@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { TableDemo } from '../dashboardTablecomponent'
 import { Button } from '@repo/ui';
 import {
@@ -16,7 +16,6 @@ function OrderHistoryDashboard() {
       date: "July 27, 2024",
       status: "In Progress",
       unitPrice: "₹499",
-      platform: "Dotpe",
     },
     {
       orderID: "123456789",
@@ -36,7 +35,7 @@ function OrderHistoryDashboard() {
       orderID: "123456789",
       customer: "Vikram Y",
       date: "Aug 21, 2024",
-      status: "In Progress",
+      status: "Active",
       unitPrice: "₹1,199",
     },
     {
@@ -49,27 +48,39 @@ function OrderHistoryDashboard() {
   ];
   const tabs = [
     {
-      name: "All orders",
+      name: "All Orders",
       value: "all"
     },
     {
       name: "Completed",
-      value: "COMPLETED"
+      value: "Completed"
     }, {
       name: "In Progress",
-      value: "IN_PROGRESS"
+      value: "In Progress"
+    },
+    {
+      name: "Cancelled",
+      value: "Cancelled"
     }
   ]
+  
+  const [activeTab, setActiveTab] = useState("all");
+
+  const filteredOrders = ordersData.filter((order) => {
+    if (activeTab === "all") return true;
+    return order.status === activeTab;
+  });
+
   return (
     <div>
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center p-6">
         <h1 className="text-[20px] font-semibold leading-[27.32px]">Order History</h1>
-        <Tabs defaultValue="All Products" className="w-[400px]">
-          <TabsList className="grid w-full grid-cols-3 bg-gray-100 rounded-md p-3 h-[100%]">
+        <Tabs defaultValue="all" className="w-[400px]" onValueChange={(value) => setActiveTab(value)}>
+          <TabsList className="grid w-full grid-cols-4 bg-gray-100 rounded-md p-3 h-[100%]">
             {tabs.map((tab: any, index: number) => (
               <TabsTrigger
                 key={index}
-                defaultValue="all"
+                // defaultValue="all"
                 value={tab?.value}
                 className="data-[state=active]:bg-black data-[state=active]:text-white text-gray-800 transition-colors rounded-md font-[600]  text-[10px]"
               >
@@ -82,7 +93,7 @@ function OrderHistoryDashboard() {
                   See All
         </Button>
       </div>
-      <TableDemo data={ordersData} />
+      <TableDemo data={filteredOrders} />
     </div>
   )
 }
