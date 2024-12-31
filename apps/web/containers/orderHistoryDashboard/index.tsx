@@ -11,7 +11,7 @@ import {
 function OrderHistoryDashboard() {
   const ordersData = [
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Gaurav Kumar",
       date: "July 27, 2024",
       status: "In Progress",
@@ -19,28 +19,28 @@ function OrderHistoryDashboard() {
       platform: "Dotpe",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Vijay Viju",
       date: "Mar 15, 2024",
       status: "Completed",
       unitPrice: "₹399",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Roshan Gujarathi",
       date: "Apr 18, 2024",
       status: "Completed",
       unitPrice: "₹449",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Vikram Y",
       date: "Aug 21, 2024",
       status: "In Progress",
       unitPrice: "₹1,199",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Srinivas A",
       date: "July 27, 2024",
       status: "Cancelled",
@@ -61,8 +61,8 @@ function OrderHistoryDashboard() {
     }
   ]
   return (
-    <div>
-      <div className="flex flex-row justify-between items-center">
+    <div className='w-full'>
+      <div className="flex flex-row justify-between items-center w-full">
         <h1 className="text-[20px] font-semibold leading-[27.32px]">Order History</h1>
         <Tabs defaultValue="All Products" className="w-[400px]">
           <TabsList className="grid w-full grid-cols-3 bg-gray-100 rounded-md p-3 h-[100%]">

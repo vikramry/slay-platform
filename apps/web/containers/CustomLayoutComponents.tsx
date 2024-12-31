@@ -7,6 +7,7 @@ import OrdersCardContainer from "./orderCardContainer";
 import { CustomerData } from "./customerDetailsCard";
 import CustomerOrderCard from "./customerDetailsCard";
 import { AddressContainer } from "./addressCardComponent";
+import OrderHistoryDashboard from "./orderHistoryDashboard";
 export {
   ProfileForm,
   createUser,
@@ -17,4 +18,5 @@ export {
   CustomerData,
   AddressContainer,
   CustomerOrderCard,
+  OrderHistoryDashboard
 };
