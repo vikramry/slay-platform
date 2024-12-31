@@ -14,20 +14,13 @@ import { NavBar } from "@repo/ui/navBar";
 ("col-span-1 col-span-2 col-span-3 row-span-1 row-span-2 row-span-3 col-span-4 col-span-5 row-span-4 col-span-5");
 
 const DynamicLayout = () => {
-  const [listLayouts, { data, loading, error }] = useLazyQuery(serverFetch);
   const [getCurrentLayoutStructures, getCurrentLayoutStructuresResponse] = useLazyQuery(serverFetch);
   const [getModel, getModelResponse] = useLazyQuery(serverFetch);
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
 
   const [modelId, setModelId] = useState("")
   useEffect(() => {
-    listLayouts(
-      LIST_ALL_LAYOUTS_LABELS,
-      {},
-      {
-        cache: 'no-store'
-      }
-    )
+    
     getModel(
       GET_MODEL, {
         "offset": 0,
@@ -44,9 +37,6 @@ const DynamicLayout = () => {
   }, [])
 
 
-  useEffect(() => {
-
-  }, [data, error, loading])
   useEffect(() => {
     if (getModelResponse?.data) {
       setModelId(getModelResponse?.data?.getModel.id)
@@ -120,7 +110,7 @@ const DynamicLayout = () => {
         </Select>
       </div> */}
       <div className="h-auto w-[100vw - 100px] grid lg:grid-cols-3 gap-2 md:grid-cols-2 grid-cols-1  dark:bg-black bg-white p-2">
-        {getCurrentLayoutStructuresResponse.loading || ListLayoutsResponse?.loading || loading ?
+        {getCurrentLayoutStructuresResponse.loading || ListLayoutsResponse?.loading ?
           // Skeleton Loader
           <>
             {[1, 2, 3, 4, 5].map((_, index) => (
