@@ -81,11 +81,11 @@ export function TableDemo({ data }: { data: any[] }) {
                     <Badge
                       className={`${
                         row[header] === "Active" || row[header] === "Completed"
-                          ? "bg-green-100 text-green-800 "
+                          ? "bg-green-100 text-green-800  hover:bg-green-100"
                           : row[header] === "Draft" ||
                               row[header] === "In Progress"
-                            ? "bg-[#FFD279] text-black"
-                            : "bg-gray-100 text-gray-800"
+                            ? "bg-[#FFD279] text-black hover:bg-[#FFD279]"
+                            : "bg-gray-100 text-gray-800 hover:bg-gray-100"
                       } rounded-full px-2 py-1 hover:bg-transparent`}
                     >
                       {row[header]}

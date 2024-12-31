@@ -72,7 +72,7 @@ function OrderHistoryDashboard() {
   });
 
   return (
-    <div>
+    <div className='w-full'>
       <div className="flex flex-row justify-between items-center p-6">
         <h1 className="text-[20px] font-semibold leading-[27.32px]">Order History</h1>
         <Tabs defaultValue="all" className="w-[400px]" onValueChange={(value) => setActiveTab(value)}>
