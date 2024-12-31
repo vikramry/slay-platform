@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Card from "@repo/ui/card";
 import { useLazyQuery } from "./hook";
 import { serverFetch } from "./action";
-import { LIST_ALL_LAYOUTS, LIST_ALL_LAYOUTS_LABELS, LIST_LAYOUT_STRUCTURES, listtabs } from "./queries";
+import { GET_MODEL, LIST_ALL_LAYOUTS, LIST_ALL_LAYOUTS_LABELS, LIST_LAYOUT_STRUCTURES, listtabs } from "./queries";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@repo/ui";
 import { Layout } from "@/types";
 import App from "@/containers/DynamicComponent";
@@ -16,7 +16,7 @@ import { NavBar } from "@repo/ui/navBar";
 const DynamicLayout = () => {
   const [listLayouts, { data, loading, error }] = useLazyQuery(serverFetch);
   const [getCurrentLayoutStructures, getCurrentLayoutStructuresResponse] = useLazyQuery(serverFetch);
-  const [ListTabs, ListTabsResponse] = useLazyQuery(serverFetch);
+  const [getModel, getModelResponse] = useLazyQuery(serverFetch);
   const [ListLayouts, ListLayoutsResponse] = useLazyQuery(serverFetch);
 
   const [modelId, setModelId] = useState("")
@@ -28,10 +28,15 @@ const DynamicLayout = () => {
         cache: 'no-store'
       }
     )
-    ListTabs(
-      listtabs, {
+    getModel(
+      GET_MODEL, {
         "offset": 0,
-        "limit": 100
+        "limit": 100,
+        where: {
+          name: {
+            is: "Dashboard"
+          }
+        }
       }, {
       cache: 'no-store'
     }
@@ -43,15 +48,14 @@ const DynamicLayout = () => {
 
   }, [data, error, loading])
   useEffect(() => {
-    if (ListTabsResponse?.data) {
-      console.log(ListTabsResponse?.data, "tabsdata")
-      // setModelId(ListTabsResponse?.data?.listTabs?.docs[0]?.model?.id)
+    if (getModelResponse?.data) {
+      setModelId(getModelResponse?.data?.getModel.id)
     }
-    else if (ListTabsResponse?.error) {
-      console.log(ListTabsResponse?.error)
+    else if (getModelResponse?.error) {
+      console.log(getModelResponse?.error)
     }
 
-  }, [ListTabsResponse?.data, ListTabsResponse?.error, ListTabsResponse?.loading])
+  }, [getModelResponse?.data, getModelResponse?.error, getModelResponse?.loading])
 
 
   useEffect(() => {
@@ -141,16 +145,23 @@ const DynamicLayout = () => {
                 <span className="sr-only">Loading...</span>
               </div>))}
           </> :
-          <>
-            {getCurrentLayoutStructuresResponse.data?.listLayoutStructures.docs.map((item: any) => (
-              <Card
-                classNames={`col-span-${item.col} bg-white`}
-                rows={item.row}
-              >
-                <App jsxString={decodeURIComponent(escape(atob(item.component.code)))} onClick={() => console.log("Clicked A button")} managed={true} componentName={"ProfileForm"}/>
-              </Card>
-            ))}
-          </>}
+         <>
+         {getCurrentLayoutStructuresResponse.data?.listLayoutStructures.docs.map(
+           (item: any) => (
+             <Card
+               classNames={`col-span-${item.col} row-span-${item.row} bg-white`}
+               rows={item.row}
+             >
+               <App
+                 jsxString={decodeURIComponent(escape(atob(item.component.code)))}
+                 onClick={() => console.log("Clicked A button")}
+                //  metaData={{ recordData: DynamicGetQuaryResponse?.data?.[`getDashboard`], model: GetModelResponse?.data?.getModel, modelFields: data?.listModelFields?.docs }}
+                 managed={item.component?.managed} componentName={item.component?.name}
+               />
+             </Card>
+           )
+         )}
+       </>}
       </div>
     </div>
   );

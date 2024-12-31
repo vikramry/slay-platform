@@ -5,7 +5,8 @@ import DashboardAnalyticsContainer from '@/containers/dashboardAnalyticsContaine
 const page = () => {
     return (
         <div>
-            <DashboardAnalyticsContainer/>
+            {/* <DashboardAnalyticsContainer/> */}
+            <DynamicLayout />
         </div>
     )
 }

@@ -11,35 +11,35 @@ import {
 function OrderHistoryDashboard() {
   const ordersData = [
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Gaurav Kumar",
       date: "July 27, 2024",
       status: "In Progress",
       unitPrice: "₹499",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Vijay Viju",
       date: "Mar 15, 2024",
       status: "Completed",
       unitPrice: "₹399",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Roshan Gujarathi",
       date: "Apr 18, 2024",
       status: "Completed",
       unitPrice: "₹449",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Vikram Y",
       date: "Aug 21, 2024",
       status: "Active",
       unitPrice: "₹1,199",
     },
     {
-      orderID: "123456789",
+      orderId: "123456789",
       customer: "Srinivas A",
       date: "July 27, 2024",
       status: "Cancelled",
