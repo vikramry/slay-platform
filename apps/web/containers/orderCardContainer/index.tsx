@@ -3,61 +3,65 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useLazyQuery } from "@/app/hook";
 import { serverFetch } from "@/app/action";
-import { GET_ORDER, SHIPMENT_TRACKING } from "@/app/queries";
+import { CONFIRM_ORDER_QUERY, GET_ORDER, SHIPMENT_TRACKING } from "@/app/queries";
 import {
-    Dialog,
-    DialogPortal,
-    DialogOverlay,
-    DialogClose,
-    DialogTrigger,
-    DialogContent,
-    DialogHeader,
-    DialogFooter,
-    DialogTitle,
-    DialogDescription,
-    Button,
-    toast,
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@repo/ui";
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  Button,
+  toast,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Input,
+} from "@repo/ui";
 import DownloadInvoiceContainer from "../downloadInvoiceContainer";
-
+import { e } from "../../../../packages/ui/dist/chunk-YSBOAJPK.mjs";
 
 const OrderCard: React.FC<any> = ({ order }) => {
   const { invoice, shipmentStatus, trackings, date, orderId } = order;
   const [AddShipment, AddShipmentResponce] = useLazyQuery(serverFetch);
   const [updateMessage, setUpdateMessage] = useState("");
   const [shipmentStatuss, setShipmentStatus] = useState("");
-  const router=useRouter()
+
+  const router = useRouter();
 
   const progress = (() => {
     // ((trackings.length ) ) * 25;
     switch (shipmentStatus) {
-      case "PACKAGING":
+      case "GENERATED":
         return 10;
+      case "PACKAGING":
+        return 30;
       case "IN_TRANSIT":
-        return 45;
+        return 55;
       case "DISPATCH":
-        return 75;
+        return 85;
       case "DELIVERED":
         return 100;
       default:
         return 10;
     }
   })();
-  const {recordId} =useParams()
+  const { recordId } = useParams();
   useEffect(() => {
     if (AddShipmentResponce?.data) {
       toast({
         title: "Successfully Updated",
       });
-      router.refresh()
+      router.refresh();
     }
     if (AddShipmentResponce?.error) {
       toast({
@@ -112,12 +116,40 @@ const OrderCard: React.FC<any> = ({ order }) => {
             </span>
           </p>
         </div>
+        {shipmentStatus == "GENERATED" ||
+          (true && (
+            <div>
+              <Dialog>
+                <DialogTrigger>
+                  <Button
+                    className="mt-4 px-4 py-2 rounded-lg"
+                    variant="default"
+                  >
+                    Confirm Order
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className=" overflow-auto flex flex-row justify-center">
+                  <DialogHeader>
+                    <DialogTitle
+                      className="mb-2
+                "
+                    >
+                      Provide Additional Details{" "}
+                    </DialogTitle>
+                    <DialogDescription>
+                      <ConfirmOrderForm orderId={order?.id} />
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </div>
+          ))}
       </div>
 
       <hr className="border-t border-gray-300" />
 
       <div className="space-y-6">
-        {invoice.invoiceLines.map((product:any, index:number) => (
+        {invoice.invoiceLines.map((product: any, index: number) => (
           <>
             <div
               key={index}
@@ -127,8 +159,14 @@ const OrderCard: React.FC<any> = ({ order }) => {
                 <h2 className="text-xl font-semibold text-gray-900">
                   {product?.productItem?.name}
                 </h2>
-                <p className="text-sm text-gray-500">{product?.productItem?.description}</p>
-                {product?.variants?.[0] &&<p className="text-sm text-gray-500">({product?.variants?.[0]?.name})</p>}
+                <p className="text-sm text-gray-500">
+                  {product?.productItem?.description}
+                </p>
+                {product?.variants?.[0] && (
+                  <p className="text-sm text-gray-500">
+                    ({product?.variants?.[0]?.name})
+                  </p>
+                )}
                 <p className="text-sm text-gray-500">
                   Quantity: {product?.quantity}
                 </p>
@@ -185,6 +223,7 @@ const OrderCard: React.FC<any> = ({ order }) => {
           {/* Tracking Progress */}
           <div className="mt-4">
             <div className="flex justify-between items-center text-xs text-gray-500 mb-1">
+              <span>GENERATED</span>
               <span>PACKAGING</span>
               <span>IN TRANSIT</span>
               <span>DISPATCH</span>
@@ -196,7 +235,7 @@ const OrderCard: React.FC<any> = ({ order }) => {
                 style={{ width: `${progress}%` }}
               ></div>
 
-              {[0, 34, 66, 100].map((percentage, index) => (
+              {[0, 26, 50, 75, 100].map((percentage, index) => (
                 <div
                   key={index}
                   className={`absolute top-1/2 transform -translate-y-1/2 w-4 h-4 ${
@@ -235,13 +274,18 @@ const OrderCard: React.FC<any> = ({ order }) => {
         <div className="flex justify-between mt-4">
           <Dialog>
             <DialogTrigger>
-            <Button variant="outline" className="text-black font-medium  ">Update Tracking</Button>
-
+              <Button variant="outline" className="text-black font-medium  ">
+                Update Tracking
+              </Button>
             </DialogTrigger>
             <DialogContent className=" overflow-auto flex flex-row justify-center">
               <DialogHeader>
-                <DialogTitle className="mb-2
-                ">Update shipment status </DialogTitle>
+                <DialogTitle
+                  className="mb-2
+                "
+                >
+                  Update shipment status{" "}
+                </DialogTitle>
                 <DialogDescription>
                   <div className="flex flex-col gap-3">
                     <h4>Update Shipment</h4>
@@ -264,6 +308,7 @@ const OrderCard: React.FC<any> = ({ order }) => {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
                         <option value="">Choose a Status...</option>
+                        <option value="GENERATED">GENERATED</option>
                         <option value="PACKAGING">PACKAGING</option>
                         <option value="IN_TRANSIT">IN TRANSIT</option>
                         <option value="DISPATCH">DISPATCH</option>
@@ -292,37 +337,110 @@ const OrderCard: React.FC<any> = ({ order }) => {
 };
 
 const OrdersCardContainer = () => {
-    const {recordId}=useParams()
-    const [getOrder,getOrderResponse]=useLazyQuery(serverFetch)
+  const { recordId } = useParams();
+  const [getOrder, getOrderResponse] = useLazyQuery(serverFetch);
   useEffect(() => {
-    getOrder(GET_ORDER,{
-      where: {
-        id: {
-          is: recordId,
+    getOrder(
+      GET_ORDER,
+      {
+        where: {
+          id: {
+            is: recordId,
+          },
         },
       },
-    },{
-      cache: "no-store"
-    })
-  }, [recordId])
+      {
+        cache: "no-store",
+      }
+    );
+  }, [recordId]);
   useEffect(() => {
-    if(getOrderResponse?.data){
-  console.log(getOrderResponse?.data,"getOrderResponse")
-  }
-  else if(getOrderResponse?.error){
-    console.log(getOrderResponse?.error,"getOrderResponse")
-  
-  }
-  }, [getOrderResponse?.data,getOrderResponse?.error,getOrderResponse?.loading])
-
+    if (getOrderResponse?.data) {
+      console.log(getOrderResponse?.data, "getOrderResponse");
+    } else if (getOrderResponse?.error) {
+      console.log(getOrderResponse?.error, "getOrderResponse");
+    }
+  }, [
+    getOrderResponse?.data,
+    getOrderResponse?.error,
+    getOrderResponse?.loading,
+  ]);
 
   return (
     <div className="space-y-4 w-full">
-        {getOrderResponse?.data?.getOrder &&
-      <OrderCard order={getOrderResponse?.data?.getOrder} />}
-      
+      {getOrderResponse?.data?.getOrder && (
+        <OrderCard order={getOrderResponse?.data?.getOrder} />
+      )}
     </div>
   );
 };
 
 export default OrdersCardContainer;
+
+const ConfirmOrderForm = ({orderId}: {orderId: string}) => {
+  const [orderData, setOrderData] = useState({
+    length: 0,
+    breadth: 0,
+    height: 0,
+    weight: 0,
+  });
+  const [confirmOrder, {data, loading, error}] = useLazyQuery(serverFetch);
+  const handleSubmit = () => {
+    confirmOrder(
+      CONFIRM_ORDER_QUERY,
+      {
+        ...orderData,
+        orderId
+      },
+      {
+        cache: "no-store"
+      }
+    )
+  }
+
+  useEffect(()=>{
+    if(data){
+      toast({
+        title: "Order Created in Ship Rocket"
+      });
+      
+    }
+    if(error){
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error?.message
+      });
+    }
+  }, [data, error, loading])
+  return (
+    <div className="flex flex-col gap-3">
+      <label>
+        Length
+      </label>
+        <Input placeholder="Length" type="number" name="length" value={orderData.length} onChange={(e: any) => setOrderData({ ...orderData, length: Number(e.target.value)})} />
+      <label>
+        Breadth
+      </label>
+        <Input placeholder="Breadth" type="number" name="breadth" value={orderData.breadth} onChange={(e: any) => setOrderData({ ...orderData, breadth: Number(e.target.value)})} />
+      <label>
+        Height
+      </label>
+        <Input placeholder="Height" type="number" name="height" value={orderData.height} onChange={(e: any) => setOrderData({ ...orderData, height: Number(e.target.value)})} />
+      <label>
+        Weight
+      </label>
+        <Input placeholder="Weight" type="number" name="weight" value={orderData.weight} onChange={(e: any) => setOrderData({ ...orderData, weight: Number(e.target.value)})} />
+      <div className="flex flex-row justify-center">
+        <Button
+          onClick={handleSubmit}
+          className="mt-4 px-4 py-2 rounded-lg"
+          variant="default"
+        >
+          Create Order
+        </Button>
+      </div>
+      <p className="italic text-gray-500 text-xs">Note: This will create an Order in Ship Rocket.</p>
+    </div>
+  );
+};

@@ -4,6 +4,16 @@ const typeDefs = `
     dashboardAnalytics(orderRevenueBy: timeFrame): DashboardAnalytics,
     ordersExport(startDate: DateTime!, endDate: DateTime!): JSON
   }
+  
+  type Mutation{
+    confirmOrder(orderId: String, length: Float, breadth: Float, height: Float, weight: Float): ConfirmOrderResponse
+  }
+
+  type ConfirmOrderResponse {
+    success: Boolean
+    message: String
+    shipRocketShipmentId: String
+  }
 
   type DashboardAnalytics {
     orderRevenueInsights: [OrderRevenueInsight]

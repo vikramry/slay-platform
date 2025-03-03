@@ -1770,3 +1770,11 @@ query DashboardAnalytics($orderRevenueBy: timeFrame) {
     }
   }
 }`
+
+export const CONFIRM_ORDER_QUERY=`mutation ConfirmOrder($orderId: String, $length: Float, $breadth: Float, $height: Float, $weight: Float) {
+  confirmOrder(orderId: $orderId, length: $length, breadth: $breadth, height: $height, weight: $weight) {
+    success
+    message
+    shipRocketShipmentId
+  }
+}`

@@ -1,4 +1,8 @@
 import mercury from "@mercury-js/core";
+import { GraphQLError } from "graphql";
+import { ShiprocketService } from "./ShipRocket.service";
+import { s } from "../../../../../packages/ui/dist/chunk-CWAQPCBL.mjs";
+import _ from "lodash";
 
 export default {
   Query: {
@@ -9,9 +13,11 @@ export default {
 
       return "Hello";
     },
-    dashboardAnalytics: async (root: any, {
-      orderRevenueBy = "DAY"
-    }: {orderRevenueBy: string}, ctx: any) => {
+    dashboardAnalytics: async (
+      root: any,
+      { orderRevenueBy = "DAY" }: { orderRevenueBy: string },
+      ctx: any
+    ) => {
       /*
         Revenue Received per day - compare the payment from last month revenue - Total month revenue
         Daily Order count - same compare with last week order count
@@ -26,17 +32,17 @@ export default {
       */
 
       const getDateFromOrderRevenueBy = (timeType: string) => {
-        switch(timeType) {
-          case "DAY": 
+        switch (timeType) {
+          case "DAY":
             return "%Y-%m-%d";
-          case "MONTH": 
+          case "MONTH":
             return "%Y-%m";
-          case "YEAR": 
+          case "YEAR":
             return "%Y";
-          default: 
+          default:
             return "%Y-%m-%d";
         }
-      }
+      };
 
       const [
         orderRevenueInsights,
@@ -84,7 +90,12 @@ export default {
           {
             $group: {
               _id: {
-                date: { $dateToString: { format: getDateFromOrderRevenueBy(orderRevenueBy), date: "$date" } },
+                date: {
+                  $dateToString: {
+                    format: getDateFromOrderRevenueBy(orderRevenueBy),
+                    date: "$date",
+                  },
+                },
               },
               dailyRevenue: { $sum: { $toDouble: "$payment.amount" } },
               orderCount: { $sum: 1 },
@@ -100,7 +111,7 @@ export default {
               dailyRevenue: 1,
               orderCount: 1,
             },
-          }
+          },
         ]),
         mercury.db.Order?.mongoModel.aggregate([
           {
@@ -121,85 +132,80 @@ export default {
           {
             $match: {
               date: {
-                $gte: new Date(
-                  new Date().setMonth(
-                    new Date().getMonth() - 1
-                  )
-                )
-              }
-            }
+                $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+              },
+            },
           },
           {
             $lookup: {
               from: "invoicelines",
               localField: "invoice",
               foreignField: "invoice",
-              as: "orderItems"
-            }
+              as: "orderItems",
+            },
           },
           {
-            $unwind: "$orderItems"
+            $unwind: "$orderItems",
           },
           {
             $lookup: {
               from: "productitems",
               localField: "orderItems.productItem",
               foreignField: "_id",
-              as: "product"
-            }
+              as: "product",
+            },
           },
           {
-            $unwind: "$product"
+            $unwind: "$product",
           },
           {
             $lookup: {
               from: "variants",
               localField: "orderItems.variants",
               foreignField: "_id",
-              as: "variants"
-            }
+              as: "variants",
+            },
           },
           {
             $addFields: {
               variants: {
                 $cond: {
                   if: {
-                    $eq: [{ $size: "$variants" }, 0]
+                    $eq: [{ $size: "$variants" }, 0],
                   },
                   then: { name: "No Variant" },
-                  else: { $arrayElemAt: ["$variants", 0] }
-                }
-              }
-            }
+                  else: { $arrayElemAt: ["$variants", 0] },
+                },
+              },
+            },
           },
           {
             $group: {
               _id: {
-                productId:
-                  "$orderItems.productItem",
-                variant: "$orderItems.variants"
+                productId: "$orderItems.productItem",
+                variant: "$orderItems.variants",
               },
               productName: { $first: "$product.name" },
               variantName: { $first: "$variants.name" },
               totalQuantity: {
-                $sum: "$orderItems.quantity"
+                $sum: "$orderItems.quantity",
               },
               totalRevenue: {
-                $sum: "$orderItems.amount"
-              }
-            }
+                $sum: "$orderItems.amount",
+              },
+            },
           },
           {
-            $sort: { totalQuantity: -1 }
+            $sort: { totalQuantity: -1 },
           },
           {
-            $limit: 10
+            $limit: 10,
           },
           {
             $project: {
-              _id: 0
-            }
-          }
+              _id: 0,
+            },
+          },
         ]),
 
         mercury.db.Order?.mongoModel.aggregate([
@@ -541,6 +547,141 @@ export default {
         orders,
         columns,
       };
+    },
+  },
+  Mutation: {
+    confirmOrder: async (
+      root: any,
+      {
+        orderId,
+        length,
+        breadth,
+        height,
+        weight,
+      }: {
+        orderId: string;
+        length: string;
+        breadth: string;
+        height: string;
+        weight: string;
+      },
+      ctx: any
+    ) => {
+      try {
+        const order = await mercury.db.Order?.get({ _id: orderId }, ctx?.user, {
+          populate: [
+            {
+              path: "invoice",
+              populate: [
+                {
+                  path: "payment",
+                },
+                {
+                  path: "customer",
+                },
+                {
+                  path: "shippingAddress",
+                },
+                {
+                  path: "billingAddress",
+                },
+                {
+                  path: "invoiceLines",
+                  populate: [
+                    {
+                      path: "productItem",
+                    },
+                    {
+                      path: "variants",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+
+        const invoice = order?.invoice;
+        const payment = invoice?.payment;
+        const billingAddress = invoice?.billingAddress;
+        const shippingAddress = invoice?.shippingAddress;
+        const invoiceLines = invoice?.invoiceLines;
+        const customer = invoice?.customer;
+
+        if (_.isEmpty(order)) {
+          throw new Error("Order not found");
+        }
+        const shiprocket = new ShiprocketService();
+        const shiprocketPayload = {
+          order_id: order.id,
+          order_date: order.date.toISOString().slice(0, 10),
+          pickup_location: "Primary",
+          company_name: "Slay Coffee",
+          billing_customer_name: `${billingAddress.name}`,
+          billing_address: billingAddress.addressLine1 || "Default Address",
+          billing_address_2: billingAddress.addressLine2 || "Default Address",
+          billing_city: billingAddress.city,
+          billing_pincode: billingAddress.zipCode,
+          billing_state: billingAddress.state,
+          billing_country: billingAddress.country,
+          billing_email: customer.email,
+          billing_phone: customer.mobile,
+          shipping_is_billing: false,
+          shipping_customer_name: `${shippingAddress.name}`,
+          shipping_address: shippingAddress.addressLine1 || "Default Address",
+          shipping_address_2: shippingAddress.addressLine2 || "Default Address",
+          shipping_city: shippingAddress.city,
+          shipping_pincode: shippingAddress.zipCode,
+          shipping_state: shippingAddress.state,
+          shipping_country: shippingAddress.country,
+          shipping_email: customer.email,
+          shipping_phone: customer.mobile,
+
+          order_items: invoiceLines.map((line: any) => ({
+            name: line.productItem.name,
+            sku: line.productItem?.id,
+            units: line.quantity,
+            selling_price: line.pricePerUnit,
+          })),
+          payment_method: payment?.method === "OFFLINE" ? "COD" : "Prepaid",
+          sub_total: invoice.totalAmount - invoice?.discountedAmount,
+          length: length,
+          breadth: breadth,
+          height: height,
+          weight: weight,
+        };
+
+        const shipmentResponse =
+          await shiprocket.createOrder(shiprocketPayload);
+        if (!shipmentResponse || !shipmentResponse.shipment_id) {
+          throw new Error("Failed to create shipment in Shiprocket");
+        }
+
+        await mercury.db.Order?.update(
+          orderId,
+          {
+            shipRocketShipmentId: shipmentResponse?.shipment_id,
+          },
+          ctx.user
+        );
+
+        await mercury.db.ShipmentTracking?.create(
+          {
+            status: "PACKAGING",
+            update: `Created Order in Ship Rocket with Shipment Id: ${shipmentResponse?.shipment_id}`,
+            order: orderId,
+          },
+          ctx.user
+        );
+
+        return {
+          success: true,
+          message: "Order Created!!",
+          shipRocketShipmentId: shipmentResponse.shipment_id,
+        };
+      } catch (error: any) {
+        throw new GraphQLError(error.message || "Something went wrong");
+      }
     },
   },
 };
