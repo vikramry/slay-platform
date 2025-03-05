@@ -3,13 +3,13 @@ export class ShiprocketService {
   private baseUrl = "https://apiv2.shiprocket.in/v1";
   private token: string | undefined;
   constructor() {
-    this.generateToken();
+    // this.generateToken();
   }
   async createOrder(orderData: any) {
     try {
       const response: AxiosResponse<any> = await axios.post(
         `${this.baseUrl}/external/orders/create/adhoc`,
-        orderData,
+        {...orderData},
         {
           headers: {
             "Content-Type": "application/json",

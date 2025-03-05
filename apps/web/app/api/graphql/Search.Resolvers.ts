@@ -6,7 +6,7 @@ import _ from "lodash";
 
 export default {
   Query: {
-    hello: (root: any, {}, ctx: any) => {
+    hello: (root: any, { }, ctx: any) => {
       console.log(ctx);
       const { req } = ctx;
       console.log(req?.cookies, req?.headers);
@@ -600,7 +600,7 @@ export default {
             },
           ],
         });
-
+        console.log(order, "order");
         const invoice = order?.invoice;
         const payment = invoice?.payment;
         const billingAddress = invoice?.billingAddress;
@@ -612,12 +612,14 @@ export default {
           throw new Error("Order not found");
         }
         const shiprocket = new ShiprocketService();
+        await shiprocket.generateToken();
         const shiprocketPayload = {
           order_id: order.id,
           order_date: order.date.toISOString().slice(0, 10),
-          pickup_location: "Primary",
+          pickup_location: "home-1",
           company_name: "Slay Coffee",
           billing_customer_name: `${billingAddress.name}`,
+          billing_last_name: "",
           billing_address: billingAddress.addressLine1 || "Default Address",
           billing_address_2: billingAddress.addressLine2 || "Default Address",
           billing_city: billingAddress.city,
@@ -636,7 +638,6 @@ export default {
           shipping_country: shippingAddress.country,
           shipping_email: customer.email,
           shipping_phone: customer.mobile,
-
           order_items: invoiceLines.map((line: any) => ({
             name: line.productItem.name,
             sku: line.productItem?.id,
@@ -645,10 +646,10 @@ export default {
           })),
           payment_method: payment?.method === "OFFLINE" ? "COD" : "Prepaid",
           sub_total: invoice.totalAmount - invoice?.discountedAmount,
-          length: length,
-          breadth: breadth,
-          height: height,
-          weight: weight,
+          length: Number(length),
+          breadth: Number(breadth),
+          height: Number(height),
+          weight: Number(weight),
         };
 
         const shipmentResponse =
@@ -661,6 +662,7 @@ export default {
           orderId,
           {
             shipRocketShipmentId: shipmentResponse?.shipment_id,
+            status: "PACKAGING"
           },
           ctx.user
         );
@@ -671,7 +673,10 @@ export default {
             update: `Created Order in Ship Rocket with Shipment Id: ${shipmentResponse?.shipment_id}`,
             order: orderId,
           },
-          ctx.user
+          ctx.user,
+          {
+            skiphook: true
+          }
         );
 
         return {
