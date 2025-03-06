@@ -116,8 +116,7 @@ const OrderCard: React.FC<any> = ({ order }) => {
             </span>
           </p>
         </div>
-        {shipmentStatus == "GENERATED" ||
-          (true && (
+        {shipmentStatus == "GENERATED" && (
             <div>
               <Dialog>
                 <DialogTrigger>
@@ -143,7 +142,7 @@ const OrderCard: React.FC<any> = ({ order }) => {
                 </DialogContent>
               </Dialog>
             </div>
-          ))}
+          )}
       </div>
 
       <hr className="border-t border-gray-300" />
