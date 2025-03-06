@@ -1770,3 +1770,21 @@ query DashboardAnalytics($orderRevenueBy: timeFrame) {
     }
   }
 }`
+
+export const LIST_COUPON =`
+query ListCoupons($where: whereCouponInput, $limit: Int!) {
+  listCoupons(where: $where, limit: $limit) {
+    docs {
+      code
+      active
+      discountType
+      discountValue
+      expiryDate
+      id
+      maxDiscountPrice
+      minOrderPrice
+    }
+    limit
+  }
+}
+`

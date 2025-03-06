@@ -40,6 +40,7 @@ import {
   LIST_ALL_CUSTOMERS,
   GET_COLLECTION,
   LIST_COLLECTION,
+  LIST_COUPON,
 } from "@/app/queries";
 import _ from "lodash";
 
@@ -69,6 +70,7 @@ const formSchema = z.object({
   isBillingSameAsShipping: z.boolean(),
   products: z.array(productSchema),
   totalAmount: z.coerce.number(),
+  coupon:z.string().optional()
 });
 
 const CreateOrderContainer = () => {
@@ -83,6 +85,8 @@ const CreateOrderContainer = () => {
   const [listCustomers, { data, loading, error }] = useLazyQuery(serverFetch);
   const [listAddresses, listAddressesResponse] = useLazyQuery(serverFetch);
   const [listColections, listColectionsResponse] = useLazyQuery(serverFetch);
+  const [ListCoupon, ListCouponResponse] = useLazyQuery(serverFetch);
+
   const [listProductItems, listProductItemsResponse] =
     useLazyQuery(serverFetch);
 
@@ -109,6 +113,14 @@ const CreateOrderContainer = () => {
         cache: "no-store",
       }
     );
+    ListCoupon(LIST_COUPON,{
+      "where": {
+        "active": true
+      },
+      "limit": 100
+    },{
+      cache: "no-store",
+    })
   }, []);
 
   useEffect(() => {
@@ -134,7 +146,9 @@ const CreateOrderContainer = () => {
   }, [form.watch("customer")]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(values,"values");
+    const payload = transformToBackendPayload(values);
+    console.log(payload,"payload")
   }
 
   useEffect(() => {
@@ -151,7 +165,9 @@ const CreateOrderContainer = () => {
     listColectionsResponse?.loading,
     listColectionsResponse?.error,
   ]);
+useEffect(() => {
 
+}, [ListCouponResponse?.data,ListCouponResponse?.error,ListCouponResponse?.loading])
   useEffect(() => {
     if (selectedCollectionId) {
       listProductItems(
@@ -184,6 +200,24 @@ const CreateOrderContainer = () => {
       .reduce((sum, product) => sum + product.totalAmount, 0);
     form.setValue("totalAmount", newTotalAmount);
   }, [form.watch("products")]);
+  function transformToBackendPayload(
+    formData: any,
+  ): any {
+    return {
+      customerId: formData.customer,
+      productItems: formData.products.map(product => ({
+        productItemId: product.productItemId,
+        quantity: product.quantity,
+        pricePerUnit: product.pricePerUnit,
+        variants: product.variants?.map(variant => variant.id) || [],
+      })),
+      isBillingSameAsShipping: formData.isBillingSameAsShipping,
+      shippingAddress: formData.shippingAddress,
+      coupon: formData?.coupon || undefined,
+      paymentMethod:"OFFLINE"
+    };
+  }
+  
   return (
     <div className="justify-center items-center w-full">
       <div className="mt-4">
@@ -646,6 +680,46 @@ const CreateOrderContainer = () => {
                     )}
                   />
                 </div>
+                <FormField
+                  control={form.control}
+                  name="coupon"
+                  render={({ field }) => (
+                    <FormItem className="col-span-6">
+                      <FormLabel>Coupon</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value: any) => {
+                            form.setValue("coupon", value);
+                          
+                          }}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="">
+                            <SelectValue placeholder="Select coupon" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Coupon</SelectLabel>
+                              {ListCouponResponse?.data?.listCoupons?.docs.map(
+                                (item: any) => (
+                                  <SelectItem
+                                    key={item.id}
+                                    value={item.id}
+                                    className="break-words  whitespace-normal"
+                                    title={`${item.code}`}
+                                  >
+                                    {`${item.code}`}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div className="flex justify-center items-center">
                   <Button type="submit" variant="default">
                     Create Order
