@@ -616,7 +616,7 @@ export default {
         const shiprocketPayload = {
           order_id: order.id,
           order_date: order.date.toISOString().slice(0, 10),
-          pickup_location: "home-1",
+          pickup_location: "work",
           company_name: "Slay Coffee",
           billing_customer_name: `${billingAddress.name}`,
           billing_last_name: "",
