@@ -1778,3 +1778,21 @@ export const CONFIRM_ORDER_QUERY=`mutation ConfirmOrder($orderId: String, $lengt
     shipRocketShipmentId
   }
 }`
+
+
+export const CREATE_CUSTOM_ORDER=`mutation CreateCustomOrder($customerId: ID!, $productItems: [products!]!, $shippingAddress: String!, $isBillingSameAsShipping: Boolean!, $paymentMethod: String!, $billingAddress: String, $coupon: String) {
+  createCustomOrder(customerId: $customerId, productItems: $productItems, shippingAddress: $shippingAddress, isBillingSameAsShipping: $isBillingSameAsShipping, paymentMethod: $paymentMethod, billingAddress: $billingAddress, coupon: $coupon) {
+    id
+    message
+  }
+}`
+
+
+export const LIST_COUPONS=`query Docs($where: whereCouponInput, $limit: Int!) {
+  listCoupons(where: $where, limit: $limit) {
+    docs {
+      id
+      code
+    }
+  }
+}`

@@ -415,19 +415,19 @@ const ConfirmOrderForm = ({orderId}: {orderId: string}) => {
   return (
     <div className="flex flex-col gap-3">
       <label>
-        Length
+        Length (g)
       </label>
         <Input placeholder="Length" type="number" name="length" value={orderData.length} onChange={(e: any) => setOrderData({ ...orderData, length: Number(e.target.value)})} />
       <label>
-        Breadth
+        Breadth (g)
       </label>
         <Input placeholder="Breadth" type="number" name="breadth" value={orderData.breadth} onChange={(e: any) => setOrderData({ ...orderData, breadth: Number(e.target.value)})} />
       <label>
-        Height
+        Height (g)
       </label>
         <Input placeholder="Height" type="number" name="height" value={orderData.height} onChange={(e: any) => setOrderData({ ...orderData, height: Number(e.target.value)})} />
       <label>
-        Weight
+        Weight (g)
       </label>
         <Input placeholder="Weight" type="number" name="weight" value={orderData.weight} onChange={(e: any) => setOrderData({ ...orderData, weight: Number(e.target.value)})} />
       <div className="flex flex-row justify-center">

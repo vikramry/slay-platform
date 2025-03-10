@@ -40,8 +40,11 @@ import {
   LIST_ALL_CUSTOMERS,
   GET_COLLECTION,
   LIST_COLLECTION,
+  CREATE_CUSTOM_ORDER,
+  LIST_COUPONS,
 } from "@/app/queries";
 import _ from "lodash";
+import { useRouter } from "next/navigation";
 
 const productSchema = z.object({
   productItemId: z.string().optional(),
@@ -69,6 +72,7 @@ const formSchema = z.object({
   isBillingSameAsShipping: z.boolean(),
   products: z.array(productSchema),
   totalAmount: z.coerce.number(),
+  coupon: z.string().optional(),
 });
 
 const CreateOrderContainer = () => {
@@ -80,14 +84,18 @@ const CreateOrderContainer = () => {
       products: [],
     },
   });
+  const router = useRouter();
+  const { toast } = useToast();
   const [listCustomers, { data, loading, error }] = useLazyQuery(serverFetch);
   const [listAddresses, listAddressesResponse] = useLazyQuery(serverFetch);
   const [listColections, listColectionsResponse] = useLazyQuery(serverFetch);
+  const [listCoupons, listCouponsResponse] = useLazyQuery(serverFetch);
   const [listProductItems, listProductItemsResponse] =
     useLazyQuery(serverFetch);
 
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>("");
   const [selectedVarentId, setSelectedVarentId] = useState<any[]>([]);
+  const [createOrder, createOrderResponse] = useLazyQuery(serverFetch);
 
   const [selectedProductItemId, setSelectedProductItemId] = useState<any>();
   useEffect(() => {
@@ -104,6 +112,18 @@ const CreateOrderContainer = () => {
       LIST_COLLECTION,
       {
         limit: 1000,
+      },
+      {
+        cache: "no-store",
+      }
+    );
+    listCoupons(
+      LIST_COUPONS,
+      {
+        where: {
+          active: true,
+        },
+        limit: 100,
       },
       {
         cache: "no-store",
@@ -134,7 +154,27 @@ const CreateOrderContainer = () => {
   }, [form.watch("customer")]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    createOrder(
+      CREATE_CUSTOM_ORDER,
+      {
+        customerId: values.customer,
+        shippingAddress: values.shippingAddress,
+        billingAddress: values.billingAddress,
+        productItems: values.products.map((item) => ({
+          pricePerUnit: item.pricePerUnit,
+          productItemId: item.productItemId,
+          variants: item.variants?.map((variant) => variant.id),
+          quantity: item.quantity,
+        })),
+        isBillingSameAsShipping: values.isBillingSameAsShipping,
+        totalAmount: values.totalAmount,
+        paymentMethod: "OFFLINE",
+        coupon: values.coupon,
+      },
+      {
+        cache: "no-store",
+      }
+    );
   }
 
   useEffect(() => {
@@ -150,6 +190,26 @@ const CreateOrderContainer = () => {
     listColectionsResponse?.data,
     listColectionsResponse?.loading,
     listColectionsResponse?.error,
+  ]);
+
+  useEffect(() => {
+    if (createOrderResponse.error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: createOrderResponse?.error?.message,
+      });
+    }
+    if (createOrderResponse.data) {
+      toast({
+        title: "Order created!!",
+      });
+      router.push("/dashboard/o/Order/list");
+    }
+  }, [
+    createOrderResponse.data,
+    createOrderResponse.error,
+    createOrderResponse.loading,
   ]);
 
   useEffect(() => {
@@ -197,7 +257,11 @@ const CreateOrderContainer = () => {
                   <Dialog>
                     <DialogTrigger asChild>
                       <div className="flex justify-end w-[100%]">
-                        <Button variant="outline" type="button" className="w-[150px]">
+                        <Button
+                          variant="outline"
+                          type="button"
+                          className="w-[150px]"
+                        >
                           Add product
                         </Button>
                       </div>
@@ -501,7 +565,7 @@ const CreateOrderContainer = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-span-4 space-y-10">
+              <div className="col-span-4 space-y-5">
                 <Label className="text-lg">Custom Customer Order</Label>
 
                 <FormField
@@ -526,6 +590,38 @@ const CreateOrderContainer = () => {
                                   {`${item?.firstName} ${item?.lastName}`}
                                 </SelectItem>
                               ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="coupon"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Coupon</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="">
+                            <SelectValue placeholder="Select a Coupon" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Coupons</SelectLabel>
+                              {listCouponsResponse?.data?.listCoupons?.docs.map(
+                                (item: any) => (
+                                  <SelectItem key={item.id} value={item.code}>
+                                    {`${item?.code}`}
+                                  </SelectItem>
+                                )
+                              )}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
